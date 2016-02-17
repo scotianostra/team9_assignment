@@ -13,7 +13,7 @@ class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StudentSerializer
 
 
-class StafftList(generics.ListCreateAPIView):
+class StaffList(generics.ListCreateAPIView):
     queryset = Staff.objects.all()
     serializer_class = StaffSerializer
 
