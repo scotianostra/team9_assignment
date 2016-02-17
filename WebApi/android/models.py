@@ -1,4 +1,6 @@
 from django.db import models
+import os
+
 
 # Create your models here.
 
@@ -9,6 +11,14 @@ class Staff(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     password = models.CharField(max_length=30)
+    hash = models.CharField(max_length=128, null=True)
+
+    def create_hash(self):
+        return os.urandom(32).encode('hex')
+
+    def save(self, *args, **kwargs):
+        self.hash = self.create_hash()
+        super(Staff, self).save(*args, **kwargs)
 
 
 class Student(models.Model):
@@ -17,6 +27,15 @@ class Student(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     password = models.CharField(max_length=30)
+    hash = models.CharField(max_length=128,  null=True)
+
+    def create_hash(self):
+        return os.urandom(32).encode('hex')
+
+    def save(self, *args, **kwargs):
+        # check if the row with this hash already exists.
+        self.hash = self.create_hash()
+        super(Student, self).save(*args, **kwargs)
 
 
 class Module(models.Model):
