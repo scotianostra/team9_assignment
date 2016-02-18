@@ -27,7 +27,7 @@ class StaffDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 @api_view(['GET', 'POST'])
-def login(request, format='json'):
+def login(request):
     if request.method == 'POST':
         email = request.POST['email_address']
         password = request.POST['password']
