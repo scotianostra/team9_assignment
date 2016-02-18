@@ -12,3 +12,9 @@ class StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = Staff
         fields = ('staff_id', 'email', 'first_name', 'last_name')
+
+
+class ClassSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Class
+        fields = ('classid', 'qrCode', 'occurance', 'room', 'building')

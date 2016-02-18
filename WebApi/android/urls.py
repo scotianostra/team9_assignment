@@ -4,6 +4,7 @@ from android import views
 
 
 urlpatterns = [
+	url(r'^students/sign/$', views.ClassSign.as_view()),
     url(r'^students/$', views.StudentList.as_view()),
     url(r'^staff/$', views.StaffList.as_view()),
     # url(r'^students/(?P<pk>[0-9]+)/$', views.StudentDetail.as_view()),
