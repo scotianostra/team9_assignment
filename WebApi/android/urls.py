@@ -6,6 +6,7 @@ from android import views
 urlpatterns = [
     url(r'^students/$', views.StudentList.as_view()),
     url(r'^staff/$', views.StaffList.as_view()),
+    url(r'^staffModuleList/$', views.StaffModuleList.as_view()),
     # url(r'^students/(?P<pk>[0-9]+)/$', views.StudentDetail.as_view()),
     # url(r'^staff/(?P<pk>[0-9]+)/$', views.StaffDetail.as_view()),
 ]

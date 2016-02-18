@@ -1,5 +1,5 @@
 from android.models import *
-from android.serializers import StudentSerializer, StaffSerializer
+from android.serializers import *
 from rest_framework import generics
 
 
@@ -18,7 +18,11 @@ class StaffList(generics.ListCreateAPIView):
     serializer_class = StaffSerializer
 
 
+class StaffModuleList(generics.ListCreateAPIView):
+    queryset = Module.objects.filter(coordinators=1234)
+    serializer_class = StaffModuleListSerializer
+
+
 class StaffDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Staff.objects.all()
     serializer_class = StaffSerializer
-    
