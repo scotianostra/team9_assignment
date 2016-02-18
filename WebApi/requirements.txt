@@ -10,7 +10,6 @@ Jinja2==2.8
 Markdown==2.6.5
 MarkupSafe==0.23
 pycparser==2.14
-Pygments==2.1.1
 pymongo==2.9.2
 python-magic==0.4.10
 requests==2.8.1
