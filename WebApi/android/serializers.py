@@ -18,3 +18,9 @@ class StaffModuleListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Module
         fields = ('module_code', 'module_title', 'coordinators')
+
+
+class ModuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Module
+        fields = ('hash', 'staffid')
