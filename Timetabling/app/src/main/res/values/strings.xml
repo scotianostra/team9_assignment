@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Timetabling</string>
+    <string name="title_activity_module_enrollement_list">ModuleEnrollementList</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    
+    <array name="module_enrollment_list">
+        <item>Agile Engineering</item>
+        <item>Human Computer Interaction</item>
+        <item>Software Engineering</item>
+        <item>Game Programming</item>
+    </array>
 </resources>
