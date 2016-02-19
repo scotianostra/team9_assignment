@@ -11,8 +11,13 @@ class StudentSerializer(serializers.ModelSerializer):
 class StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model = Staff
-        fields = ('staffid', 'email', 'first_name', 'last_name')
+        fields = ('staff_id', 'email', 'first_name', 'last_name')
 
+
+class StaffModuleListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Module
+        fields = ('module_code', 'module_title', 'coordinators')
 
 
 class ModuleSerializer(serializers.ModelSerializer):

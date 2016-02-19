@@ -6,7 +6,7 @@ import os, binascii
 
 
 class Staff(models.Model):
-    staffid = models.IntegerField(primary_key=True)
+    staff_id = models.IntegerField(primary_key=True)
     email = models.CharField(max_length=60)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
