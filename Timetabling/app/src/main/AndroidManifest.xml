@@ -16,8 +16,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ModuleEnrollementList"
-            android:label="@string/title_activity_module_enrollement_list" >
+            android:name=".ModuleList"
+            android:label="@string/title_activity_module_list" >
+        </activity>
+        <activity
+            android:name=".EnrolledStudents"
+            android:label="@string/title_activity_enrolled_students" >
         </activity>
     </application>
 

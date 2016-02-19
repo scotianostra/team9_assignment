@@ -9,33 +9,32 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class ModuleEnrollementList extends AppCompatActivity {
+public class EnrolledStudents extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_module_enrollement_list);
+        setContentView(R.layout.activity_enrolled_students);
 
+        String m = getIntent().getStringExtra("module");
+        Log.i("value ", m);
 
-        ArrayList<String> enroList = new ArrayList<>();
-        enroList.add("Agile Engineering");
-        enroList.add("Human Computer Interaction");
-        enroList.add("Software Engineering");
-        enroList.add("Game Programming");
-        ArrayAdapter<String> enroListAdapter = new ArrayAdapter<>(this, R.layout.text_view, enroList);
+        Resources res = getResources();
+        ArrayList<String> students = new ArrayList<>(Arrays.asList(res.getStringArray(R.array.students)));
 
-        ListView listView1 = (ListView) findViewById(R.id.listView);
-        listView1.setAdapter(enroListAdapter);
-        Log.i("List :", enroListAdapter.toString());
+        ArrayAdapter<String> slAdapter = new ArrayAdapter<>(this, R.layout.text_view, students);
+        ListView lv = (ListView) findViewById(R.id.listView);
+        lv.setAdapter(slAdapter);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_module_enrollement_list, menu);
+        getMenuInflater().inflate(R.menu.menu_enrolled_students, menu);
         return true;
     }
 
