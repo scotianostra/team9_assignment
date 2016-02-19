@@ -38,7 +38,7 @@ class StaffDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StaffSerializer
 
 
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 def login(request):
     if request.method == 'POST':
         email = request.POST['email_address']
@@ -46,12 +46,14 @@ def login(request):
         try:
             staff = Staff.objects.get(email=email)
             if staff.password == password:
-                return Response({'id': staff.staffid, 'hash': staff.hash})
+                serializer = StaffLoginSerializer(staff)
+                return Response(serializer.data)
         except(KeyError, Staff.DoesNotExist):
             try:
                 student = Student.objects.get(email=email)
                 if student.password == password:
-                    return Response({'id': student.staffid, 'hash': student.hash})
+                    serializer = StudentLoginSerializer(student)
+                    return Response(serializer.data)
             except(KeyError, Student.DoesNotExist):
                 return Response(status=status.HTTP_204_NO_CONTENT)
     return Response(status=status.HTTP_400_BAD_REQUEST)
