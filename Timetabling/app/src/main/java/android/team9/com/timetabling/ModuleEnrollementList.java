@@ -18,6 +18,7 @@ public class ModuleEnrollementList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_module_enrollement_list);
 
+
         ArrayList<String> enroList = new ArrayList<>();
         enroList.add("Agile Engineering");
         enroList.add("Human Computer Interaction");
