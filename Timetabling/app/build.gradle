@@ -4,6 +4,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
+
     defaultConfig {
         applicationId "android.team9.com.timetabling"
         minSdkVersion 15

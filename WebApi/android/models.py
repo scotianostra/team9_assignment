@@ -1,12 +1,12 @@
 from django.db import models
-import os
+import os,binascii
 
 
 # Create your models here.
 
 
 class Staff(models.Model):
-    staffid = models.IntegerField(primary_key=True)
+    staff_id = models.IntegerField(primary_key=True)
     email = models.CharField(max_length=60)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
@@ -14,7 +14,7 @@ class Staff(models.Model):
     hash = models.CharField(max_length=128, null=True)
 
     def create_hash(self):
-        return os.urandom(32).encode('hex')
+        return binascii.hexlify(os.urandom(16))
 
     def save(self, *args, **kwargs):
         self.hash = self.create_hash()
@@ -30,7 +30,7 @@ class Student(models.Model):
     hash = models.CharField(max_length=128,  null=True)
 
     def create_hash(self):
-        return os.urandom(32).encode('hex')
+        return binascii.hexlify(os.urandom(16))
 
     def save(self, *args, **kwargs):
         # check if the row with this hash already exists.
@@ -39,7 +39,7 @@ class Student(models.Model):
 
 
 class Module(models.Model):
-    moduleid = models.IntegerField(primary_key=True)
+    module_id = models.IntegerField(primary_key=True)
     module_code = models.CharField(max_length=20)
     module_title = models.CharField(max_length=50)
     coordinators = models.ManyToManyField(Staff)
@@ -47,7 +47,7 @@ class Module(models.Model):
 
 
 class Class(models.Model):
-    classid = models.IntegerField(primary_key=True)
+    class_id = models.IntegerField(primary_key=True)
     qrCode = models.IntegerField()
     occurance = models.DateTimeField()
     room = models.CharField(max_length=10)

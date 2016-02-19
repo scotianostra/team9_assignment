@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -21,6 +22,8 @@ import com.google.zxing.Result;
 import me.dm7.barcodescanner.core.IViewFinder;
 import me.dm7.barcodescanner.core.ViewFinderView;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
+import java.net.*;
+
 
 public class SimpleScannerActivity extends BaseScannerActivity implements ZXingScannerView.ResultHandler {
     private ZXingScannerView mScannerView;
@@ -56,20 +59,29 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
 
     @Override
     public void handleResult(Result rawResult) {
-        Toast.makeText(this, "Contents = " + rawResult.getText() +
-                ", Format = " + rawResult.getBarcodeFormat().toString(), Toast.LENGTH_SHORT).show();
+       // Toast.makeText(this, "Contents = " + rawResult.getText() +
+      //          ", Format = " + rawResult.getBarcodeFormat().toString(), Toast.LENGTH_SHORT).show();
+        String userid="101010";
+        Log.v("QRCODE STRING : ", rawResult.getText());
 
+        String finalString = "studentid=" + userid + "classid=" + rawResult.getText();
+        try {
+            URL url = new URL("http://5.39.43.115:8000/students/sign/");
+        }catch(Exception e) {
+            Log.v("URL: ", "Error URL");
+        }
+        finish();
         // Note:
         // * Wait 2 seconds to resume the preview.
         // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
         // * I don't know why this is the case but I don't have the time to figure out.
-        Handler handler = new Handler();
+     /*   Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 mScannerView.resumeCameraPreview(SimpleScannerActivity.this);
             }
-        }, 2000);
+        }, 2000);*/
     }
 
     private static class CustomViewFinderView extends ViewFinderView {
