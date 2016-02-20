@@ -17,16 +17,26 @@ import android.util.TypedValue;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.zxing.Result;
 
 import me.dm7.barcodescanner.core.IViewFinder;
 import me.dm7.barcodescanner.core.ViewFinderView;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 import java.net.*;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class SimpleScannerActivity extends BaseScannerActivity implements ZXingScannerView.ResultHandler {
     private ZXingScannerView mScannerView;
+    String userid="101010";
+    String roomid;
 
     @Override
     public void onCreate(Bundle state) {
@@ -61,15 +71,57 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
     public void handleResult(Result rawResult) {
        // Toast.makeText(this, "Contents = " + rawResult.getText() +
       //          ", Format = " + rawResult.getBarcodeFormat().toString(), Toast.LENGTH_SHORT).show();
-        String userid="101010";
-        Log.v("QRCODE STRING : ", rawResult.getText());
+        //String userid="101010";
+       roomid=rawResult.getText();
+        Log.v("QRCODE STRING : ", roomid );
 
-        String finalString = "studentid=" + userid + "classid=" + rawResult.getText();
-        try {
-            URL url = new URL("http://5.39.43.115:8000/students/sign/");
-        }catch(Exception e) {
-            Log.v("URL: ", "Error URL");
+        String url = "http://5.39.43.115:8000/students/sign/";
+
+
+// Request a string response
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        // Result handling
+                        System.out.println(response.substring(0,100));
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                // Error handling
+                System.out.println("Something went wrong!");
+                error.printStackTrace();
+
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("student_id", userid);
+                params.put("room_id", roomid);
+
+            return params;
         }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+
+// Add the request to the queue
+        Volley.newRequestQueue(this).add(stringRequest);
+
+
+
+
+
         finish();
         // Note:
         // * Wait 2 seconds to resume the preview.
