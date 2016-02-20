@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 import datetime
 from django.utils import timezone
+from django.db.models.query import Q
 
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
@@ -33,47 +34,43 @@ class ClassSign(generics.UpdateAPIView):
         roomid = request.data["room_id"]
         studentid = request.data["student_id"]
         
-        signFor = None
-        
-        #Select all classes which start within +/- 60 minutes
+        #Select all classes which start within +/- 60 minutes in the specified room
         now = timezone.now()
         startTime = now + timezone.timedelta(minutes = -60)
         endTime = now + timezone.timedelta(minutes = 60)
         classes = Class.objects.filter(Q(occurance__range = (startTime, endTime)) & Q(room = roomid))
         
-        #Find the classes which are within the 45 minutes sign in window
-        for thisClass in classes:
-            minutesToStart = (thisClass.occurance - now).total_seconds() % 3600 // 60
-            if minutesToStart <= 15 and minutesToStart >= -30:
-                for module in Module.objects.filter(Q(students_enrolled__id__exact = studentid) & Q(moduleid = thisClass.moduleid)):
-                    print("hello world")
-        
-        #for thisClass in Class.objects.all():
-        #    classStartDiff = (thisClass.occurance.replace(tzinfo=None) - datetime.datetime.now()).days * 24 * 60
-        #    classEndDiff = (datetime.datetime.now() - thisClass.occurance.replace(tzinfo=None)).days * 24 * 60
-        #    print(classStartDiff)
-        #    print(classEndDiff)
-        #    if (classStartDiff <= 15 and classStartDiff >= 0) or (classEndDiff >= 0 and classEndDiff <= 30):
-        #        signFor = thisClass
-        #        
-        #        break
-        
-        student = Student.objects.get(matric_number = studentid)
-        
         result = 'success'
         responseStatus = status.HTTP_200_OK
         
-        if not signFor:
-            result = 'A class with class_id ' + classID + ' does not exist.'
-            responseStatus = status.HTTP_404_NOT_FOUND
-        elif signFor.class_register.get(matric_number = studentid):
-            result = 'The student with student_id ' + studentid + ' has already signed in for the class with class_id ' + classID
-            responseStatus = status.HTTP_409_CONFLICT
-        elif not student:
-            result = 'A student with student_id ' + studentid + ' does not exist.'
-            responseStatus = status.HTTP_404_NOT_FOUND
+        signedIn = False
+        action = 0
+        
+        #Find the classes which are within the 45 minutes sign in window that the student is enrolled in and sign the student into them
+        for thisClass in classes:
+            minutesToStart = (thisClass.occurance - now).total_seconds() % 3600 // 60
+            minutesToStart = minutesToStart - 60
+            if minutesToStart <= 15 and minutesToStart >= -30:
+                action = 1
+                if Module.objects.filter(Q(students_enrolled__exact = studentid) & Q(moduleid = thisClass.moduleid_id)).count() != 0:
+                    if thisClass.class_register.get(matric_number = studentid):
+                        action = 2
+                    else:
+                        thisClass.class_register.add(student)
+                        signedIn = True
+        
+        if signedIn == True:
+            result = 'Student id ' + studentid + ' has been signed into all classes with an open register in room id ' + roomid
         else:
-            signFor.class_register.add(student)
+            if action == 0:
+                result = 'There are no classes with an open register taking place in room id ' + roomid + ' at this time.'
+                responseStatus = status.HTTP_404_NOT_FOUND
+            elif action == 1:
+                result = 'There is a class taking place in ' + roomid + ' but student id ' + studentid + ' is not enrolled in this class.'
+                responseStatus = status.HTTP_404_NOT_FOUND
+            elif action == 2:
+                result = 'Student id ' + studentid + ' is already signed into all classes currently available in room id ' + roomid
+                responseStatus = status.HTTP_409_CONFLICT
         
         content = {
             'result': result
