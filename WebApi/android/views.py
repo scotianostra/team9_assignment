@@ -60,16 +60,16 @@ class ClassSign(generics.UpdateAPIView):
                         signedIn = True
         
         if signedIn == True:
-            result = 'Student id ' + studentid + ' has been signed into all classes with an open register in room id ' + roomid
+            result = 'Student id ' + str(studentid) + ' has been signed into all classes with an open register in room id ' + str(roomid)
         else:
             if action == 0:
-                result = 'There are no classes with an open register taking place in room id ' + roomid + ' at this time.'
+                result = 'There are no classes with an open register taking place in room id ' + str(roomid) + ' at this time.'
                 responseStatus = status.HTTP_404_NOT_FOUND
             elif action == 1:
-                result = 'There is a class taking place in ' + roomid + ' but student id ' + studentid + ' is not enrolled in this class.'
+                result = 'There is a class taking place in ' + str(roomid) + ' but student id ' + str(studentid) + ' is not enrolled in this class.'
                 responseStatus = status.HTTP_404_NOT_FOUND
             elif action == 2:
-                result = 'Student id ' + studentid + ' is already signed into all classes currently available in room id ' + roomid
+                result = 'Student id ' + str(studentid) + ' is already signed into all classes currently available in room id ' + str(roomid)
                 responseStatus = status.HTTP_409_CONFLICT
         
         content = {
