@@ -1,5 +1,7 @@
 package android.team9.com.timetabling;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +23,11 @@ public class LoginActivity extends AppCompatActivity {
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_EMAIL = "email_address";
 
+//    public static final String MyPREFERENCES = "MyPrefs" ;
+//    public static final String Hash = "hashKey";
+//    public static final String StaffID = "staffidKey";
+//    public static final String Matric = "matricKey";
+
     private EditText editTextEmail;
     private EditText editTextPassword;
 
@@ -30,7 +37,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
 
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
         editTextEmail= (EditText) findViewById(R.id.editTextEmail);
