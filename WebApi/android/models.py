@@ -53,3 +53,4 @@ class Class(models.Model):
     room = models.CharField(max_length=10)
     building = models.CharField(max_length=20)
     class_register = models.ManyToManyField(Student)
+    moduleid = models.ForeignKey(Module, null=True)
