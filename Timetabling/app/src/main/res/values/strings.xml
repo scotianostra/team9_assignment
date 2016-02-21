@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Timetabling</string>
-
+    <!--Refactoring hardcoded login ui text into string resources -->
+    <string name="login_button_txt">Login</string>
+    <string name="password_hint">Password</string>
+    <string name="email_hint">Email</string>
 </resources>
