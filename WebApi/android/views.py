@@ -48,15 +48,15 @@ def login(request):
             if staff.password == password:
                 serializer = StaffLoginSerializer(staff)
                 return Response(serializer.data)
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         except(KeyError, Staff.DoesNotExist):
             try:
                 student = Student.objects.get(email=email)
                 if student.password == password:
                     serializer = StudentLoginSerializer(student)
                     return Response(serializer.data)
-                return Response(status=status.HTTP_204_NO_CONTENT)
+                return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
             except(KeyError, Student.DoesNotExist):
-                return Response(status=status.HTTP_204_NO_CONTENT)
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+                return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+    return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
