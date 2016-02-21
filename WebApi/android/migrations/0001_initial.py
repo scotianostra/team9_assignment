@@ -16,7 +16,6 @@ class Migration(migrations.Migration):
                 ('classid', models.IntegerField(primary_key=True, serialize=False)),
                 ('qrCode', models.IntegerField()),
                 ('occurance', models.DateTimeField()),
-                ('room', models.CharField(max_length=10)),
                 ('building', models.CharField(max_length=20)),
             ],
         ),
@@ -29,6 +28,13 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='Room',
+            fields=[
+                ('id', models.AutoField(primary_key=True, verbose_name='ID', serialize=False, auto_created=True)),
+                ('room_name', models.CharField(max_length=10)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Staff',
             fields=[
                 ('staffid', models.IntegerField(primary_key=True, serialize=False)),
@@ -36,6 +42,7 @@ class Migration(migrations.Migration):
                 ('first_name', models.CharField(max_length=30)),
                 ('last_name', models.CharField(max_length=30)),
                 ('password', models.CharField(max_length=30)),
+                ('hash', models.CharField(max_length=128, null=True)),
             ],
         ),
         migrations.CreateModel(
@@ -46,6 +53,7 @@ class Migration(migrations.Migration):
                 ('first_name', models.CharField(max_length=30)),
                 ('last_name', models.CharField(max_length=30)),
                 ('password', models.CharField(max_length=30)),
+                ('hash', models.CharField(max_length=128, null=True)),
             ],
         ),
         migrations.AddField(

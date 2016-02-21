@@ -18,13 +18,13 @@ class LoginTest(TestCase):
 
         self.assertEqual(response.status_code, 204)
 
-    # def test_staff_can_login_if_registered(self):
-    #     request = HttpRequest()
-    #     request.method = 'POST'
-    #     request.POST['email_address'] = 'ouanixi@gmail.com'
-    #     request.POST['password'] = 'password'
-    #     response = login(request)
-    #
-    #     self.assertTrue(type(response.data) == 'JSON' )
+    def test_staff_can_login_if_registered(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST['email_address'] = 'ouanixi@gmail.com'
+        request.POST['password'] = 'password'
+        response = login(request)
+
+        self.assertTrue(type(response.data) == 'JSON' )
 
 
