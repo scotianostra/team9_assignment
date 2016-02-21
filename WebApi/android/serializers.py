@@ -18,3 +18,8 @@ class ClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = Class
         fields = ('classid', 'qrCode', 'occurance', 'room', 'building')
+		
+class ClassRegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Student
+        fields = ('matric_number', 'email', 'first_name', 'last_name', 'has_signed')

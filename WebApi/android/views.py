@@ -1,11 +1,12 @@
 from android.models import *
-from android.serializers import StudentSerializer, StaffSerializer, ClassSerializer
+from android.serializers import StudentSerializer, StaffSerializer, ClassSerializer, ClassRegisterSerializer
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
-import datetime
+import json
 from django.utils import timezone
 from django.db.models.query import Q
+from itertools import chain
 
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
@@ -25,6 +26,48 @@ class StaffList(generics.ListCreateAPIView):
 class StaffDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Staff.objects.all()
     serializer_class = StaffSerializer
+
+class ClassRegister(generics.ListCreateAPIView):
+    serializer_class = StudentSerializer
+    def get(self, request, format=None):
+        searchid = request.data["class_id"]
+        
+        classToCheck = Class.objects.filter(classid = searchid)[:1].get()
+        signedIn = classToCheck.class_register.all()
+        studentsOnModule = Module.objects.filter(moduleid = classToCheck.moduleid_id)[:1].get().students_enrolled.all()
+        
+        registerList = list(chain(signedIn, studentsOnModule))
+        registerList = sorted(registerList, key = lambda instance: instance.last_name)
+        seen = []
+        resultList = []
+        
+        for student in registerList:
+            found = False
+            for seenStudent in seen:
+                if student.matric_number == seenStudent:
+                    found = True
+                    break
+            
+            if found == False:
+                seen.append(student.matric_number)
+                hasSigned = False
+                for signedStudent in signedIn:
+                    if signedStudent.matric_number == student.matric_number:
+                        hasSigned = True
+                
+                student.has_signed = hasSigned;
+                resultList.append(student)
+        
+        #result = json.dumps([o.dump() for o in resultList])
+        #content = {
+        #    'result': result
+        #}
+        
+        serializer = ClassRegisterSerializer(resultList, many=True)
+        return Response(serializer.data)
+        
+        responseStatus = status.HTTP_200_OK
+        return Response(content, status = responseStatus)
 
 
 class ClassSign(generics.UpdateAPIView):

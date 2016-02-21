@@ -28,7 +28,8 @@ class Student(models.Model):
     last_name = models.CharField(max_length=30)
     password = models.CharField(max_length=30)
     hash = models.CharField(max_length=128,  null=True)
-
+    has_signed = False
+    
     def create_hash(self):
         return os.urandom(32).encode('hex')
 
