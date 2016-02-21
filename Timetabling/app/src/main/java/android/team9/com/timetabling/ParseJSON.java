@@ -10,8 +10,14 @@ public class ParseJSON {
     public static String[] moduleCode;
     public static String[] moduleTitle;
 
+    public  int user_id;
+    public  String role;
+
     public static final String KEY_MODULE_CODE = "module_code";
     public static final String KEY_MODULE_TITLE = "module_title";
+
+    public static final String KEY_HASH_CODE = "hash";
+    public static final String KEY_USER_ID = "matric_number";
 
     private String json;
 
@@ -19,7 +25,7 @@ public class ParseJSON {
         this.json = json;
     }
 
-    protected void parseJSON(){
+    protected void parseJSONArray(){
         try {
 
             JSONArray jsonArray = new JSONArray(json);
@@ -33,6 +39,17 @@ public class ParseJSON {
                 moduleCode[i] = jsonobject.getString(KEY_MODULE_CODE);
                 moduleTitle[i] = jsonobject.getString(KEY_MODULE_TITLE);
             }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void parseJSONObject(){
+        try {
+            JSONObject jsonObj = new JSONObject(json);
+            user_id = jsonObj.getInt(KEY_USER_ID);
+            role = jsonObj.getString(KEY_HASH_CODE);
 
         } catch (JSONException e) {
             e.printStackTrace();

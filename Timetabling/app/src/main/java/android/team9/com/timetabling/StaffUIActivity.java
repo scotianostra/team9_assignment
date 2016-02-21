@@ -56,7 +56,7 @@ public class StaffUIActivity extends AppCompatActivity {
 
     private void showJSON(String json) throws JSONException {
         ParseJSON pj = new ParseJSON(json);
-        pj.parseJSON();
+        pj.parseJSONArray();
         CustomList cl = new CustomList(this, ParseJSON.moduleCode, ParseJSON.moduleTitle);
         listView.setAdapter(cl);
 
