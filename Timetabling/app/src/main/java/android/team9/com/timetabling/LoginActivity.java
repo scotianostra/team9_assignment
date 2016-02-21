@@ -1,6 +1,7 @@
 package android.team9.com.timetabling;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.http.HttpResponseCache;
 import android.support.v7.app.AppCompatActivity;
@@ -21,22 +22,18 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity {
     public static final String TAG = LoginActivity.class.getSimpleName();
+    public final static String EXTRA_USERID = "android.team9.com.USERID";
+
     private static final String LOGIN_URL = "http://api.ouanixi.com/login/";
     public static final String KEY_PASSWORD = "password";
     public static final String KEY_EMAIL = "email_address";
-
-//    public static final String MyPREFERENCES = "MyPrefs" ;
-//    public static final String Hash = "hashKey";
-//    public static final String StaffID = "staffidKey";
-//    public static final String Matric = "matricKey";
 
     private EditText editTextEmail;
     private EditText editTextPassword;
@@ -46,6 +43,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        String role = sharedPref.getString("hash", "no_user");
+        int id = sharedPref.getInt("matric_number", -1);
+        redirectToActivity(id, role);
         setContentView(R.layout.activity_login);
 
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
@@ -71,6 +72,13 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         ParseJSON prsJson = new ParseJSON(response);
                         prsJson.parseJSONObject();
+//                        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+//                        SharedPreferences.Editor editor = sharedPref.edit();
+//                        editor.clear();
+//                        editor.putInt("id", prsJson.user_id);
+//                        editor.putString("role", prsJson.role);
+//                        editor.commit();
+//                        redirectToActivity(prsJson.user_id, prsJson.role);
                         Toast.makeText(LoginActivity.this, prsJson.role + " " +prsJson.user_id, Toast.LENGTH_LONG).show();
                     }
                 },
@@ -96,6 +104,23 @@ public class LoginActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+    private void redirectToActivity(int id, String role){
+
+        if (id > 0 ) {
+
+            if (role == "staff") {
+                Intent intent = new Intent(this, StaffUIActivity.class);
+                intent.putExtra(EXTRA_USERID, id);
+                startActivity(intent);
+            }
+//            else if (role == "student") {
+//                Intent intent = new Intent(this, StudentUIActivity.class);
+//                intent.putExtra(EXTRA_USERID, id);
+//                startActivity(intent);
+//            }
+        }
     }
 
 }

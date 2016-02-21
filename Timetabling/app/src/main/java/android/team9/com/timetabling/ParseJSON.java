@@ -17,7 +17,8 @@ public class ParseJSON {
     public static final String KEY_MODULE_TITLE = "module_title";
 
     public static final String KEY_HASH_CODE = "hash";
-    public static final String KEY_USER_ID = "matric_number";
+    public static final String KEY_STUDENT_ID = "matric_number";
+    public static final String KEY_STAFF_ID = "staff_id";
 
     private String json;
 
@@ -48,7 +49,9 @@ public class ParseJSON {
     protected void parseJSONObject(){
         try {
             JSONObject jsonObj = new JSONObject(json);
-            user_id = jsonObj.getInt(KEY_USER_ID);
+            if (jsonObj.has(KEY_STUDENT_ID) && !jsonObj.isNull(KEY_STUDENT_ID))
+                user_id = jsonObj.getInt(KEY_STUDENT_ID);
+            else user_id = jsonObj.getInt(KEY_STAFF_ID);
             role = jsonObj.getString(KEY_HASH_CODE);
 
         } catch (JSONException e) {
