@@ -72,13 +72,13 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         ParseJSON prsJson = new ParseJSON(response);
                         prsJson.parseJSONObject();
-//                        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-//                        SharedPreferences.Editor editor = sharedPref.edit();
-//                        editor.clear();
-//                        editor.putInt("id", prsJson.user_id);
-//                        editor.putString("role", prsJson.role);
-//                        editor.commit();
-//                        redirectToActivity(prsJson.user_id, prsJson.role);
+                        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        editor.clear();
+                        editor.putInt("id", prsJson.user_id);
+                        editor.putString("role", prsJson.role);
+                        editor.commit();
+                        //redirectToActivity(prsJson.user_id, prsJson.role);
                         Toast.makeText(LoginActivity.this, prsJson.role + " " +prsJson.user_id, Toast.LENGTH_LONG).show();
                     }
                 },

@@ -18,7 +18,7 @@ public class ParseJSON {
 
     public static final String KEY_HASH_CODE = "hash";
     public static final String KEY_STUDENT_ID = "matric_number";
-    public static final String KEY_STAFF_ID = "staff_id";
+    public static final String KEY_STAFF_ID = "staffid";
 
     private String json;
 
