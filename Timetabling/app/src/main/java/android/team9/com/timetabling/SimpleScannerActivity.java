@@ -74,17 +74,7 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
 
 
 // Request a string response
-        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        // Result handling
-                        System.out.println(response.substring(0,100));
-                        Toast.makeText(getApplicationContext(), "Successfully logged in", Toast.LENGTH_SHORT).show();
-
-                    }
-                }, new ResponseErrorFrank(this)){
+        StringRequest stringRequest = new StringRequest(Request.Method.PUT, url,new ResponseFrank(this), new ResponseErrorFrank(this)){
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
