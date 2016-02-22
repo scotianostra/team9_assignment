@@ -4,14 +4,20 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
+        android:layout_width="fill_parent"
+        android:textSize="15sp"
+        android:paddingLeft="6dip"
+        android:paddingRight="6dip"
+        android:gravity="center"
         android:id="@+id/textViewModuleCode" />
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="New Text"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_width="fill_parent"
+        android:textSize="20sp"
+        android:paddingLeft="6dip"
+        android:paddingRight="6dip"
+        android:gravity="center"
         android:id="@+id/textViewModuleTitle" />
 
 </LinearLayout>
