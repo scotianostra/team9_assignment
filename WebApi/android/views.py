@@ -76,6 +76,7 @@ class ClassSign(generics.UpdateAPIView):
     def put(self, request, format=None):
         roomid = request.data["room_id"]
         studentid = request.data["student_id"]
+        student = Student.objects.get(matric_number = studentid)
         
         #Select all classes which start within +/- 60 minutes in the specified room
         now = timezone.now()
@@ -96,7 +97,7 @@ class ClassSign(generics.UpdateAPIView):
             if minutesToStart <= 15 and minutesToStart >= -30:
                 action = 1
                 if Module.objects.filter(Q(students_enrolled__exact = studentid) & Q(moduleid = thisClass.moduleid_id)).count() != 0:
-                    if thisClass.class_register.get(matric_number = studentid):
+                    if thisClass.class_register.filter(matric_number = studentid).count() != 0:
                         action = 2
                     else:
                         thisClass.class_register.add(student)
