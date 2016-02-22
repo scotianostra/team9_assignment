@@ -9,12 +9,16 @@ import org.json.JSONObject;
 public class ParseJSON {
     public static String[] moduleCode;
     public static String[] moduleTitle;
+    public static String[] moduleId;
+
 
     public  int user_id;
     public  String role;
 
     public static final String KEY_MODULE_CODE = "module_code";
     public static final String KEY_MODULE_TITLE = "module_title";
+    public static final String KEY_MODULE_ID = "moduleid";
+
 
     public static final String KEY_HASH_CODE = "hash";
     public static final String KEY_STUDENT_ID = "matric_number";
@@ -22,11 +26,9 @@ public class ParseJSON {
 
     private String json;
 
-    public ParseJSON(String json){
-        this.json = json;
-    }
+    public ParseJSON(String json) { this.json = json; }
 
-    protected void parseJSONArray(){
+    protected void parseJSONModuleList(){
         try {
 
             JSONArray jsonArray = new JSONArray(json);
@@ -34,11 +36,14 @@ public class ParseJSON {
 
             moduleCode = new String[jsonArray.length()];
             moduleTitle = new String[jsonArray.length()];
+            moduleId = new String[jsonArray.length()];
+
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonobject = jsonArray.getJSONObject(i);
                 moduleCode[i] = jsonobject.getString(KEY_MODULE_CODE);
                 moduleTitle[i] = jsonobject.getString(KEY_MODULE_TITLE);
+                moduleId[i] = jsonobject.getString(KEY_MODULE_ID);
             }
 
         } catch (JSONException e) {
@@ -46,7 +51,7 @@ public class ParseJSON {
         }
     }
 
-    protected void parseJSONObject(){
+    protected void parseJSONLogin(){
         try {
             JSONObject jsonObj = new JSONObject(json);
             if (jsonObj.has(KEY_STUDENT_ID) && !jsonObj.isNull(KEY_STUDENT_ID))
