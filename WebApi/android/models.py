@@ -47,13 +47,11 @@ class Module(models.Model):
 
 
 class Class(models.Model):
-    classid = models.IntegerField(primary_key=True)
     qrCode = models.IntegerField()
-    occurance = models.DateTimeField()
+    start_time = models.DateTimeField()
+    room_id = models.CharField(max_length=10)
+    end_time = models.DateTimeField()
     building = models.CharField(max_length=20)
     class_register = models.ManyToManyField(Student)
 
-
-class Room(models.Model):
-    room_name = models.CharField(max_length=10)
 

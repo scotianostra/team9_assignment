@@ -14,7 +14,7 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 
 
-public class StaffUIActivity extends AppCompatActivity {
+public class StaffLandingActivity extends AppCompatActivity {
 
     private String JSON_URL = "http://api.ouanixi.com/staffModuleList/";
     private ListView listView;
@@ -49,7 +49,7 @@ public class StaffUIActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(StaffUIActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(StaffLandingActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
                     }
                 });
 

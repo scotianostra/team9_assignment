@@ -4,6 +4,8 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+import datetime
+
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -55,8 +57,8 @@ class StaffDetail(generics.RetrieveUpdateDestroyAPIView):
 @api_view(['POST'])
 def login(request):
     if request.method == 'POST':
-        email = request.POST['email_address']
-        password = request.POST['password']
+        email = request.data['email_address']
+        password = request.data['password']
         try:
             staff = Staff.objects.get(email=email)
             if staff.password == password:
@@ -74,3 +76,21 @@ def login(request):
                 return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
+
+@api_view(['PUT'])
+def sign_to_class(request):
+    if request.method == 'PUT':
+        now = datetime.datetime.now().hour
+        student_id = request.data['student_id']
+        room_id = request.data['room_id']
+
+        if Class.objects.filter(start_time__hour=now, room_id=room_id).exists():
+            cls = Class.objects.filter(start_time__hour=now).filter(room_id=room_id)[0]
+            try:
+                student = Student.objects.get(matric_number=student_id)
+                cls.class_register.add(student)
+                cls.save()
+            except(KeyError, Student.DoesNotExist):
+                return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_201_CREATED)
+    return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
