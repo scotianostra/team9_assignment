@@ -14,7 +14,7 @@ class Staff(models.Model):
     hash = models.CharField(max_length=128, null=True)
 
     def create_hash(self):
-        return binascii.hexlify(os.random(16))
+        return "staff" #+ binascii.b2a_hex(os.urandom(15)).decode()
 
     def save(self, *args, **kwargs):
         self.hash = self.create_hash()
@@ -30,7 +30,7 @@ class Student(models.Model):
     hash = models.CharField(max_length=128,  null=True)
 
     def create_hash(self):
-        return binascii.hexlify(os.random(16))
+        return "student" #+ binascii.b2a_hex(os.urandom(15)).decode()
 
     def save(self, *args, **kwargs):
         # check if the row with this hash already exists.

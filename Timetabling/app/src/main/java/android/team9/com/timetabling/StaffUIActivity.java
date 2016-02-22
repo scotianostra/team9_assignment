@@ -2,7 +2,6 @@ package android.team9.com.timetabling;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,9 +16,9 @@ import org.json.JSONException;
 
 public class StaffUIActivity extends AppCompatActivity {
 
-    public static final String JSON_URL = "http://10.0.2.2:8000/staffModuleList/1000";
-
+    private String JSON_URL = "http://api.ouanixi.com/staffModuleList/";
     private ListView listView;
+    private int user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +27,15 @@ public class StaffUIActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listView);
 
+        Bundle extra = getIntent().getExtras();
+        user_id = extra.getInt(LoginActivity.EXTRA_USERID);
+
         sendRequest();
     }
 
     private void sendRequest(){
 
-        StringRequest stringRequest = new StringRequest(JSON_URL,
+        StringRequest stringRequest = new StringRequest(JSON_URL + user_id,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -56,10 +58,9 @@ public class StaffUIActivity extends AppCompatActivity {
     }
 
     private void showJSON(String json) throws JSONException {
-        ParseModuleList pj = new ParseModuleList(json);
-
-        pj.parseJSON();
-        CustomModuleList cl = new CustomModuleList(this, ParseModuleList.moduleCode, ParseModuleList.moduleTitle, ParseModuleList.moduleId);
+        ParseJSON pj = new ParseJSON(json);
+        pj.parseJSONModuleList();
+        CustomModuleList cl = new CustomModuleList(this, ParseJSON.moduleCode, ParseJSON.moduleTitle, ParseJSON.moduleId);
         listView.setAdapter(cl);
 
     }

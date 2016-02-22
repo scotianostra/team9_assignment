@@ -21,7 +21,7 @@ public class CustomModuleList extends ArrayAdapter<String> {
         this.moduleCode = moduleCode;
         this.moduleTitle = moduleTitle;
         this.moduleId = moduleId;
-        Log.v("MODULE ID:", ParseModuleList.moduleId[0].toString());
+        //Log.v("MODULE ID:", ParseJSON.moduleId[0].toString());
 
     }
 

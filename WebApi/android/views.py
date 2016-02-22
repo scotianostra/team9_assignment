@@ -19,6 +19,19 @@ def staff_module_list(request, pk):
         return Response(serializer.data)
 
 
+@api_view(['GET'])
+def module_enrollment_list(request, pk):
+
+    try:
+        students = Module.objects.get(moduleid=pk).students_enrolled
+    except Module.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = StudentSerializer(students, many=True)
+        return Response(serializer.data)
+
+
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
@@ -39,7 +52,7 @@ class StaffDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StaffSerializer
 
 
-@api_view(['GET', 'POST'])
+@api_view(['POST'])
 def login(request):
     if request.method == 'POST':
         email = request.POST['email_address']
@@ -47,13 +60,17 @@ def login(request):
         try:
             staff = Staff.objects.get(email=email)
             if staff.password == password:
-                return Response({'id': staff.staffid, 'hash': staff.hash})
+                serializer = StaffLoginSerializer(staff)
+                return Response(serializer.data)
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
         except(KeyError, Staff.DoesNotExist):
             try:
                 student = Student.objects.get(email=email)
                 if student.password == password:
-                    return Response({'id': student.staffid, 'hash': student.hash})
+                    serializer = StudentLoginSerializer(student)
+                    return Response(serializer.data)
+                return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
             except(KeyError, Student.DoesNotExist):
-                return Response(status=status.HTTP_204_NO_CONTENT)
-    return Response(status=status.HTTP_400_BAD_REQUEST)
+                return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+    return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
