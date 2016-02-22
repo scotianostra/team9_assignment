@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Handler;
 
 import android.util.AttributeSet;
 import android.util.Log;
@@ -20,7 +19,6 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.zxing.Result;
@@ -28,16 +26,15 @@ import com.google.zxing.Result;
 import me.dm7.barcodescanner.core.IViewFinder;
 import me.dm7.barcodescanner.core.ViewFinderView;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
-import java.net.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class SimpleScannerActivity extends BaseScannerActivity implements ZXingScannerView.ResultHandler {
     private ZXingScannerView mScannerView;
-    String userid="101010";
-    String roomid;
-
+    private String userid="1";
+    private String roomid;
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -69,13 +66,11 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
 
     @Override
     public void handleResult(Result rawResult) {
-       // Toast.makeText(this, "Contents = " + rawResult.getText() +
-      //          ", Format = " + rawResult.getBarcodeFormat().toString(), Toast.LENGTH_SHORT).show();
-        //String userid="101010";
        roomid=rawResult.getText();
-        Log.v("QRCODE STRING : ", roomid );
 
-        String url = "http://5.39.43.115:8000/students/sign/";
+        Log.v("QRCODE STRING : ", roomid);
+
+        String url = "http://5.39.43.115:8081/students/sign/";
 
 
 // Request a string response
@@ -86,18 +81,10 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
 
                         // Result handling
                         System.out.println(response.substring(0,100));
+                        Toast.makeText(getApplicationContext(), "Successfully logged in", Toast.LENGTH_SHORT).show();
 
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                // Error handling
-                System.out.println("Something went wrong!");
-                error.printStackTrace();
-
-            }
-        }){
+                }, new ResponseErrorFrank(this)){
             @Override
             protected Map<String,String> getParams(){
                 Map<String,String> params = new HashMap<String, String>();
@@ -118,16 +105,12 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
 // Add the request to the queue
         Volley.newRequestQueue(this).add(stringRequest);
 
-
-
-
-
         finish();
         // Note:
         // * Wait 2 seconds to resume the preview.
         // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
         // * I don't know why this is the case but I don't have the time to figure out.
-     /*   Handler handler = new Handler();
+      /* Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
