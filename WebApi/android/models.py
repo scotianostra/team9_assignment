@@ -1,5 +1,5 @@
 from django.db import models
-import os
+import os, binascii
 
 
 # Create your models here.
@@ -14,7 +14,7 @@ class Staff(models.Model):
     hash = models.CharField(max_length=128, null=True)
 
     def create_hash(self):
-        return os.urandom(32).encode('hex')
+        return "staff" #+ binascii.b2a_hex(os.urandom(15)).decode()
 
     def save(self, *args, **kwargs):
         self.hash = self.create_hash()
@@ -30,7 +30,7 @@ class Student(models.Model):
     hash = models.CharField(max_length=128,  null=True)
 
     def create_hash(self):
-        return os.urandom(32).encode('hex')
+        return "student" #+ binascii.b2a_hex(os.urandom(15)).decode()
 
     def save(self, *args, **kwargs):
         # check if the row with this hash already exists.
@@ -50,7 +50,10 @@ class Class(models.Model):
     classid = models.IntegerField(primary_key=True)
     qrCode = models.IntegerField()
     occurance = models.DateTimeField()
-    room = models.CharField(max_length=10)
     building = models.CharField(max_length=20)
     class_register = models.ManyToManyField(Student)
+
+
+class Room(models.Model):
+    room_name = models.CharField(max_length=10)
 

@@ -1,16 +1,10 @@
 <resources>
     <string name="app_name">Timetabling</string>
-    <string name="title_activity_module_list">Module List</string>
-    <string name="title_activity_enrolled_students">Enrolled Students</string>
+    <!--Refactoring hardcoded login ui text into string resources -->
+    <string name="login_button_txt">Login</string>
+    <string name="password_hint">Password</string>
+    <string name="email_hint">Email</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    
-    <array name="students">
-        <item>Claire1</item>
-        <item>Claire2</item>
-        <item>Claire3</item>
-    </array>
-
+    <string name="attendance_button">View module attendance</string>
+    <string name="student_list_Button">View enrolled students</string>
 </resources>
-
