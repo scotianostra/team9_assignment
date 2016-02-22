@@ -71,7 +71,7 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
         Log.v("QRCODE STRING : ", roomid);
 
         String url = "http://5.39.43.115:8081/students/sign/";
-
+           // String url="http://api.ouanixi.com/student_signin/";
 
 // Request a string response
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, url,new ResponseFrank(this), new ResponseErrorFrank(this)){

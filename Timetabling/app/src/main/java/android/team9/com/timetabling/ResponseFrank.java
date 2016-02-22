@@ -16,8 +16,9 @@ public class ResponseFrank implements Response.Listener {
 
     @Override
     public void onResponse(Object response) {
+        String result=(String) response;
         // Result handling
-        System.out.println(response.toString().substring(0,100));
+      System.out.println(result);
         Toast.makeText(context, "Successfully logged in", Toast.LENGTH_SHORT).show();
     }
 }
