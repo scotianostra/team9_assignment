@@ -4,4 +4,7 @@
     <string name="login_button_txt">Login</string>
     <string name="password_hint">Password</string>
     <string name="email_hint">Email</string>
+
+    <string name="attendance_button">View module attendance</string>
+    <string name="student_list_Button">View enrolled students</string>
 </resources>
