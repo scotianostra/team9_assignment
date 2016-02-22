@@ -24,7 +24,7 @@ public class StaffUIActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_staff_ui);
 
         listView = (ListView) findViewById(R.id.listView);
 
@@ -60,7 +60,7 @@ public class StaffUIActivity extends AppCompatActivity {
 
     private void showJSON(String json) throws JSONException {
         ParseJSON pj = new ParseJSON(json);
-        pj.parseJSONArray();
+        pj.parseJSONModulelist();
         CustomList cl = new CustomList(this, ParseJSON.moduleCode, ParseJSON.moduleTitle);
         listView.setAdapter(cl);
 

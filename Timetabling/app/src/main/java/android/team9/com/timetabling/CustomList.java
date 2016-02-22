@@ -10,10 +10,11 @@ import android.widget.TextView;
 public class CustomList extends ArrayAdapter<String> {
     private static String[] moduleCode;
     private static String[] moduleTitle;
+    private static int[] moduleId;
     private Activity context;
 
     public CustomList(Activity context, String[] moduleCode, String[] moduleTitle) {
-        super(context, R.layout.list_view_layout, moduleCode);
+        super(context, R.layout.module_list_view_layout, moduleCode);
         this.context = context;
         this.moduleCode = moduleCode;
         this.moduleTitle = moduleTitle;
@@ -22,7 +23,7 @@ public class CustomList extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View listViewItem = inflater.inflate(R.layout.list_view_layout, null, true);
+        View listViewItem = inflater.inflate(R.layout.module_list_view_layout, null, true);
         TextView textViewModuleCode = (TextView) listViewItem.findViewById(R.id.textViewModuleCode);
         TextView textViewModuleTitle = (TextView) listViewItem.findViewById(R.id.textViewModuleTitle);
 
