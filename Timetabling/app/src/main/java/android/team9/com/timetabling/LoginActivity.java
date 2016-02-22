@@ -39,14 +39,27 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editTextPassword;
 
     private Button buttonRegister;
+    private int user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        String role = sharedPref.getString("hash", "no_user");
-        int id = sharedPref.getInt("matric_number", -1);
-        redirectToActivity(id, role);
+        String role = sharedPref.getString("role", "no_user");
+        int id = sharedPref.getInt("id", -1);
+        if (id > 0 ) {
+
+            if (role.equals("staff") ) {
+                Intent intent = new Intent(this, StaffUIActivity.class);
+                intent.putExtra(EXTRA_USERID, id);
+                startActivity(intent);
+            }
+//            else if (role == "student") {
+//                Intent intent = new Intent(this, StudentUIActivity.class);
+//                intent.putExtra(EXTRA_USERID, id);
+//                startActivity(intent);
+//            }
+        }
         setContentView(R.layout.activity_login);
 
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
@@ -78,8 +91,11 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putInt("id", prsJson.user_id);
                         editor.putString("role", prsJson.role);
                         editor.commit();
-                        //redirectToActivity(prsJson.user_id, prsJson.role);
-                        Toast.makeText(LoginActivity.this, prsJson.role + " " +prsJson.user_id, Toast.LENGTH_LONG).show();
+                        user_id = prsJson.user_id;
+                        Intent intent  = new Intent(getApplicationContext(),StaffUIActivity.class);
+                        intent.putExtra(EXTRA_USERID, user_id);
+                        startActivity(intent);
+                        //Toast.makeText(LoginActivity.this, prsJson.role + " " +prsJson.user_id, Toast.LENGTH_LONG).show();
                     }
                 },
                 new Response.ErrorListener() {
@@ -105,22 +121,4 @@ public class LoginActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
-    private void redirectToActivity(int id, String role){
-
-        if (id > 0 ) {
-
-            if (role == "staff") {
-                Intent intent = new Intent(this, StaffUIActivity.class);
-                intent.putExtra(EXTRA_USERID, id);
-                startActivity(intent);
-            }
-//            else if (role == "student") {
-//                Intent intent = new Intent(this, StudentUIActivity.class);
-//                intent.putExtra(EXTRA_USERID, id);
-//                startActivity(intent);
-//            }
-        }
-    }
-
 }

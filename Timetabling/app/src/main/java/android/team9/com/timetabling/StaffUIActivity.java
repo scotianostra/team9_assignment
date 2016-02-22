@@ -16,9 +16,10 @@ import org.json.JSONException;
 
 public class StaffUIActivity extends AppCompatActivity {
 
-    public static final String JSON_URL = "http://10.0.2.2:8000/staffModuleList/1234";
+    private String JSON_URL = "http://api.ouanixi.com/staffModuleList/";
 
     private ListView listView;
+    private int user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,12 +28,15 @@ public class StaffUIActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listView);
 
+        Bundle extra = getIntent().getExtras();
+        user_id = extra.getInt(LoginActivity.EXTRA_USERID);
+
         sendRequest();
     }
 
     private void sendRequest(){
 
-        StringRequest stringRequest = new StringRequest(JSON_URL,
+        StringRequest stringRequest = new StringRequest(JSON_URL + user_id,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
