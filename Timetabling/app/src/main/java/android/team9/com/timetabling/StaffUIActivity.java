@@ -16,7 +16,7 @@ import org.json.JSONException;
 
 public class StaffUIActivity extends AppCompatActivity {
 
-    private String JSON_URL = "http://api.ouanixi.com/staffModuleList/";
+    public String JSON_URL = "http://api.ouanixi.com/staffModuleList/";
     private ListView listView;
     private int user_id;
 
@@ -33,7 +33,7 @@ public class StaffUIActivity extends AppCompatActivity {
         sendRequest();
     }
 
-    private void sendRequest(){
+    public void sendRequest(){
 
         StringRequest stringRequest = new StringRequest(JSON_URL + user_id,
                 new Response.Listener<String>() {
@@ -57,7 +57,7 @@ public class StaffUIActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    private void showJSON(String json) throws JSONException {
+    public void showJSON(String json) throws JSONException {
         ParseJSON pj = new ParseJSON(json);
         pj.parseJSONModuleList();
         CustomModuleList cl = new CustomModuleList(this, ParseJSON.moduleCode, ParseJSON.moduleTitle, ParseJSON.moduleId);
