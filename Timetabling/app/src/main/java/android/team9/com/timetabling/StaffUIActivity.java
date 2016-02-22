@@ -2,6 +2,7 @@ package android.team9.com.timetabling;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -16,14 +17,14 @@ import org.json.JSONException;
 
 public class StaffUIActivity extends AppCompatActivity {
 
-    public static final String JSON_URL = "http://10.0.2.2:8000/staffModuleList/1234";
+    public static final String JSON_URL = "http://10.0.2.2:8000/staffModuleList/1000";
 
     private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_staff_ui);
 
         listView = (ListView) findViewById(R.id.listView);
 
@@ -55,9 +56,10 @@ public class StaffUIActivity extends AppCompatActivity {
     }
 
     private void showJSON(String json) throws JSONException {
-        ParseJSON pj = new ParseJSON(json);
+        ParseModuleList pj = new ParseModuleList(json);
+
         pj.parseJSON();
-        CustomList cl = new CustomList(this, ParseJSON.moduleCode, ParseJSON.moduleTitle);
+        CustomModuleList cl = new CustomModuleList(this, ParseModuleList.moduleCode, ParseModuleList.moduleTitle, ParseModuleList.moduleId);
         listView.setAdapter(cl);
 
     }

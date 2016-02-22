@@ -1,9 +1,9 @@
 import unittest
-from unittest.mock import Mock, patch
+#from unittest.mock import Mock, patch
 
 from django.http import HttpRequest
 from django.test import TestCase
-from android.views import login
+from android.views import login, staff_module_list
 from django.utils.html import escape
 
 
@@ -17,6 +17,14 @@ class LoginTest(TestCase):
         response = login(request)
 
         self.assertEqual(response.status_code, 204)
+
+    # def test_return_404_if_staffid_not_found(self):
+    #     request = HttpRequest()
+    #     request.method = 'GET'
+    #     request.POST['staffid'] = '0'
+    #     response = staff_module_list(request)
+    #
+    #     self.assertEqual(response.status_code, 404)
 
     # def test_staff_can_login_if_registered(self):
     #     request = HttpRequest()
