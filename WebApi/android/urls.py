@@ -13,6 +13,8 @@ urlpatterns = [
     url(r'^login/$', views.login),
     url(r'^students/(?P<pk>[0-9]+)/$', views.StudentDetail.as_view()),
     url(r'^staff/(?P<pk>[0-9]+)/$', views.StaffDetail.as_view()),
+    url(r'^student_signin/$', views.sign_to_class),
+
 
 ]
 

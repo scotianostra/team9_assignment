@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         if (id > 0 ) {
 
             if (role.equals("staff") ) {
-                Intent intent = new Intent(this, StaffUIActivity.class);
+                Intent intent = new Intent(this, StaffLandingActivity.class);
                 intent.putExtra(EXTRA_USERID, id);
                 startActivity(intent);
             }
@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("role", prsJson.role);
                         editor.commit();
                         user_id = prsJson.user_id;
-                        Intent intent  = new Intent(getApplicationContext(),StaffUIActivity.class);
+                        Intent intent  = new Intent(getApplicationContext(),StaffLandingActivity.class);
                         intent.putExtra(EXTRA_USERID, user_id);
                         startActivity(intent);
                         //Toast.makeText(LoginActivity.this, prsJson.role + " " +prsJson.user_id, Toast.LENGTH_LONG).show();
@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                 }) {
             @Override
             protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put(KEY_PASSWORD, password);
                 params.put(KEY_EMAIL, email);
                 return params;

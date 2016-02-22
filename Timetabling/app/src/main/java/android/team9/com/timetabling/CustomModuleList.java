@@ -38,4 +38,14 @@ public class CustomModuleList extends ArrayAdapter<String> {
 
         return listViewItem;
     }
+
+    public String getModuleCode(int pos){
+        return moduleCode[pos];
+    }
+    public String getModuleId(int pos){
+        return moduleId[pos];
+    }
+    public String getModuleTitle(int pos){
+        return moduleTitle[pos];
+    }
 }
