@@ -20,7 +20,7 @@ import org.json.JSONException;
 
 public class StaffLandingActivity extends AppCompatActivity {
 
-    private String JSON_URL = "http://api.ouanixi.com/staffModuleList/";
+    public String JSON_URL = "http://api.ouanixi.com/staffModuleList/";
     private ListView listView;
     private int user_id;
     CustomModuleList cl;
@@ -60,7 +60,7 @@ public class StaffLandingActivity extends AppCompatActivity {
         });
     }
 
-    private void sendRequest(){
+    public void sendRequest(){
 
         StringRequest stringRequest = new StringRequest(JSON_URL + user_id,
                 new Response.Listener<String>() {
@@ -84,7 +84,7 @@ public class StaffLandingActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    private void showJSON(String json) throws JSONException {
+    public void showJSON(String json) throws JSONException {
         ParseJSON pj = new ParseJSON(json);
         pj.parseJSONModuleList();
          cl = new CustomModuleList(this, ParseJSON.moduleCode, ParseJSON.moduleTitle, ParseJSON.moduleId);
