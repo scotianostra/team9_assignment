@@ -70,10 +70,16 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
 
         Log.v("QRCODE STRING : ", roomid);
 
-        String url = "http://5.39.43.115:8081/students/sign/";
-           // String url="http://api.ouanixi.com/student_signin/";
+        submitValues();
 
-// Request a string response
+        finish();
+    }
+
+    protected void submitValues(){
+        String url = "http://5.39.43.115:8081/students/sign/";
+        // String url="http://api.ouanixi.com/student_signin/";
+
+            // Request a string response
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, url,new ResponseFrank(this), new ResponseErrorFrank(this)){
             @Override
             protected Map<String,String> getParams(){
@@ -81,8 +87,8 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
                 params.put("student_id", userid);
                 params.put("room_id", roomid);
 
-            return params;
-        }
+                return params;
+            }
 
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
@@ -92,10 +98,8 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
             }
         };
 
-// Add the request to the queue
+        // Add the request to the queue
         Volley.newRequestQueue(this).add(stringRequest);
-
-        finish();
         // Note:
         // * Wait 2 seconds to resume the preview.
         // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
