@@ -16,6 +16,7 @@ public class CustomModuleList extends ArrayAdapter<String> {
     private Activity context;
 
     public CustomModuleList(Activity context, String[] moduleCode, String[] moduleTitle, String[] moduleId) {
+
         super(context, R.layout.module_list_view_layout, moduleCode);
         this.context = context;
         this.moduleCode = moduleCode;
