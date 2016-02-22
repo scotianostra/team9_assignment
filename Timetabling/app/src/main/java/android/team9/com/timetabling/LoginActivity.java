@@ -106,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
                 }) {
             @Override
             protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
+                Map<String, String> params = new HashMap<>();
                 params.put(KEY_PASSWORD, password);
                 params.put(KEY_EMAIL, email);
                 return params;

@@ -1,5 +1,3 @@
-import unittest
-#from unittest.mock import Mock, patch
 from rest_framework.test import APITestCase
 from rest_framework import status
 from android.models import Staff, Student, Class
