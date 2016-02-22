@@ -18,6 +18,20 @@ def staff_module_list(request, pk):
         serializer = StaffModuleListSerializer(modules, many=True)
         return Response(serializer.data)
 
+
+@api_view(['GET'])
+def module_enrollment_list(request, pk):
+
+    try:
+        students = Module.objects.get(moduleid=pk).students_enrolled
+    except Module.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = StudentSerializer(students, many=True)
+        return Response(serializer.data)
+
+
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
