@@ -12,8 +12,8 @@ public class ParseJSON {
     public static String[] moduleId;
 
 
-    public  int user_id;
-    public  String role;
+    public static int user_id;
+    public static String role;
 
     public static final String KEY_MODULE_CODE = "module_code";
     public static final String KEY_MODULE_TITLE = "module_title";
@@ -28,7 +28,7 @@ public class ParseJSON {
 
     public ParseJSON(String json) { this.json = json; }
 
-    protected void parseJSONModuleList(){
+    protected void parseJSONModuleList() throws JSONException{
         try {
 
             JSONArray jsonArray = new JSONArray(json);
@@ -48,19 +48,23 @@ public class ParseJSON {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            throw e;
         }
     }
 
-    protected void parseJSONLogin(){
+    protected void parseJSONLogin() throws JSONException {
         try {
             JSONObject jsonObj = new JSONObject(json);
             if (jsonObj.has(KEY_STUDENT_ID) && !jsonObj.isNull(KEY_STUDENT_ID))
                 user_id = jsonObj.getInt(KEY_STUDENT_ID);
-            else user_id = jsonObj.getInt(KEY_STAFF_ID);
+            else {
+                user_id = jsonObj.getInt(KEY_STAFF_ID);
+            }
             role = jsonObj.getString(KEY_HASH_CODE);
 
         } catch (JSONException e) {
             e.printStackTrace();
+            throw e;
         }
     }
 }

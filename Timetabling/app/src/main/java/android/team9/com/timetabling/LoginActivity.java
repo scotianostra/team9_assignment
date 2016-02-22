@@ -19,6 +19,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 
+import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -80,7 +81,11 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         ParseJSON prsJson = new ParseJSON(response);
-                        prsJson.parseJSONLogin();
+                        try {
+                            prsJson.parseJSONLogin();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.clear();

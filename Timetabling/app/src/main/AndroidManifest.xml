@@ -14,10 +14,15 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+<<<<<<< HEAD
 
         android:theme="@style/AppTheme" >
         <activity android:name=".StaffLandingActivity" >
 
+=======
+        android:theme="@style/AppTheme">
+        <activity android:name=".StaffLandingActivity">
+>>>>>>> 7cf2117118e799ae0a92f71fe965077f91bbfabf
         </activity>
         <activity android:name=".LoginActivity" >
             <intent-filter>
