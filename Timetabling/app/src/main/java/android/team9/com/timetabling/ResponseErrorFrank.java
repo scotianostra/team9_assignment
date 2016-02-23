@@ -13,6 +13,7 @@ public  class ResponseErrorFrank implements Response.ErrorListener{
     private Context context;
 
     public ResponseErrorFrank(Context con){
+
         context=con;
     }
     private boolean error_bool;
