@@ -10,7 +10,6 @@ import datetime
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def staff_module_list(request, pk):
-
     try:
         modules = Module.objects.filter(coordinators=pk)
     except Module.DoesNotExist:
@@ -34,6 +33,9 @@ def module_enrollment_list(request, pk):
         return Response(serializer.data)
 
 
+
+
+
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
@@ -44,6 +46,9 @@ class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = StudentSerializer
 
 
+
+
+
 class StaffList(generics.ListCreateAPIView):
     queryset = Staff.objects.all()
     serializer_class = StaffSerializer
@@ -52,6 +57,28 @@ class StaffList(generics.ListCreateAPIView):
 class StaffDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Staff.objects.all()
     serializer_class = StaffSerializer
+
+
+
+
+
+class ModuleList(generics.ListCreateAPIView):
+    queryset = Module.objects.all()
+    serializer_class = ModuleSerializer
+
+class ModuleList(generics.ListCreateAPIView):
+    queryset = Module.objects.all()
+    serializer_class = ModuleSerializer
+
+
+class ClassList(generics.ListCreateAPIView):
+    queryset = Class.objects.all()
+    serializer_class = ClassSerializer
+
+
+class ClassDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Class.objects.all()
+    serializer_class = ClassSerializer
 
 
 @api_view(['POST'])

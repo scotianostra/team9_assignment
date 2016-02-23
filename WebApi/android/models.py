@@ -52,6 +52,7 @@ class Class(models.Model):
     room_id = models.CharField(max_length=10)
     end_time = models.DateTimeField()
     building = models.CharField(max_length=20)
+    module = models.ForeignKey(Module)
     class_register = models.ManyToManyField(Student)
 
 

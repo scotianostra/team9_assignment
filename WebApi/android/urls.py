@@ -8,6 +8,8 @@ urlpatterns = [
     url(r'^staff/$', views.StaffList.as_view()),
     url(r'^staffModuleList/(?P<pk>[0-9]+)$', views.staff_module_list),
     url(r'^module_enrollments/(?P<pk>[0-9]+)/$', views.module_enrollment_list),
+    url(r'^modules/$', views.ModuleList.as_view()),
+    url(r'^classes/$', views.ClassList.as_view()),
     # url(r'^students/(?P<pk>[0-9]+)/$', views.StudentDetail.as_view()),
     # url(r'^staff/(?P<pk>[0-9]+)/$', views.StaffDetail.as_view()),
     url(r'^login/$', views.login),
