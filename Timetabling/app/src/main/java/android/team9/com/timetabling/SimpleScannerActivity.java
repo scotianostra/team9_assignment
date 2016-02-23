@@ -4,6 +4,7 @@ package android.team9.com.timetabling;
  * Created by frank on 18/02/16.
  */
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -67,9 +68,7 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
     @Override
     public void handleResult(Result rawResult) {
        roomid=rawResult.getText();
-      // Bundle extra = getIntent().getExtras();
-
-           userid=getIntent().getStringExtra("User");
+       userid=getIntent().getStringExtra("User");
 
         Log.v("QRCODE STRING : ", roomid + " " +userid);
 

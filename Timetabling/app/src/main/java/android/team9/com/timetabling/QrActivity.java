@@ -25,10 +25,10 @@ public class QrActivity extends AppCompatActivity {
 
     public void launchSimpleActivity(View v) {
        Bundle extra = getIntent().getExtras();
-        int id=extra.getInt(LoginActivity.EXTRA_USERID);
+        Integer id= new Integer(extra.getInt(LoginActivity.EXTRA_USERID));
+
         Intent intent = new Intent(this, SimpleScannerActivity.class);
-         intent.putExtra("User",id);
-        //intent.putExtra("User",extra.getInt(LoginActivity.EXTRA_USERID));
+        intent.putExtra("User",id.toString());
         startActivity(intent);
         //launchActivity(SimpleScannerActivity.class);
     }
