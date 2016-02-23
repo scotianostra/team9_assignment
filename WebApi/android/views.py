@@ -12,7 +12,7 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-import datetime
+
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -87,45 +87,6 @@ class ClassDetail(generics.RetrieveUpdateDestroyAPIView):
 class ClassRegister(generics.RetrieveUpdateDestroyAPIView):
     queryset = Class.objects.all()
     serializer_class = ClassSerializer
-
-
-# class ClassRegister(generics.ListCreateAPIView):
-#     serializer_class = StudentSerializer
-#     def get(self, request, format=None):
-#         searchid = request.data["class_id"]
-#
-#         classToCheck = Class.objects.filter(classid = searchid)[:1].get()
-#         signedIn = classToCheck.class_register.all()
-#         studentsOnModule = Module.objects.filter(moduleid = classToCheck.module_id)[:1].get().students_enrolled.all()
-#
-#         registerList = list(chain(signedIn, studentsOnModule))
-#         registerList = sorted(registerList, key = lambda instance: instance.last_name)
-#         seen = []
-#         resultList = []
-#
-#         for student in registerList:
-#             found = False
-#             for seenStudent in seen:
-#                 if student.matric_number == seenStudent:
-#                     found = True
-#                     break
-#
-#             if found == False:
-#                 seen.append(student.matric_number)
-#                 hasSigned = False
-#                 for signedStudent in signedIn:
-#                     if signedStudent.matric_number == student.matric_number:
-#                         hasSigned = True
-#
-#                 student.has_signed = hasSigned;
-#                 resultList.append(student)
-#
-#
-#         serializer = ClassRegisterSerializer(resultList, many=True)
-#         return Response(serializer.data)
-#
-#         responseStatus = status.HTTP_200_OK
-#         return Response(content, status = responseStatus)
 
 
 class ClassSign(generics.UpdateAPIView):
@@ -207,3 +168,42 @@ def login(request):
             except(KeyError, Student.DoesNotExist):
                 return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
     return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
+# class ClassRegister(generics.ListCreateAPIView):
+#     serializer_class = StudentSerializer
+#     def get(self, request, format=None):
+#         searchid = request.data["class_id"]
+#
+#         classToCheck = Class.objects.filter(classid = searchid)[:1].get()
+#         signedIn = classToCheck.class_register.all()
+#         studentsOnModule = Module.objects.filter(moduleid = classToCheck.module_id)[:1].get().students_enrolled.all()
+#
+#         registerList = list(chain(signedIn, studentsOnModule))
+#         registerList = sorted(registerList, key = lambda instance: instance.last_name)
+#         seen = []
+#         resultList = []
+#
+#         for student in registerList:
+#             found = False
+#             for seenStudent in seen:
+#                 if student.matric_number == seenStudent:
+#                     found = True
+#                     break
+#
+#             if found == False:
+#                 seen.append(student.matric_number)
+#                 hasSigned = False
+#                 for signedStudent in signedIn:
+#                     if signedStudent.matric_number == student.matric_number:
+#                         hasSigned = True
+#
+#                 student.has_signed = hasSigned;
+#                 resultList.append(student)
+#
+#
+#         serializer = ClassRegisterSerializer(resultList, many=True)
+#         return Response(serializer.data)
+#
+#         responseStatus = status.HTTP_200_OK
+#         return Response(content, status = responseStatus)

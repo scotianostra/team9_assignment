@@ -16,14 +16,10 @@ class StaffSerializer(serializers.ModelSerializer):
         model = Staff
         fields = ('staffid', 'email', 'first_name', 'last_name', 'modules')
 
-<<<<<<< HEAD
-class StaffModuleListSerializer(serializers.ModelSerializer):
-=======
 
 # List all modules, including an array of their staff coordinators
 class ModuleSerializer(serializers.ModelSerializer):
     classes = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
->>>>>>> upstream/master
     class Meta:
         model = Module
         fields = ('moduleid', 'module_code', 'module_title', 'coordinators', 'students_enrolled', 'classes')
@@ -43,19 +39,11 @@ class ClassRegisterSerializer(serializers.ModelSerializer):
         fields = ('matric_number', 'email', 'first_name', 'last_name', 'has_signed')
 
 
-
-
-
-
-
 ## Jamie's class
 class StaffModuleListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Module
         fields = ('moduleid', 'module_code', 'module_title', 'coordinators')
-
-
-
 
 
 # lists the role and id of the staff trying to login
@@ -69,8 +57,4 @@ class StaffLoginSerializer(serializers.ModelSerializer):
 class StudentLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-<<<<<<< HEAD
-        fields = ('matric_number', 'email', 'first_name', 'last_name', 'has_signed')
-=======
         fields = ('hash', 'matric_number')
->>>>>>> upstream/master
