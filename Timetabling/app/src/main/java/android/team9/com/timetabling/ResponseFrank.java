@@ -11,7 +11,12 @@ public class ResponseFrank implements Response.Listener {
     private Context context;
 
     public ResponseFrank(Context con){
+<<<<<<< HEAD
+
+        context=con;
+=======
       context=con;
+>>>>>>> upstream/master
     }
 
     @Override
