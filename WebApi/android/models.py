@@ -6,7 +6,7 @@ import os, binascii
 
 
 class Staff(models.Model):
-    staff_id = models.IntegerField(primary_key=True)
+    staffid = models.IntegerField(primary_key=True)
     email = models.CharField(max_length=60)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
@@ -39,7 +39,7 @@ class Student(models.Model):
 
 
 class Module(models.Model):
-    module_id = models.IntegerField(primary_key=True)
+    moduleid = models.IntegerField(primary_key=True)
     module_code = models.CharField(max_length=20)
     module_title = models.CharField(max_length=50)
     coordinators = models.ManyToManyField(Staff, related_name='modules')
