@@ -12,16 +12,18 @@
         android:text="@string/student_list_Button"
         android:id="@+id/studentListButton"
         android:layout_marginTop="75dp"
-        android:onClick="viewStudents()"
         android:layout_below="@+id/moduleId"
-        android:layout_centerHorizontal="true" />
+        android:onClick="view_enrolled_students"
+        android:layout_alignLeft="@+id/attendanceButton"
+        android:layout_alignStart="@+id/attendanceButton"
+        android:layout_alignRight="@+id/attendanceButton"
+        android:layout_alignEnd="@+id/attendanceButton" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/attendance_button"
         android:id="@+id/attendanceButton"
-        android:onClick="viewAttendance()"
         android:nestedScrollingEnabled="false"
         android:layout_below="@+id/studentListButton"
         android:layout_centerHorizontal="true" />
