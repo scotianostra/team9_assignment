@@ -8,7 +8,6 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student
         fields = ('matric_number', 'email', 'first_name', 'last_name')
 
-
 # List all staff
 class StaffSerializer(serializers.ModelSerializer):
     class Meta:
