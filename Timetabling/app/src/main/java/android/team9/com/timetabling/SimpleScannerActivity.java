@@ -33,7 +33,7 @@ import java.util.Map;
 
 public class SimpleScannerActivity extends BaseScannerActivity implements ZXingScannerView.ResultHandler {
     private ZXingScannerView mScannerView;
-    private String userid="1";
+    private String userid;
     private String roomid;
     @Override
     public void onCreate(Bundle state) {
@@ -67,8 +67,11 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
     @Override
     public void handleResult(Result rawResult) {
        roomid=rawResult.getText();
+      // Bundle extra = getIntent().getExtras();
 
-        Log.v("QRCODE STRING : ", roomid);
+           userid=getIntent().getStringExtra("User");
+
+        Log.v("QRCODE STRING : ", roomid + " " +userid);
 
         submitValues();
 
@@ -78,6 +81,7 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
     protected void submitValues(){
         String url = "http://5.39.43.115:8081/students/sign/";
         // String url="http://api.ouanixi.com/student_signin/";
+
 
             // Request a string response
         StringRequest stringRequest = new StringRequest(Request.Method.PUT, url,new ResponseFrank(this), new ResponseErrorFrank(this)){
