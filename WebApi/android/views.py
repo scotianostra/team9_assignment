@@ -7,6 +7,40 @@ import json
 from django.utils import timezone
 from django.db.models.query import Q
 from itertools import chain
+from android.serializers import *
+from rest_framework import generics
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+import datetime
+
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def staff_module_list(request, pk):
+
+    try:
+        modules = Module.objects.filter(coordinators=pk)
+    except Module.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = StaffModuleListSerializer(modules, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def module_enrollment_list(request, pk):
+
+    try:
+        students = Module.objects.get(moduleid=pk).students_enrolled
+    except Module.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = StudentSerializer(students, many=True)
+        return Response(serializer.data)
+
 
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
@@ -26,6 +60,7 @@ class StaffList(generics.ListCreateAPIView):
 class StaffDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Staff.objects.all()
     serializer_class = StaffSerializer
+
 
 class ClassRegister(generics.ListCreateAPIView):
     serializer_class = StudentSerializer
@@ -58,11 +93,7 @@ class ClassRegister(generics.ListCreateAPIView):
                 student.has_signed = hasSigned;
                 resultList.append(student)
         
-        #result = json.dumps([o.dump() for o in resultList])
-        #content = {
-        #    'result': result
-        #}
-        
+       
         serializer = ClassRegisterSerializer(resultList, many=True)
         return Response(serializer.data)
         
@@ -121,3 +152,28 @@ class ClassSign(generics.UpdateAPIView):
         }
         
         return Response(content, status = responseStatus)
+
+
+@api_view(['POST'])
+def login(request):
+    if request.method == 'POST':
+        email = request.data['email_address']
+        password = request.data['password']
+        try:
+            staff = Staff.objects.get(email=email)
+            if staff.password == password:
+                serializer = StaffLoginSerializer(staff)
+                return Response(serializer.data)
+            return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+        except(KeyError, Staff.DoesNotExist):
+            try:
+                student = Student.objects.get(email=email)
+                if student.password == password:
+                    serializer = StudentLoginSerializer(student)
+                    return Response(serializer.data)
+                return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+            except(KeyError, Student.DoesNotExist):
+                return Response(status=status.HTTP_406_NOT_ACCEPTABLE)
+    return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+
