@@ -8,43 +8,47 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 public class CustomStudentList extends ArrayAdapter<String> {
-    private static String[] moduleCode;
-    private static String[] moduleTitle;
-    private static String[] moduleId;
+    private static String[] matricNumber;
+    private static String[] email;
+    private static String[] fName;
+    private static String[] lName;
+
 
     private Activity context;
 
-    public CustomStudentList(Activity context, String[] moduleCode, String[] moduleTitle, String[] moduleId) {
+    public CustomStudentList(Activity context, String[] matricNumber, String[] email, String[] fName, String[] lName) {
 
-        super(context, R.layout.module_list_view_layout, moduleCode);
+        super(context, R.layout.activity_enrolled_students, matricNumber);
         this.context = context;
-        this.moduleCode = moduleCode;
-        this.moduleTitle = moduleTitle;
-        this.moduleId = moduleId;
-        //Log.v("MODULE ID:", ParseJSON.moduleId[0].toString());
-
+        this.matricNumber = matricNumber;
+        this.email = email;
+        this.fName = fName;
+        this.lName = lName;
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View listViewItem = inflater.inflate(R.layout.module_list_view_layout, null, true);
-        TextView textViewModuleCode = (TextView) listViewItem.findViewById(R.id.textViewModuleCode);
-        TextView textViewModuleTitle = (TextView) listViewItem.findViewById(R.id.textViewModuleTitle);
+        View listViewItem = inflater.inflate(R.layout.student_list_view, null, true);
+        TextView textViewMatricNumber = (TextView) listViewItem.findViewById(R.id.textViewMatricNumber);
+        TextView textViewEmail = (TextView) listViewItem.findViewById(R.id.textViewEmail);
+        TextView textViewName = (TextView) listViewItem.findViewById(R.id.textViewName);
 
-        textViewModuleCode.setText(moduleCode[position]);
-        textViewModuleTitle.setText(moduleTitle[position]);
+        String name = new StringBuilder(fName[position]).append(" ").append(lName[position]).toString();
+
+        textViewMatricNumber.setText(matricNumber[position]);
+        textViewEmail.setText(email[position]);
+        textViewName.setText(name);
 
         return listViewItem;
     }
 
-    public String getModuleCode(int pos){
-        return moduleCode[pos];
+    public String getMatricNumber(int pos){return matricNumber[pos];}
+    public String getEmail(int pos){
+        return email[pos];
     }
-    public String getModuleId(int pos){
-        return moduleId[pos];
+    public String getFirstName(int pos){
+        return fName[pos];
     }
-    public String getModuleTitle(int pos){
-        return moduleTitle[pos];
-    }
+    public String getLastName(int pos){return lName[pos];}
 }

@@ -11,6 +11,11 @@ public class ParseJSON {
     public static String[] moduleTitle;
     public static String[] moduleId;
 
+    public static String[] matricNumber;
+    public static String[] email;
+    public static String[] fName;
+    public static String[] lName;
+
 
     public  int user_id;
     public  String role;
@@ -18,6 +23,11 @@ public class ParseJSON {
     public static final String KEY_MODULE_CODE = "module_code";
     public static final String KEY_MODULE_TITLE = "module_title";
     public static final String KEY_MODULE_ID = "moduleid";
+
+    public static final String KEY_MATRIC_NUMBER = "matric_number";
+    public static final String KEY_EMAIL = "email";
+    public static final String KEY_FIRST_NAME = "first_name";
+    public static final String KEY_LAST_NAME = "last_name";
 
 
     public static final String KEY_HASH_CODE = "hash";
@@ -44,6 +54,31 @@ public class ParseJSON {
                 moduleCode[i] = jsonobject.getString(KEY_MODULE_CODE);
                 moduleTitle[i] = jsonobject.getString(KEY_MODULE_TITLE);
                 moduleId[i] = jsonobject.getString(KEY_MODULE_ID);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void parseJSONEnrolledStudents(){
+        try {
+
+            JSONArray jsonArray = new JSONArray(json);
+            Log.v("JSON", jsonArray.toString());
+
+            matricNumber = new String[jsonArray.length()];
+            email = new String[jsonArray.length()];
+            fName = new String[jsonArray.length()];
+            lName = new String[jsonArray.length()];
+
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonobject = jsonArray.getJSONObject(i);
+                matricNumber[i] = jsonobject.getString(KEY_MATRIC_NUMBER);
+                email[i] = jsonobject.getString(KEY_EMAIL);
+                fName[i] = jsonobject.getString(KEY_FIRST_NAME);
+                lName[i] = jsonobject.getString(KEY_LAST_NAME);
             }
 
         } catch (JSONException e) {

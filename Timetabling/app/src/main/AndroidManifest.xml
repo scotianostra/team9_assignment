@@ -30,6 +30,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="android.team9.com.timetabling.StaffLandingActivity" />
         </activity>
+        <activity
+            android:name=".EnrolledStudents"
+            android:parentActivityName=".StaffFirstSelectionActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="android.team9.com.timetabling.EnrolledStudents" />
+        </activity>
     </application>
 
 </manifest>

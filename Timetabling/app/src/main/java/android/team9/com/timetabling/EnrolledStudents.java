@@ -8,6 +8,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -15,41 +24,54 @@ import java.util.Arrays;
 
 public class EnrolledStudents extends AppCompatActivity {
 
+    private String JSON_URL = "http://api.ouanixi.com/module_enrollments/";
+    private ListView lv;
+    private String moduleID;
+    CustomStudentList sl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enrolled_students);
 
-        String m = getIntent().getStringExtra("module");
-        Log.i("value ", m);
+        lv = (ListView) findViewById(R.id.listView);
 
-        Resources res = getResources();
-        ArrayList<String> students = new ArrayList<>(Arrays.asList(res.getStringArray(R.array.students)));
+        moduleID = getIntent().getStringExtra("module");
+        Log.i("module ID ", moduleID);
 
-        ArrayAdapter<String> slAdapter = new ArrayAdapter<>(this, R.layout.text_view, students);
-        ListView lv = (ListView) findViewById(R.id.listView);
-        lv.setAdapter(slAdapter);
+        sendRequest();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_enrolled_students, menu);
-        return true;
+
+    private void sendRequest(){
+        StringRequest stringRequest = new StringRequest(JSON_URL + moduleID,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            showJSON(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(EnrolledStudents.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+    private void showJSON(String json) throws JSONException {
+        ParseJSON pj = new ParseJSON(json);
+        pj.parseJSONEnrolledStudents();
+        sl = new CustomStudentList(this, ParseJSON.matricNumber, ParseJSON.email, ParseJSON.fName, ParseJSON.lName);
+        lv.setAdapter(sl);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
+
 }
