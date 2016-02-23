@@ -42,8 +42,11 @@ class Module(models.Model):
     module_id = models.IntegerField(primary_key=True)
     module_code = models.CharField(max_length=20)
     module_title = models.CharField(max_length=50)
-    coordinators = models.ManyToManyField(Staff)
+    coordinators = models.ManyToManyField(Staff, related_name='modules')
     students_enrolled = models.ManyToManyField(Student)
+
+    def __unicode__(self):
+        return self.moduleid
 
 
 class Class(models.Model):
@@ -52,6 +55,7 @@ class Class(models.Model):
     room_id = models.CharField(max_length=10)
     end_time = models.DateTimeField()
     building = models.CharField(max_length=20)
+    module = models.ForeignKey(Module, related_name='classes')
     class_register = models.ManyToManyField(Student)
 
 

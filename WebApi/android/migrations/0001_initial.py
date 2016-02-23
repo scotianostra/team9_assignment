@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Class',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
                 ('qrCode', models.IntegerField()),
                 ('start_time', models.DateTimeField()),
                 ('room_id', models.CharField(max_length=10)),
@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Module',
             fields=[
-                ('moduleid', models.IntegerField(serialize=False, primary_key=True)),
+                ('moduleid', models.IntegerField(primary_key=True, serialize=False)),
                 ('module_code', models.CharField(max_length=20)),
                 ('module_title', models.CharField(max_length=50)),
             ],
@@ -32,23 +32,23 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Staff',
             fields=[
-                ('staffid', models.IntegerField(serialize=False, primary_key=True)),
+                ('staffid', models.IntegerField(primary_key=True, serialize=False)),
                 ('email', models.CharField(max_length=60)),
                 ('first_name', models.CharField(max_length=30)),
                 ('last_name', models.CharField(max_length=30)),
                 ('password', models.CharField(max_length=30)),
-                ('hash', models.CharField(null=True, max_length=128)),
+                ('hash', models.CharField(max_length=128, null=True)),
             ],
         ),
         migrations.CreateModel(
             name='Student',
             fields=[
                 ('email', models.CharField(max_length=60)),
-                ('matric_number', models.IntegerField(serialize=False, primary_key=True)),
+                ('matric_number', models.IntegerField(primary_key=True, serialize=False)),
                 ('first_name', models.CharField(max_length=30)),
                 ('last_name', models.CharField(max_length=30)),
                 ('password', models.CharField(max_length=30)),
-                ('hash', models.CharField(null=True, max_length=128)),
+                ('hash', models.CharField(max_length=128, null=True)),
             ],
         ),
         migrations.AddField(
@@ -65,5 +65,10 @@ class Migration(migrations.Migration):
             model_name='class',
             name='class_register',
             field=models.ManyToManyField(to='android.Student'),
+        ),
+        migrations.AddField(
+            model_name='class',
+            name='module',
+            field=models.ForeignKey(to='android.Module'),
         ),
     ]
