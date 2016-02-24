@@ -95,56 +95,61 @@ class ClassSign(generics.UpdateAPIView):
     def put(self, request, format=None):
         roomid = request.data["room_id"]
         studentid = request.data["student_id"]
-        student = Student.objects.get(matric_number=studentid)
+        
+        try:
+            student = Student.objects.get(matric_number=studentid)
+            
+            # Select all classes which start within +/- 60 minutes in the specified room
+            now = timezone.now()
+            startTime = now + timezone.timedelta(minutes=-60)
+            endTime = now + timezone.timedelta(minutes=60)
+            classes = Class.objects.filter(Q(start_time__range=(startTime, endTime)) & Q(room_id=roomid))
+            
+            result = 'success'
+            responseStatus = status.HTTP_200_OK
+            
+            signedIn = False
+            action = 0
+            
+            # Find the classes which are within the 45 minutes sign in window that the student is enrolled in and sign the student into them
+            for thisClass in classes:
+                minutesToStart = (thisClass.start_time - now).total_seconds() / 60
+                if minutesToStart <= 15 and minutesToStart >= -30:
+                    action = 1
+                    if Module.objects.filter(
+                                    Q(students_enrolled__exact=studentid) & Q(moduleid=thisClass.module_id)).count() != 0:
+                        if thisClass.class_register.filter(matric_number=studentid).count() != 0:
+                            action = 2
+                        else:
+                            thisClass.class_register.add(student)
+                            signedIn = True
 
-        # Select all classes which start within +/- 60 minutes in the specified room
-        now = timezone.now()
-        startTime = now + timezone.timedelta(minutes=-60)
-        endTime = now + timezone.timedelta(minutes=60)
-        classes = Class.objects.filter(Q(start_time__range=(startTime, endTime)) & Q(room_id=roomid))
-
-        result = 'success'
-        responseStatus = status.HTTP_200_OK
-
-        signedIn = False
-        action = 0
-
-        # Find the classes which are within the 45 minutes sign in window that the student is enrolled in and sign the student into them
-        for thisClass in classes:
-            minutesToStart = (thisClass.start_time - now).total_seconds() % 3600 // 60
-            minutesToStart = minutesToStart - 60
-            if minutesToStart <= 15 and minutesToStart >= -30:
-                action = 1
-                if Module.objects.filter(
-                                Q(students_enrolled__exact=studentid) & Q(moduleid=thisClass.module_id)).count() != 0:
-                    if thisClass.class_register.filter(matric_number=studentid).count() != 0:
-                        action = 2
-                    else:
-                        thisClass.class_register.add(student)
-                        signedIn = True
-
-        if signedIn == True:
-            result = 'Student id ' + str(
-                studentid) + ' has been signed into all classes with an open register in room id ' + str(roomid)
-        else:
-            if action == 0:
-                result = 'There are no classes with an open register taking place in room id ' + str(
-                    roomid) + ' at this time.'
-                responseStatus = status.HTTP_404_NOT_FOUND
-            elif action == 1:
-                result = 'There is a class taking place in ' + str(roomid) + ' but student id ' + str(
-                    studentid) + ' is not enrolled in this class.'
-                responseStatus = status.HTTP_404_NOT_FOUND
-            elif action == 2:
+            if signedIn == True:
                 result = 'Student id ' + str(
-                    studentid) + ' is already signed into all classes currently available in room id ' + str(roomid)
-                responseStatus = status.HTTP_409_CONFLICT
+                    studentid) + ' has been signed into all classes with an open register in room id ' + str(roomid)
+            else:
+                if action == 0:
+                    result = 'There are no classes with an open register taking place in room id ' + str(
+                        roomid) + ' at this time.'
+                    responseStatus = status.HTTP_404_NOT_FOUND
+                elif action == 1:
+                    result = 'There is a class taking place in ' + str(roomid) + ' but student id ' + str(
+                        studentid) + ' is not enrolled in this class.'
+                    responseStatus = status.HTTP_404_NOT_FOUND
+                elif action == 2:
+                    result = 'Student id ' + str(
+                        studentid) + ' is already signed into all classes currently available in room id ' + str(roomid)
+                    responseStatus = status.HTTP_409_CONFLICT
 
-        content = {
-            'result': result
-        }
+            content = {
+                'result': result
+            }
 
-        return Response(content, status=responseStatus)
+            return Response(content, status=responseStatus)
+        except(KeyError, Student.DoesNotExist):
+            return Response("The specified student does not exist.", status.HTTP_404_NOT_FOUND)
+        except(ValueError):
+            return Response("Invalid input.", status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
