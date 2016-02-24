@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^modules/(?P<pk>[0-9]+)/$', views.ModuleDetail.as_view()),
     url(r'^classes/$', views.ClassList.as_view()),
     url(r'^classes/(?P<pk>[0-9]+)/$', views.ClassRegister.as_view()),
+    url(r'^class_register/(?P<pk>[0-9]+)/$', views.ClassRegister.as_view()),
 
     url(r'^login/$', views.login),
     url(r'^students/$', views.StudentList.as_view()),

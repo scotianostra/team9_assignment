@@ -92,7 +92,7 @@ class ClassList(generics.ListCreateAPIView):
 # Allows deletion, update, retrieval of a Class instance in the db including its class register.
 class ClassRegister(generics.RetrieveUpdateDestroyAPIView):
     queryset = Class.objects.all()
-    serializer_class = ClassSerializer
+    serializer_class = RegisterSerializer
 
 
 class ClassSign(generics.UpdateAPIView):

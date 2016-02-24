@@ -58,3 +58,9 @@ class StudentLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ('hash', 'matric_number')
+
+
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Class
+        fields = ('id', 'qrCode', 'start_time', 'end_time' , 'room_id', 'building', 'module', 'class_register')
