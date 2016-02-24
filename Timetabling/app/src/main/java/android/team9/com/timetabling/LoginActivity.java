@@ -34,9 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private EditText editTextEmail;
     private EditText editTextPassword;
-
     private Button buttonRegister;
-    private int user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

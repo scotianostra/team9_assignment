@@ -5,7 +5,7 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
+// moved initial json code out of activity class into separate class
 public class ParseJSON {
     public static String[] moduleCode;
     public static String[] moduleTitle;

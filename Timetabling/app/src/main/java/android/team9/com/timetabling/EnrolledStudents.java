@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -26,7 +28,7 @@ public class EnrolledStudents extends AppCompatActivity {
 
     private String JSON_URL = "http://api.ouanixi.com/module_enrollments/";
     private ListView lv;
-    private String moduleID;
+    private String moduleID,moduleCode;
     CustomStudentList sl;
 
     @Override
@@ -37,11 +39,12 @@ public class EnrolledStudents extends AppCompatActivity {
         lv = (ListView) findViewById(R.id.listView);
 
         moduleID = getIntent().getStringExtra("module");
+        moduleCode = getIntent().getStringExtra("moduleCode");
         Log.i("module ID ", moduleID);
-
+        TextView nameText = (TextView) findViewById(R.id.enrolledTitle);
+        nameText.setText("Students enrolled in "+moduleCode);
         sendRequest();
     }
-
 
     private void sendRequest(){
         StringRequest stringRequest = new StringRequest(JSON_URL + moduleID,
@@ -71,7 +74,5 @@ public class EnrolledStudents extends AppCompatActivity {
         pj.parseJSONEnrolledStudents();
         sl = new CustomStudentList(this, ParseJSON.matricNumber, ParseJSON.email, ParseJSON.fName, ParseJSON.lName);
         lv.setAdapter(sl);
-
     }
-
 }
