@@ -14,20 +14,26 @@ Please note that these are only guidelines and that there are different ways of 
 Also these are steps to follow if you're using a Debian based distribution.
 
 Make sure these are installed in your general environment first:
-- Python3 (any version) 
+#### Python3 (any version) 
 `sudo apt-get install python3`
 
-- VirtualEnv 
-  sudo apt-get install virtualenv
-- A few mysql needed packages sudo 
-  apt-get install python-dev python3-dev
-  sudo apt-get install libmysqlclient-dev
+#### VirtualEnv 
+  `sudo apt-get install virtualenv`
+#### A few mysql needed packages sudo 
+  `sudo apt-get install python-dev python3-dev`
+  `sudo apt-get install libmysqlclient-dev`
 
-Setup a virtual environment:
-  virtualenv -p /usr/bin/python3 venv
+#### Setup a virtual environment:
+  `virtualenv -p /usr/bin/python3 venv`
   
-Run your virtual environment:
-  source venv/bin/activate
+#### Run your virtual environment:
+  `source venv/bin/activate`
+
+#### Finally:
+- cd onto the folder where the file **requirements.txt** resides `cd team9_assignment/WebApi/`
+- install the dependencies `pip install -r requirements.txt`
+- run the tests `python manage.py test`
+
   
 
 
