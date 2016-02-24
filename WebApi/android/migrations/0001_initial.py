@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Class',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('id', models.AutoField(serialize=False, primary_key=True, verbose_name='ID', auto_created=True)),
                 ('qrCode', models.IntegerField()),
                 ('start_time', models.DateTimeField()),
                 ('room_id', models.CharField(max_length=10)),
@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Module',
             fields=[
-                ('moduleid', models.IntegerField(primary_key=True, serialize=False)),
+                ('moduleid', models.IntegerField(serialize=False, primary_key=True)),
                 ('module_code', models.CharField(max_length=20)),
                 ('module_title', models.CharField(max_length=50)),
             ],
@@ -32,7 +32,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Staff',
             fields=[
-                ('staffid', models.IntegerField(primary_key=True, serialize=False)),
+                ('staffid', models.IntegerField(serialize=False, primary_key=True)),
                 ('email', models.CharField(max_length=60)),
                 ('first_name', models.CharField(max_length=30)),
                 ('last_name', models.CharField(max_length=30)),
@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
             name='Student',
             fields=[
                 ('email', models.CharField(max_length=60)),
-                ('matric_number', models.IntegerField(primary_key=True, serialize=False)),
+                ('matric_number', models.IntegerField(serialize=False, primary_key=True)),
                 ('first_name', models.CharField(max_length=30)),
                 ('last_name', models.CharField(max_length=30)),
                 ('password', models.CharField(max_length=30)),
@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='module',
             name='coordinators',
-            field=models.ManyToManyField(to='android.Staff'),
+            field=models.ManyToManyField(related_name='modules', to='android.Staff'),
         ),
         migrations.AddField(
             model_name='module',
@@ -69,6 +69,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='class',
             name='module',
-            field=models.ForeignKey(to='android.Module'),
+            field=models.ForeignKey(related_name='classes', to='android.Module'),
         ),
     ]

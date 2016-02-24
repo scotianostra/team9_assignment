@@ -1,8 +1,4 @@
 from django.db import models
-import os, binascii
-
-
-# Create your models here.
 
 
 class Staff(models.Model):
@@ -14,7 +10,7 @@ class Staff(models.Model):
     hash = models.CharField(max_length=128, null=True)
 
     def create_hash(self):
-        return "staff" #+ binascii.b2a_hex(os.urandom(15)).decode()
+        return "staff"
 
     def save(self, *args, **kwargs):
         self.hash = self.create_hash()
@@ -30,7 +26,7 @@ class Student(models.Model):
     hash = models.CharField(max_length=128,  null=True)
 
     def create_hash(self):
-        return "student" #+ binascii.b2a_hex(os.urandom(15)).decode()
+        return "student"
 
     def save(self, *args, **kwargs):
         # check if the row with this hash already exists.

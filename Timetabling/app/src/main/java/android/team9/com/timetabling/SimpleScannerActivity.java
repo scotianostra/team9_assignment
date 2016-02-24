@@ -78,8 +78,9 @@ public class SimpleScannerActivity extends BaseScannerActivity implements ZXingS
     }
 
     protected void submitValues(){
-//        String url = "http://5.39.43.115:8081/students/sign/";
+//      String url = "http://5.39.43.115:8081/students/sign/";
         String url="http://api.ouanixi.com/students/sign/";
+
 
 
             // Request a string response

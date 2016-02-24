@@ -39,19 +39,11 @@ class ClassRegisterSerializer(serializers.ModelSerializer):
         fields = ('matric_number', 'email', 'first_name', 'last_name', 'has_signed')
 
 
-
-
-
-
-
 ## Jamie's class
 class StaffModuleListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Module
         fields = ('moduleid', 'module_code', 'module_title', 'coordinators')
-
-
-
 
 
 # lists the role and id of the staff trying to login
