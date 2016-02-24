@@ -20,8 +20,8 @@ Make sure these are installed in your general environment first:
 #### VirtualEnv 
   `sudo apt-get install virtualenv`
 #### A few mysql needed packages sudo 
-  `sudo apt-get install python-dev python3-dev`
-  `sudo apt-get install libmysqlclient-dev`
+  ```sudo apt-get install python-dev python3-dev
+     sudo apt-get install libmysqlclient-dev```
 
 #### Setup a virtual environment:
   `virtualenv -p /usr/bin/python3 venv`
@@ -34,5 +34,5 @@ Make sure these are installed in your general environment first:
 - install the dependencies `pip install -r requirements.txt`
 - run the tests `python manage.py test`
 
-Tests can be found at team9_assignment/WebApi/android/tests.py
+Tests can be found at `team9_assignment/WebApi/android/tests.py`
 
