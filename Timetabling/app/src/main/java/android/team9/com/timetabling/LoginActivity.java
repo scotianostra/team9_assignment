@@ -44,19 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         String role = sharedPref.getString("role", "no_user");
         int id = sharedPref.getInt("id", -1);
-        if (id > 0 ) {
-
-            if (role.equals("staff") ) {
-                Intent intent = new Intent(this, StaffLandingActivity.class);
-                intent.putExtra(EXTRA_USERID, id);
-                startActivity(intent);
-            }
-//            else if (role == "student") {
-//                Intent intent = new Intent(this, StudentUIActivity.class);
-//                intent.putExtra(EXTRA_USERID, id);
-//                startActivity(intent);
-//            }
-        }
+        routeToActivity(role, id);
         setContentView(R.layout.activity_login);
 
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
@@ -70,6 +58,22 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void routeToActivity(String role, int id) {
+        if (id > 0 ) {
+
+            if (role.equals("staff") ) {
+                Intent intent = new Intent(this, StaffLandingActivity.class);
+                intent.putExtra(EXTRA_USERID, id);
+                startActivity(intent);
+            }
+            else if (role.equals("student")) {
+                Intent intent = new Intent(this, QrActivity.class);
+                intent.putExtra(EXTRA_USERID, id);
+                startActivity(intent);
+            }
+        }
     }
 
     private void loginUser() {
@@ -92,11 +96,8 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putInt("id", prsJson.user_id);
                         editor.putString("role", prsJson.role);
                         editor.commit();
-                        user_id = prsJson.user_id;
-                        Intent intent  = new Intent(getApplicationContext(),StaffLandingActivity.class);
-                        intent.putExtra(EXTRA_USERID, user_id);
-                        startActivity(intent);
                         //Toast.makeText(LoginActivity.this, prsJson.role + " " +prsJson.user_id, Toast.LENGTH_LONG).show();
+                        routeToActivity(prsJson.role,prsJson.user_id);
                     }
                 },
                 new Response.ErrorListener() {
