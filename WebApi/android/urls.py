@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^staff/$', views.StaffList.as_view()),
     url(r'^students/(?P<pk>[0-9]+)/$', views.StudentDetail.as_view()),
     url(r'^staff/(?P<pk>[0-9]+)/$', views.StaffDetail.as_view()),
+    url(r'^module_classes/(?P<pk>[0-9]+)/$', views.module_classes),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

@@ -39,6 +39,18 @@ def module_enrollment_list(request, pk):
         return Response(serializer.data)
 
 
+@api_view(['GET'])
+def module_classes(request, pk):
+    try:
+        classes = Class.objects.filter(module=pk)
+    except Class.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = ClassSerializer(classes, many=True)
+        return Response(serializer.data)
+
+
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
@@ -87,6 +99,8 @@ class ClassDetail(generics.RetrieveUpdateDestroyAPIView):
 class ClassRegister(generics.RetrieveUpdateDestroyAPIView):
     queryset = Class.objects.all()
     serializer_class = ClassSerializer
+
+
 
 
 class ClassSign(generics.UpdateAPIView):
