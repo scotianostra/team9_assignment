@@ -34,7 +34,5 @@ Make sure these are installed in your general environment first:
 - install the dependencies `pip install -r requirements.txt`
 - run the tests `python manage.py test`
 
-  
-
-
+Tests can be found at team9_assignment/WebApi/android/tests.py
 
