@@ -1,12 +1,6 @@
-from android.models import *
-from android.serializers import StudentSerializer, StaffSerializer, ClassSerializer, ClassRegisterSerializer
-from rest_framework import generics
-from rest_framework.response import Response
-from rest_framework import status
-import json
+
 from django.utils import timezone
 from django.db.models.query import Q
-from itertools import chain
 from android.serializers import *
 from rest_framework import generics
 from rest_framework import status
@@ -24,6 +18,18 @@ def staff_module_list(request, pk):
 
     if request.method == 'GET':
         serializer = StaffModuleListSerializer(modules, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def module_classes(request, pk):
+    try:
+        classes = Class.objects.filter(module=pk)
+    except Class.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = ClassSerializer(classes, many=True)
         return Response(serializer.data)
 
 
