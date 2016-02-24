@@ -1,6 +1,6 @@
 # team9_assignment
 
-## Contributing
+## Notes for Team
 
 Simple rules to stick to really.
 - Fork this repository to your github account.
@@ -9,7 +9,13 @@ Simple rules to stick to really.
 - Master branch should be ready for deployement at any given time. Therfore, make sure your code is tested before submitting a pull request.
 
 
-## Notes for running the API tests
+## Notes for Mark:
+### Android Studio notes:
+
+We decided not to use Eclipse or Netbeans and opted for Android Studio. We recommend opening the project in Android Studio.
+When doing so, please make sure you don't open the folder containing the project, instead simply open the **build.gradle** file. This should allow the IDE to install all dependencies automatically.
+
+### Testing the API
 Please note that these are only guidelines and that there are different ways of accomplishing the same results.
 Also these are steps to follow if you're using a Debian based distribution.
 
@@ -21,7 +27,8 @@ Make sure these are installed in your general environment first:
   `sudo apt-get install virtualenv`
 #### A few mysql needed packages sudo 
   `sudo apt-get install python-dev python3-dev`
-  `sudo apt-get install libmysqlclient-dev`
+  And then :
+     `sudo apt-get install libmysqlclient-dev`
 
 #### Setup a virtual environment:
   `virtualenv -p /usr/bin/python3 venv`
@@ -34,7 +41,5 @@ Make sure these are installed in your general environment first:
 - install the dependencies `pip install -r requirements.txt`
 - run the tests `python manage.py test`
 
-  
-
-
+Tests can be found at `team9_assignment/WebApi/android/tests.py`
 
