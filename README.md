@@ -15,7 +15,8 @@ Also these are steps to follow if you're using a Debian based distribution.
 
 Make sure these are installed in your general environment first:
 - Python3 (any version) 
-  sudo apt-get install python3
+`sudo apt-get install python3`
+
 - VirtualEnv 
   sudo apt-get install virtualenv
 - A few mysql needed packages sudo 
