@@ -5,16 +5,27 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-// moved initial json code out of activity class into separate class
+
 public class ParseJSON {
     public static String[] moduleCode;
     public static String[] moduleTitle;
     public static String[] moduleId;
 
+
     public static String[] matricNumber;
     public static String[] email;
     public static String[] fName;
     public static String[] lName;
+
+    public static String[] classId;
+    public static String[] qrCode;
+    public static String[] startTime;
+    public static String[] endTime;
+    public static String[] room;
+    public static String[] building;
+    public static String[] module;
+
+
 
     public static int user_id;
     public static String role;
@@ -31,6 +42,14 @@ public class ParseJSON {
     public static final String KEY_HASH_CODE = "hash";
     public static final String KEY_STUDENT_ID = "matric_number";
     public static final String KEY_STAFF_ID = "staffid";
+
+    public static final String KEY_CLASS_ID = "id";
+    public static final String KEY_QR_CODE = "qrCode";
+    public static final String KEY_START_TIME = "start_time";
+    public static final String KEY_END_TIME = "end_time";
+    public static final String KEY_ROOM = "room_id";
+    public static final String KEY_BUILDING = "building";
+    public static final String KEY_MODULE = "module";
 
     private String json;
 
@@ -56,7 +75,6 @@ public class ParseJSON {
 
         } catch (JSONException e) {
             e.printStackTrace();
-            throw e;
         }
     }
 
@@ -78,6 +96,38 @@ public class ParseJSON {
                 email[i] = jsonobject.getString(KEY_EMAIL);
                 fName[i] = jsonobject.getString(KEY_FIRST_NAME);
                 lName[i] = jsonobject.getString(KEY_LAST_NAME);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    protected void parseJSONClassList() throws JSONException{
+        try {
+
+            JSONArray jsonArray = new JSONArray(json);
+            Log.v("JSON", jsonArray.toString());
+
+            classId = new String[jsonArray.length()];
+            qrCode = new String[jsonArray.length()];
+            startTime = new String[jsonArray.length()];
+            endTime = new String[jsonArray.length()];
+            room = new String[jsonArray.length()];
+            building = new String[jsonArray.length()];
+            module = new String[jsonArray.length()];
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonobject = jsonArray.getJSONObject(i);
+                classId[i] = jsonobject.getString(KEY_CLASS_ID);
+                Log.i("Class ID ", classId[i]);
+                qrCode[i] = jsonobject.getString(KEY_QR_CODE);
+                startTime[i] = jsonobject.getString(KEY_START_TIME);
+                endTime[i] = jsonobject.getString(KEY_END_TIME);
+                room[i] = jsonobject.getString(KEY_ROOM);
+                building[i] = jsonobject.getString(KEY_BUILDING);
+                module[i] = jsonobject.getString(KEY_MODULE);
             }
 
         } catch (JSONException e) {
