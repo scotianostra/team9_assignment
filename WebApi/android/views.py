@@ -47,6 +47,19 @@ def module_enrollment_list(request, pk):
         return Response(serializer.data)
 
 
+# Returns a list of students that have attended to a given class.
+@api_view(['GET'])
+def class_register(request, pk):
+    try:
+        students = Class.objects.get(id=pk).class_register
+    except Module.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = StudentSerializer(students, many=True)
+        return Response(serializer.data)
+
+
 # Returns a list of all students.
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
