@@ -19,6 +19,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 
+import org.json.JSONException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,19 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
         String role = sharedPref.getString("role", "no_user");
         int id = sharedPref.getInt("id", -1);
-        if (id > 0 ) {
-
-            if (role.equals("staff") ) {
-                Intent intent = new Intent(this, StaffLandingActivity.class);
-                intent.putExtra(EXTRA_USERID, id);
-                startActivity(intent);
-            }
-//            else if (role == "student") {
-//                Intent intent = new Intent(this, StudentUIActivity.class);
-//                intent.putExtra(EXTRA_USERID, id);
-//                startActivity(intent);
-//            }
-        }
+        routeToActivity(role, id);
         setContentView(R.layout.activity_login);
 
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
@@ -71,6 +60,22 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void routeToActivity(String role, int id) {
+        if (id > 0 ) {
+
+            if (role.equals("staff") ) {
+                Intent intent = new Intent(this, StaffLandingActivity.class);
+                intent.putExtra(EXTRA_USERID, id);
+                startActivity(intent);
+            }
+            else if (role.equals("student")) {
+                Intent intent = new Intent(this, QrActivity.class);
+                intent.putExtra(EXTRA_USERID, id);
+                startActivity(intent);
+            }
+        }
+    }
+
     private void loginUser() {
         final String password = editTextPassword.getText().toString().trim();
         final String email = editTextEmail.getText().toString().trim();
@@ -80,18 +85,19 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         ParseJSON prsJson = new ParseJSON(response);
-                        prsJson.parseJSONLogin();
+                        try {
+                            prsJson.parseJSONLogin();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPref.edit();
                         editor.clear();
                         editor.putInt("id", prsJson.user_id);
                         editor.putString("role", prsJson.role);
                         editor.commit();
-                        user_id = prsJson.user_id;
-                        Intent intent  = new Intent(getApplicationContext(),StaffLandingActivity.class);
-                        intent.putExtra(EXTRA_USERID, user_id);
-                        startActivity(intent);
                         //Toast.makeText(LoginActivity.this, prsJson.role + " " +prsJson.user_id, Toast.LENGTH_LONG).show();
+                        routeToActivity(prsJson.role,prsJson.user_id);
                     }
                 },
                 new Response.ErrorListener() {

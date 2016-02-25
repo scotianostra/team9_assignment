@@ -1,8 +1,11 @@
 package android.team9.com.timetabling;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 public class StaffFirstSelectionActivity extends AppCompatActivity {
@@ -22,13 +25,17 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
         idText.setText(moduleCode);
         nameText.setText(moduleTitle);
     }
-    // for button clicks
-     private void viewStudents(){
 
-     }
-    private void viewAttendance(){
+    //click on button 'VIEW ENROLLED STUDENTS'
+    public void view_enrolled_students(View view){
+        Bundle b = new Bundle();
+        b.putString("module", moduleId);
 
+        Log.i("click on first button ", moduleId);
+
+        Intent pass = new Intent(StaffFirstSelectionActivity.this, EnrolledStudents.class);
+        pass.putExtras(b);
+        startActivity(pass);
     }
-
 
 }
