@@ -10,6 +10,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listView"
-        android:choiceMode="singleChoice" />
+        android:choiceMode="singleChoice"
+        android:divider="#000080"
+        android:dividerHeight="1px"
+        android:footerDividersEnabled="false"
+        android:layout_below="@+id/enrolledTitle" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/enrolled_title"
+        android:id="@+id/enrolledTitle"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textStyle="bold"
+        android:textSize="20sp" />
 
 </RelativeLayout>

@@ -30,12 +30,9 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
     public void view_enrolled_students(View view){
         Bundle b = new Bundle();
         b.putString("module", moduleId);
-
-        Log.i("click on first button ", moduleId);
-
+        b.putString("moduleCode", moduleCode);
         Intent pass = new Intent(StaffFirstSelectionActivity.this, EnrolledStudents.class);
         pass.putExtras(b);
         startActivity(pass);
     }
-
 }

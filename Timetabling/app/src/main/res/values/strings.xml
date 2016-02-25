@@ -19,4 +19,5 @@
 
     <string name="attendance_button">View module attendance</string>
     <string name="student_list_Button">View enrolled students</string>
+    <string name="enrolled_title">Students enrolled in the module</string>
 </resources>

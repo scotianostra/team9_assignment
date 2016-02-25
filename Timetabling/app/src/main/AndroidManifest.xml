@@ -51,7 +51,8 @@
         </activity>
         <activity
             android:name=".EnrolledStudents"
-            android:parentActivityName=".StaffFirstSelectionActivity">
+            android:parentActivityName=".StaffFirstSelectionActivity"
+            android:label="Students enrolled in a module">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="android.team9.com.timetabling.EnrolledStudents" />

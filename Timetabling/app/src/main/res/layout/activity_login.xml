@@ -20,7 +20,9 @@
         android:hint="@string/email_hint"
         android:inputType="textEmailAddress"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textStyle="italic"
+        android:singleLine="false" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -31,7 +33,8 @@
         android:hint="@string/password_hint"
         android:layout_below="@+id/editTextEmail"
         android:layout_alignStart="@+id/editTextEmail"
-        android:layout_marginTop="59dp" />
+        android:layout_marginTop="25dp"
+        android:textStyle="italic" />
 
     <Button
         android:layout_width="wrap_content"
@@ -39,8 +42,26 @@
         android:text="@string/login_button_txt"
         android:id="@+id/buttonLogin"
         android:hint="@string/login_button_txt"
-        android:layout_below="@+id/editTextEmail"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="188dp" />
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/editTextPassword"
+        android:background="#34baff"
+        android:layout_alignEnd="@+id/editTextPassword"
+        android:layout_alignStart="@+id/editTextPassword"
+        android:textColor="#ffffff"
+        android:textStyle="bold" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:text="@string/app_name"
+        android:enabled="false"
+        android:editable="false"
+        android:elegantTextHeight="false"
+        android:textSize="20dp"
+        android:textStyle="bold|italic"
+        android:focusable="false"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
