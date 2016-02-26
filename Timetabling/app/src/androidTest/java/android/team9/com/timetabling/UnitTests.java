@@ -12,7 +12,7 @@ import org.junit.rules.ExpectedException;
  * Created by jamie on 22/02/16.
  */
 
-public class ParseJSONTest{
+public class UnitTests {
 
     private ParseJSON parseJSON;
     private String jsonArray;

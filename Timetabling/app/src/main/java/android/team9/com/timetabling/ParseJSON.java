@@ -75,6 +75,7 @@ public class ParseJSON {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            throw e;
         }
     }
 

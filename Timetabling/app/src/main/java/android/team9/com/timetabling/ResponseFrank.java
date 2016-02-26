@@ -19,6 +19,6 @@ public class ResponseFrank implements Response.Listener {
         String result=(String) response;
         // Result handling
       System.out.println(result);
-        Toast.makeText(context, "Successfully logged in", Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, "Successfully singed in", Toast.LENGTH_SHORT).show();
     }
 }
