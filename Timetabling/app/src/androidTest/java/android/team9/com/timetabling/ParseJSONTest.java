@@ -19,6 +19,7 @@ public class ParseJSONTest{
     private String jsonStudents;
     private String jsonStudentObject;
     private String jsonStaffObject;
+    private String jsonClassList;
 
 
     @Rule
@@ -35,6 +36,9 @@ public class ParseJSONTest{
 
         jsonStudentObject = "{\"matric_number\": 234242, \"hash\": \"AD3435SF\"}";
         jsonStaffObject = "{\"staffid\": 1000, \"hash\": \"AJ232ASFA\"}";
+
+        jsonClassList = "[{\"id\": 1, \"qrCode\": 0, \"start_time\": \"2016-02-22T17:00:00\", \"end_time\": \"2016-02-22T18:00:00\", \"room_id\": \"5\", \"building\": \"QMB\", \"module\": \"10012\"}, " +
+                "{\"id\": 2, \"qrCode\": 123, \"start_time\": \"2016-02-23T16:00:00\", \"end_time\": \"2016-02-23T17:00:00\", \"room_id\": \"2S14\", \"building\": \"Dalhousie\", \"module\": \"10012\"}]";
 
     }
 
@@ -66,6 +70,28 @@ public class ParseJSONTest{
         assertEquals("John", ParseJSON.fName[1]);
         assertEquals("Kill", ParseJSON.lName[0]);
         assertEquals("Wick", ParseJSON.lName[1]);
+    }
+
+    @Test
+    public void testParseJSONClassList() throws JSONException {
+
+        parseJSON = new ParseJSON(jsonClassList);
+        parseJSON.parseJSONClassList();
+
+        assertEquals("1", ParseJSON.classId[0]);
+        assertEquals("2", ParseJSON.classId[1]);
+        assertEquals("0", ParseJSON.qrCode[0]);
+        assertEquals("123", ParseJSON.qrCode[1]);
+        assertEquals("2016-02-22T17:00:00", ParseJSON.startTime[0]);
+        assertEquals("2016-02-23T16:00:00", ParseJSON.startTime[1]);
+        assertEquals("2016-02-22T18:00:00", ParseJSON.endTime[0]);
+        assertEquals("2016-02-23T17:00:00", ParseJSON.endTime[1]);
+        assertEquals("5", ParseJSON.room[0]);
+        assertEquals("2S14", ParseJSON.room[1]);
+        assertEquals("QMB", ParseJSON.building[0]);
+        assertEquals("Dalhousie", ParseJSON.building[1]);
+        assertEquals("10012", ParseJSON.module[0]);
+        assertEquals("10012", ParseJSON.module[1]);
     }
 
     @Test
@@ -108,11 +134,19 @@ public class ParseJSONTest{
         parseJSON.parseJSONEnrolledStudents();
     }
 
+    @Test
+    public void testParseJSONClassListThrowsJSONException() throws JSONException {
+        parseJSON = new ParseJSON("not valid json");
+        thrown.expect(JSONException.class);
+        parseJSON.parseJSONClassList();
+    }
+
     @After
     public void tearDown() {
         parseJSON = null;
         jsonStaffObject = null;
         jsonStudentObject = null;
         jsonArray = null;
+        jsonClassList = null;
     }
 }
