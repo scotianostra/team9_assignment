@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="android.team9.com.timetabling">
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -15,9 +16,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".StaffUIActivity">
-
-        </activity>
+        <activity
+            android:name=".StaffLandingActivity"
+            android:label="Modules I teach" />
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,6 +26,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SimpleScannerActivity"
+            android:label="@string/simple_scanner_activity"
+            android:theme="@style/AppOverlayTheme" />
+        <activity
+            android:name=".StaffFirstSelectionActivity"
+            android:parentActivityName=".StaffLandingActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".StaffLandingActivity" />
+        </activity>
+        <activity
+            android:name=".QrActivity"
+            android:parentActivityName=".LoginActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".LoginActivity" />
+        </activity>
+        <activity
+            android:name=".EnrolledStudents"
+            android:label="Students enrolled in a module"
+            android:parentActivityName=".StaffFirstSelectionActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="android.team9.com.timetabling.EnrolledStudents" />
+        </activity>
+        <activity android:name=".ClassListActivity" />
+        <activity android:name=".AttendanceActivity"></activity>
     </application>
 
 </manifest>
