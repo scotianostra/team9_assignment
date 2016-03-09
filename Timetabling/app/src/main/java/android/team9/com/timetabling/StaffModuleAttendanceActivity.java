@@ -50,16 +50,21 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
 
     public void init() {
         tableLayout = (TableLayout) findViewById(R.id.tableMain);
+        tableLayout.setPadding(0, 25, 0, 25);
         headingRow = new TableRow(this);
-        headingRow.setPadding(25, 25, 25, 25);
         headers = new ArrayList<>();
         defaultHeaders = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             headers.add(new TextView(this));
+            headers.get(i).setPadding(25, 0, 25, 25);
+            headers.get(i).setTextColor(Color.WHITE);
+            headers.get(i).setGravity(Gravity.CENTER);
+            headers.get(i).setTextSize(15);
         }
+
         defaultHeaders.add(getString(R.string.matricNumber));
         headers.get(0).setText(R.string.matricNumber);
-        headers.get(0).setTextColor(Color.WHITE);
+
         headers.get(0).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +78,6 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
         // refactored to use string resources
         headers.get(1).setText(R.string.forename);
         defaultHeaders.add(getString(R.string.forename));
-        headers.get(1).setTextColor(Color.WHITE);
         headers.get(1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +90,6 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
 
         headers.get(2).setText(R.string.surname);
         defaultHeaders.add(getString(R.string.surname));
-        headers.get(2).setTextColor(Color.WHITE);
         headers.get(2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,7 +101,6 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
 
         headers.get(3).setText(R.string.attendance);
         defaultHeaders.add(getString(R.string.attendance));
-        headers.get(3).setTextColor(Color.WHITE);
         headers.get(3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,14 +109,12 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
             }
         });
         headingRow.addView(headers.get(3));
-
         tableLayout.addView(headingRow);
-
     }
 
     // refactored code into separate methods to make it more portable/accommodate sorting
     private void populateTable() {
-        for (int i = 0; i < 25; i++) {
+        for (int i = 0; i < 100; i++) {
             TableRow tableRowInside = new TableRow(this);
             tableRowInside.setClickable(true);
 
@@ -136,26 +136,30 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                     // startActivity(pass);
                 }
             });
-            tableRowInside.setPadding(25, 0, 25, 0);
+
             TextView t1v = new TextView(this);
             t1v.setText(" " + i + 100000);
             t1v.setTextColor(Color.WHITE);
             t1v.setGravity(Gravity.CENTER);
+            t1v.setPadding(25, 0, 25, 0);
             tableRowInside.addView(t1v);
             TextView t2v = new TextView(this);
-            t2v.setText("Aistis " + i);
+            t2v.setText("AistisAistisAistis " + i);
             t2v.setTextColor(Color.WHITE);
             t2v.setGravity(Gravity.CENTER);
+            t2v.setPadding(25, 0, 25, 0);
             tableRowInside.addView(t2v);
             TextView t3v = new TextView(this);
             t3v.setText("Taraskevicius" + i);
             t3v.setTextColor(Color.WHITE);
             t3v.setGravity(Gravity.CENTER);
+            t3v.setPadding(25, 0, 25, 0);
             tableRowInside.addView(t3v);
             TextView t4v = new TextView(this);
             t4v.setText("" + i * 15 / 32 * 10 + "%");
             t4v.setTextColor(Color.WHITE);
             t4v.setGravity(Gravity.CENTER);
+            t4v.setPadding(25, 0, 25, 0);
             tableRowInside.addView(t4v);
             tableLayout.addView(tableRowInside);
         }
@@ -191,23 +195,19 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
         //lv.setAdapter(sl);
     }
 
+    // changing arrows/updating map values to track which way to sort
     private String changeSortDirection(int header, String column) {
-        Log.i("column", column);
         for (Map.Entry<String, Integer> entry : sortReminder.entrySet()) {
             String key = entry.getKey();
             Integer value = entry.getValue();
-            Log.i("Value before", entry.getValue().toString());
             if (column.regionMatches(0, key, 0, column.length() - 2)) {
                 if (value == 0) {
                     column = column.replace("✦", "▼");
                 }
                 if (value == 1) {
-                    Log.i("inside 1", column);
                     column = column.replace("▼", "▲");
-
                 }
                 if (value == 2) {
-                    Log.i("inside 2", column);
                     entry.setValue(-1);
                     column = column.replace("▲", "✦");
                 }
@@ -215,7 +215,6 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                 value++;
                 entry.setValue(value);
             } else entry.setValue(0);
-            Log.i("Value after", entry.getValue().toString());
         }
         for (int i = 0; i < 4; i++) {
             if (header != i)
