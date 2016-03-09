@@ -49,4 +49,14 @@
         android:editable="false"
         android:focusable="false"
         android:enabled="false" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/attendanceTable_button"
+        android:id="@+id/attendanceTableButton"
+        android:onClick="view_module_attendance"
+        android:layout_below="@+id/attendanceButton"
+        android:layout_alignStart="@+id/attendanceButton"
+        android:layout_alignEnd="@+id/attendanceButton" />
 </RelativeLayout>

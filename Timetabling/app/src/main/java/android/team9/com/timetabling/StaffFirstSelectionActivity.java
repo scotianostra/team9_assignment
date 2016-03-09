@@ -1,9 +1,8 @@
 package android.team9.com.timetabling;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,6 +45,14 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
         b.putString("module", moduleId);
         b.putString("moduleCode", moduleCode);
         Intent pass = new Intent(StaffFirstSelectionActivity.this, EnrolledStudents.class);
+        pass.putExtras(b);
+        startActivity(pass);
+    }
+
+    public void view_module_attendance(View view) {
+        Bundle b = new Bundle();
+        b.putString("module", moduleId);
+        Intent pass = new Intent(StaffFirstSelectionActivity.this, StaffModuleAttendanceActivity.class);
         pass.putExtras(b);
         startActivity(pass);
     }
