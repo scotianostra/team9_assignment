@@ -21,4 +21,10 @@
     <string name="attendanceTable_button">View module attendance</string>
     <string name="student_list_Button">View enrolled students</string>
     <string name="enrolled_title">Students enrolled in the module</string>
+
+
+    <string name="matricNumber"> Matriculation Nr. ✦ </string>
+    <string name="forename"> Forename ✦ </string>
+    <string name="surname"> Surname ✦ </string>
+    <string name="attendance"> Attendance ✦ </string>
 </resources>
