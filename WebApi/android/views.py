@@ -1,4 +1,4 @@
-
+import json
 from django.utils import timezone
 from django.db.models.query import Q
 from android.serializers import *
@@ -19,6 +19,36 @@ def staff_module_list(request, pk):
     if request.method == 'GET':
         serializer = StaffModuleListSerializer(modules, many=True)
         return Response(serializer.data)
+
+@api_view(['GET'])
+def module_attendance(request, pk):
+    data = []
+    try:
+        students = Module.objects.get(moduleid=pk).students_enrolled
+        classes = Class.objects.filter(module=pk)
+        number_of_classes = classes.count()
+    except Module.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    for student in students.all():
+        stdnt = {}
+        count = 0
+        for cls in classes:
+            if student in cls.class_register.all():
+                count += 1
+        if count != 0:
+            percentage = count / number_of_classes
+        else:
+            percentage = 0
+        stdnt['percentage'] = percentage
+        stdnt['first_name'] = student.first_name
+        stdnt['last_name'] = student.last_name
+        stdnt['matric_number'] = student.matric_number
+        data.append(stdnt)
+    json_obj = json.dumps(data)
+    return Response(json.loads(json_obj))
+
+
 
 
 # Returns the list of all classes that are linked to a specific module
