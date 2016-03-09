@@ -3,6 +3,7 @@ package android.team9.com.timetabling;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TableLayout;
@@ -20,42 +21,78 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
     }
 
     public void init() {
-        TableLayout tableLayout = (TableLayout) findViewById(R.id.tableMain);
-
-        tableLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //String matricNumber=;
-                //Bundle b = new Bundle();
-
-                // b.putString("matricNumber", matricNumber);
-                //Intent pass = new Intent(StaffLandingActivity.this, StaffFirstSelectionActivity.class);
-                // pass.putExtras(b);
-                // startActivity(pass);
-            }
-        });
+        final TableLayout tableLayout = (TableLayout) findViewById(R.id.tableMain);
         TableRow tableRow = new TableRow(this);
         tableRow.setPadding(25, 25, 25, 25);
+
         TextView tv0 = new TextView(this);
         tv0.setText("    Matriculation Nr. ");
         tv0.setTextColor(Color.WHITE);
+        tv0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //sort based on matric nr here or do api magic here
+            }
+        });
         tableRow.addView(tv0);
+
         TextView tv1 = new TextView(this);
         tv1.setText(" Forename ");
         tv1.setTextColor(Color.WHITE);
+        tv1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //sort based on forename here or do api magic here
+            }
+        });
+
         tableRow.addView(tv1);
+
         TextView tv2 = new TextView(this);
         tv2.setText(" Surname ");
         tv2.setTextColor(Color.WHITE);
+        tv2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //sort based on surname here or do api magic here
+            }
+        });
         tableRow.addView(tv2);
+
         TextView tv3 = new TextView(this);
         tv3.setText(" Attendance % ");
         tv3.setTextColor(Color.WHITE);
+        tv3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //sort based on attendance here or do api magic here
+            }
+        });
         tableRow.addView(tv3);
+
         tableLayout.addView(tableRow);
         for (int i = 0; i < 25; i++) {
             TableRow tableRowInside = new TableRow(this);
+            tableRowInside.setClickable(true);
+
+            tableRowInside.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    // remove colour change later if not needed
+                    v.setBackgroundColor(Color.GRAY);
+                    //get the data you need
+                    TableRow tablerow = (TableRow) v;
+                    TextView matric = (TextView) tablerow.getChildAt(0);
+                    String matricNumber = matric.getText().toString();
+                    Log.i("matric number", matricNumber);
+
+                    // call single student (based on matric number) attendance activity here
+                    //Bundle b = new Bundle();
+                    // b.putString("matricNumber", matricNumber);
+                    //Intent pass = new Intent(StaffLandingActivity.this, StaffFirstSelectionActivity.class);
+                    // pass.putExtras(b);
+                    // startActivity(pass);
+                }
+            });
             tableRowInside.setPadding(25, 0, 25, 0);
             TextView t1v = new TextView(this);
             t1v.setText(" " + i + 100000);
