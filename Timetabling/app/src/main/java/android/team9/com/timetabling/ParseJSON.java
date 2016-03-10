@@ -6,6 +6,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class ParseJSON {
     public static String[] moduleCode;
     public static String[] moduleTitle;
@@ -24,6 +28,8 @@ public class ParseJSON {
     public static String[] room;
     public static String[] building;
     public static String[] module;
+
+    public static String[] attendancePercentage;
 
 
 
@@ -50,6 +56,8 @@ public class ParseJSON {
     public static final String KEY_ROOM = "room_id";
     public static final String KEY_BUILDING = "building";
     public static final String KEY_MODULE = "module";
+
+    public static final String KEY_PERCENTAGE = "percentage";
 
     private String json;
 
@@ -149,6 +157,39 @@ public class ParseJSON {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            throw e;
+        }
+    }
+
+    protected List<List<String>> parseJSONModuleAttendance() throws JSONException {
+        try {
+            List<List<String>> attendanceData = new ArrayList<>();
+            JSONArray jsonArray = new JSONArray(json);
+            Log.v("JSON", jsonArray.toString());
+
+            matricNumber = new String[jsonArray.length()];
+            attendancePercentage = new String[jsonArray.length()];
+            fName = new String[jsonArray.length()];
+            lName = new String[jsonArray.length()];
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonobject = jsonArray.getJSONObject(i);
+                matricNumber[i] = jsonobject.getString(KEY_MATRIC_NUMBER);
+                fName[i] = jsonobject.getString(KEY_FIRST_NAME);
+                lName[i] = jsonobject.getString(KEY_LAST_NAME);
+                attendancePercentage[i] = jsonobject.getString(KEY_PERCENTAGE);
+            }
+
+            attendanceData.add(Arrays.asList(matricNumber));
+            attendanceData.add(Arrays.asList(fName));
+            attendanceData.add(Arrays.asList(lName));
+            attendanceData.add(Arrays.asList(attendancePercentage));
+            Log.i("A size", Integer.toString(attendanceData.size()));
+            Log.i("A size", Integer.toString(attendanceData.get(0).size()));
+            return attendanceData;
+        } catch (JSONException e) {
+            e.printStackTrace();
+
             throw e;
         }
     }

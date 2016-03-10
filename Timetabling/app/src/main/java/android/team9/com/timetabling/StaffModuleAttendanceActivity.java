@@ -20,18 +20,19 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class StaffModuleAttendanceActivity extends AppCompatActivity {
     private String moduleId;
-    private String JSON_URL = "http://api.ouanixi.com/";
+    private String JSON_URL = "http://api.ouanixi.com/moduleAttendance/";
     private TableLayout tableLayout;
     private TableRow headingRow;
     private TreeMap<String, Integer> sortReminder;
-    private ArrayList<TextView> headers;
+    private ArrayList<TextView> headers, rows;
     private ArrayList<String> defaultHeaders;
-
+    List<List<String>> attendanceData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +45,7 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
         sortReminder.put((getString(R.string.forename)), 0);
         sortReminder.put((getString(R.string.surname)), 0);
         sortReminder.put((getString(R.string.attendance)), 0);
-        init();
-        populateTable();
+        sendRequest();
     }
 
     public void init() {
@@ -64,7 +64,6 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
 
         defaultHeaders.add(getString(R.string.matricNumber));
         headers.get(0).setText(R.string.matricNumber);
-
         headers.get(0).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +72,6 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
             }
         });
         headingRow.addView(headers.get(0));
-
 
         // refactored to use string resources
         headers.get(1).setText(R.string.forename);
@@ -85,7 +83,6 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                 //sort based on forename here or do api magic here
             }
         });
-
         headingRow.addView(headers.get(1));
 
         headers.get(2).setText(R.string.surname);
@@ -114,10 +111,9 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
 
     // refactored code into separate methods to make it more portable/accommodate sorting
     private void populateTable() {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < attendanceData.get(0).size(); i++) {
             TableRow tableRowInside = new TableRow(this);
             tableRowInside.setClickable(true);
-
             tableRowInside.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     // remove colour change later if not needed
@@ -136,36 +132,21 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                     // startActivity(pass);
                 }
             });
-
-            TextView t1v = new TextView(this);
-            t1v.setText(" " + i + 100000);
-            t1v.setTextColor(Color.WHITE);
-            t1v.setGravity(Gravity.CENTER);
-            t1v.setPadding(25, 0, 25, 0);
-            tableRowInside.addView(t1v);
-            TextView t2v = new TextView(this);
-            t2v.setText("AistisAistisAistis " + i);
-            t2v.setTextColor(Color.WHITE);
-            t2v.setGravity(Gravity.CENTER);
-            t2v.setPadding(25, 0, 25, 0);
-            tableRowInside.addView(t2v);
-            TextView t3v = new TextView(this);
-            t3v.setText("Taraskevicius" + i);
-            t3v.setTextColor(Color.WHITE);
-            t3v.setGravity(Gravity.CENTER);
-            t3v.setPadding(25, 0, 25, 0);
-            tableRowInside.addView(t3v);
-            TextView t4v = new TextView(this);
-            t4v.setText("" + i * 15 / 32 * 10 + "%");
-            t4v.setTextColor(Color.WHITE);
-            t4v.setGravity(Gravity.CENTER);
-            t4v.setPadding(25, 0, 25, 0);
-            tableRowInside.addView(t4v);
+            rows = new ArrayList<>();
+            for (int j = 0; j < 4; j++) {
+                rows.add(new TextView(this));
+                rows.get(j).setTextColor(Color.WHITE);
+                rows.get(j).setGravity(Gravity.CENTER);
+                rows.get(j).setPadding(25, 0, 25, 0);
+                rows.get(j).setText(attendanceData.get(j).get(i));
+                tableRowInside.addView(rows.get(j));
+            }
             tableLayout.addView(tableRowInside);
         }
     }
 
     private void sendRequest() {
+        Log.i("string", JSON_URL + moduleId);
         StringRequest stringRequest = new StringRequest(JSON_URL + moduleId,
                 new Response.Listener<String>() {
                     @Override
@@ -189,10 +170,11 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
     }
 
     private void showJSON(String json) throws JSONException {
-        ///  ParseJSON pj = new ParseJSON(json);
-        // pj.parseJSONEnrolledStudents();
-        // sl = new CustomStudentList(this, ParseJSON.matricNumber, ParseJSON.email, ParseJSON.fName, ParseJSON.lName);
-        //lv.setAdapter(sl);
+        Log.i("inside", "inside json");
+        ParseJSON pj = new ParseJSON(json);
+        attendanceData = pj.parseJSONModuleAttendance();
+        init();
+        populateTable();
     }
 
     // changing arrows/updating map values to track which way to sort

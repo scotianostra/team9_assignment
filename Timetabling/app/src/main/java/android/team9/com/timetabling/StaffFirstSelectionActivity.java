@@ -51,7 +51,7 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
 
     public void view_module_attendance(View view) {
         Bundle b = new Bundle();
-        b.putString("module", moduleId);
+        b.putString("moduleId", moduleId);
         Intent pass = new Intent(StaffFirstSelectionActivity.this, StaffModuleAttendanceActivity.class);
         pass.putExtras(b);
         startActivity(pass);
