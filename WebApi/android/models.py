@@ -1,8 +1,4 @@
 from django.db import models
-import os, binascii
-
-
-# Create your models here.
 
 
 class Staff(models.Model):
@@ -14,7 +10,7 @@ class Staff(models.Model):
     hash = models.CharField(max_length=128, null=True)
 
     def create_hash(self):
-        return "staff" #+ binascii.b2a_hex(os.urandom(15)).decode()
+        return "staff"
 
     def save(self, *args, **kwargs):
         self.hash = self.create_hash()
@@ -30,7 +26,7 @@ class Student(models.Model):
     hash = models.CharField(max_length=128,  null=True)
 
     def create_hash(self):
-        return "student" #+ binascii.b2a_hex(os.urandom(15)).decode()
+        return "student"
 
     def save(self, *args, **kwargs):
         # check if the row with this hash already exists.
@@ -42,18 +38,20 @@ class Module(models.Model):
     moduleid = models.IntegerField(primary_key=True)
     module_code = models.CharField(max_length=20)
     module_title = models.CharField(max_length=50)
-    coordinators = models.ManyToManyField(Staff)
+    coordinators = models.ManyToManyField(Staff, related_name='modules')
     students_enrolled = models.ManyToManyField(Student)
+
+    def __unicode__(self):
+        return self.moduleid
 
 
 class Class(models.Model):
-    classid = models.IntegerField(primary_key=True)
     qrCode = models.IntegerField()
-    occurance = models.DateTimeField()
+    start_time = models.DateTimeField()
+    room_id = models.CharField(max_length=10)
+    end_time = models.DateTimeField()
     building = models.CharField(max_length=20)
+    module = models.ForeignKey(Module, related_name='classes')
     class_register = models.ManyToManyField(Student)
 
-
-class Room(models.Model):
-    room_name = models.CharField(max_length=10)
 

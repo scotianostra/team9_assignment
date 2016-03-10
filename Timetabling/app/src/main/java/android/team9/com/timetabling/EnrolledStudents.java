@@ -1,8 +1,15 @@
 package android.team9.com.timetabling;
 
+import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -13,26 +20,34 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-public class StaffUIActivity extends AppCompatActivity {
+public class EnrolledStudents extends AppCompatActivity {
 
-    public static final String JSON_URL = "http://10.0.2.2:8000/staffModuleList/1234";
-
-    private ListView listView;
+    private String JSON_URL = "http://api.ouanixi.com/module_enrollments/";
+    private ListView lv;
+    private String moduleID,moduleCode;
+    CustomStudentList sl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_enrolled_students);
 
-        listView = (ListView) findViewById(R.id.listView);
+        lv = (ListView) findViewById(R.id.listView);
 
+        moduleID = getIntent().getStringExtra("module");
+        moduleCode = getIntent().getStringExtra("moduleCode");
+        Log.i("module ID ", moduleID);
+        TextView nameText = (TextView) findViewById(R.id.enrolledTitle);
+        nameText.setText("Students enrolled in "+moduleCode);
         sendRequest();
     }
 
     private void sendRequest(){
-
-        StringRequest stringRequest = new StringRequest(JSON_URL,
+        StringRequest stringRequest = new StringRequest(JSON_URL + moduleID,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -46,7 +61,7 @@ public class StaffUIActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(StaffUIActivity.this,error.getMessage(),Toast.LENGTH_LONG).show();
+                        Toast.makeText(EnrolledStudents.this, error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -56,10 +71,8 @@ public class StaffUIActivity extends AppCompatActivity {
 
     private void showJSON(String json) throws JSONException {
         ParseJSON pj = new ParseJSON(json);
-        pj.parseJSONArray();
-        CustomList cl = new CustomList(this, ParseJSON.moduleCode, ParseJSON.moduleTitle);
-        listView.setAdapter(cl);
-
+        pj.parseJSONEnrolledStudents();
+        sl = new CustomStudentList(this, ParseJSON.matricNumber, ParseJSON.email, ParseJSON.fName, ParseJSON.lName);
+        lv.setAdapter(sl);
     }
-
 }
