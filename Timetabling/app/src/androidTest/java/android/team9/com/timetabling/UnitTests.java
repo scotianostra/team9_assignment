@@ -5,8 +5,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.rules.ExpectedException;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by jamie on 22/02/16.
@@ -20,6 +21,7 @@ public class UnitTests {
     private String jsonStudentObject;
     private String jsonStaffObject;
     private String jsonClassList;
+    private String jsonModuleAttendance;
 
 
     @Rule
@@ -40,6 +42,8 @@ public class UnitTests {
         jsonClassList = "[{\"id\": 1, \"qrCode\": 0, \"start_time\": \"2016-02-22T17:00:00\", \"end_time\": \"2016-02-22T18:00:00\", \"room_id\": \"5\", \"building\": \"QMB\", \"module\": \"10012\"}, " +
                 "{\"id\": 2, \"qrCode\": 123, \"start_time\": \"2016-02-23T16:00:00\", \"end_time\": \"2016-02-23T17:00:00\", \"room_id\": \"2S14\", \"building\": \"Dalhousie\", \"module\": \"10012\"}]";
 
+        jsonModuleAttendance = "[{\"matric_number\": 101010, \"first_name\": \"Bill\", \"last_name\": \"Kill\", \"percentage\": \"100%\"}, " +
+                "{\"matric_number\": 101011,  \"first_name\": \"John\", \"last_name\": \"Wick\",\"percentage\": \"50%\"}]";
     }
 
     @Test
@@ -71,6 +75,7 @@ public class UnitTests {
         assertEquals("Kill", ParseJSON.lName[0]);
         assertEquals("Wick", ParseJSON.lName[1]);
     }
+
 
     @Test
     public void testParseJSONClassList() throws JSONException {
@@ -139,6 +144,22 @@ public class UnitTests {
         parseJSON = new ParseJSON("not valid json");
         thrown.expect(JSONException.class);
         parseJSON.parseJSONClassList();
+    }
+
+    @Test
+    public void testParseJSONModuleAttendance() throws JSONException {
+
+        parseJSON = new ParseJSON(jsonModuleAttendance);
+        parseJSON.parseJSONModuleAttendance();
+
+        assertEquals("101010", ParseJSON.matricNumber[0]);
+        assertEquals("101011", ParseJSON.matricNumber[1]);
+        assertEquals("Bill", ParseJSON.fName[0]);
+        assertEquals("John", ParseJSON.fName[1]);
+        assertEquals("Kill", ParseJSON.lName[0]);
+        assertEquals("Wick", ParseJSON.lName[1]);
+        assertEquals("100%", ParseJSON.attendancePercentage[0]);
+        assertEquals("50%", ParseJSON.attendancePercentage[1]);
     }
 
     @After
