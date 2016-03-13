@@ -58,26 +58,26 @@ class LoginTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, {'staffid': 101, 'hash': 'staff'})
 
-    def test_studet_can_login_if_registered(self):
+    def test_students_can_login_if_registered(self):
         url = '/login/'
         data = {'email_address': 'student01@test.com', 'password': 'password'}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data, {'matric_number': 201, 'hash': 'student'})
 
-    def test_list_all_students(self):
+    def test_retrieve_all_students(self):
         url = '/students/'
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
 
-    def test_list_all_staff(self):
+    def test_retrieve_all_staff(self):
         url = '/staff/'
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
 
-    def test_list_all_modules(self):
+    def test_retrieve_all_modules(self):
         url = '/modules/'
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -85,9 +85,9 @@ class LoginTest(APITestCase):
     def test_staff_module_list(self):
         url = '/staffModuleList/101'
         response = self.client.get(url)
-
         self.assertEquals(response.status_code, status.HTTP_200_OK)
         self.assertEquals(len(response.data), 1)
+
 
 class ClassSignTest(APITestCase):
     def setUp(self):
@@ -161,7 +161,7 @@ class ClassSignTest(APITestCase):
         data = {'student_id': 202, 'room_id': 'time2'}
         response = self.client.put(url, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-	
+
     def test_class_sign_before_class(self):
         url = '/students/sign/'
         data = {'student_id': 202, 'room_id': 'lateroom'}
@@ -179,7 +179,7 @@ class ClassSignTest(APITestCase):
         data = {'student_id': 203, 'room_id': 'qmbsmr'}
         response = self.client.put(url, data)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-	
+
     def test_class_sign_in_no_class_in_room(self):
         url = '/students/sign/'
         data = {'student_id': 202, 'room_id': 'invalid'}

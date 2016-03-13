@@ -1,12 +1,6 @@
-from android.models import *
-from android.serializers import StudentSerializer, StaffSerializer, ClassSerializer, ClassRegisterSerializer
-from rest_framework import generics
-from rest_framework.response import Response
-from rest_framework import status
 import json
 from django.utils import timezone
 from django.db.models.query import Q
-from itertools import chain
 from android.serializers import *
 from rest_framework import generics
 from rest_framework import status
@@ -14,8 +8,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 
-
-@api_view(['GET', 'PUT', 'DELETE'])
+# Returns a list of modules that a specific staff memember teaches/coordinates
+@api_view(['GET'])
 def staff_module_list(request, pk):
     try:
         modules = Module.objects.filter(coordinators=pk)
@@ -26,7 +20,51 @@ def staff_module_list(request, pk):
         serializer = StaffModuleListSerializer(modules, many=True)
         return Response(serializer.data)
 
+@api_view(['GET'])
+def module_attendance(request, pk):
+    data = []
+    try:
+        students = Module.objects.get(moduleid=pk).students_enrolled
+        classes = Class.objects.filter(module=pk)
+        number_of_classes = classes.count()
+    except Module.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
+    for student in students.all():
+        stdnt = {}
+        count = 0
+        for cls in classes:
+            if student in cls.class_register.all():
+                count += 1
+        if count != 0:
+            percentage = count / number_of_classes
+        else:
+            percentage = 0
+        stdnt['percentage'] = percentage
+        stdnt['first_name'] = student.first_name
+        stdnt['last_name'] = student.last_name
+        stdnt['matric_number'] = student.matric_number
+        data.append(stdnt)
+    json_obj = json.dumps(data)
+    return Response(json.loads(json_obj))
+
+
+
+
+# Returns the list of all classes that are linked to a specific module
+@api_view(['GET'])
+def module_classes(request, pk):
+    try:
+        classes = Class.objects.filter(module=pk)
+    except Class.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = ClassSerializer(classes, many=True)
+        return Response(serializer.data)
+
+
+# Returns a list of students that are enrolled to a given module.
 @api_view(['GET'])
 def module_enrollment_list(request, pk):
     try:
@@ -39,54 +77,65 @@ def module_enrollment_list(request, pk):
         return Response(serializer.data)
 
 
+# Returns a list of students that have attended to a given class.
+@api_view(['GET'])
+def class_register(request, pk):
+    try:
+        students = Class.objects.get(id=pk).class_register
+    except Module.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = StudentSerializer(students, many=True)
+        return Response(serializer.data)
+
+
+# Returns a list of all students.
 class StudentList(generics.ListCreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
-
+# Allows deletion, update, retrieval of a Student instance in the db.
 class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
 
 
+# Returns a list of all Staff members
 class StaffList(generics.ListCreateAPIView):
     queryset = Staff.objects.all()
     serializer_class = StaffSerializer
 
 
+# Allows deletion, update, retrieval of a Staff instance in the db.
 class StaffDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Staff.objects.all()
     serializer_class = StaffSerializer
 
 
+# Returns a list of all modules
 class ModuleList(generics.ListCreateAPIView):
     queryset = Module.objects.all()
     serializer_class = ModuleSerializer
 
 
-class ModuleList(generics.ListCreateAPIView):
-    queryset = Module.objects.all()
-    serializer_class = ModuleSerializer
-
-
+# Allows deletion, update, retrieval of a module instance in the db.
 class ModuleDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Module.objects.all()
     serializer_class = ModuleSerializer
 
 
+# Returns a list of all classes
 class ClassList(generics.ListCreateAPIView):
     queryset = Class.objects.all()
     serializer_class = ClassSerializer
 
 
-class ClassDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Class.objects.all()
-    serializer_class = ClassSerializer
-
-
+# REFACTORED (ORIGINAL CODE COMMENTED OUT AT THE BOTTOM OF THIS FILE)
+# Allows deletion, update, retrieval of a Class instance in the db including its class register.
 class ClassRegister(generics.RetrieveUpdateDestroyAPIView):
     queryset = Class.objects.all()
-    serializer_class = ClassSerializer
+    serializer_class = RegisterSerializer
 
 
 class ClassSign(generics.UpdateAPIView):
