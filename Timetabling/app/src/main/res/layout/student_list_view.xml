@@ -10,7 +10,8 @@
         android:paddingLeft="6dip"
         android:paddingRight="6dip"
         android:gravity="center"
-        android:id="@+id/textViewMatricNumber" />
+        android:id="@+id/textViewMatricNumber"
+        android:elegantTextHeight="true" />
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
@@ -18,14 +19,17 @@
         android:paddingLeft="6dip"
         android:paddingRight="6dip"
         android:gravity="center"
-        android:id="@+id/textViewEmail" />
+        android:id="@+id/textViewEmail"
+        android:elegantTextHeight="true" />
     <TextView
-        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_height="wrap_content"
         android:layout_width="fill_parent"
         android:textSize="20sp"
         android:paddingLeft="6dip"
         android:paddingRight="6dip"
         android:gravity="center"
-        android:id="@+id/textViewName" />
+        android:id="@+id/textViewName"
+        android:autoText="false"
+        android:elegantTextHeight="true" />
 
 </LinearLayout>

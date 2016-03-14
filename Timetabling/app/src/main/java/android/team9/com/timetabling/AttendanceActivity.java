@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -24,30 +23,49 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class EnrolledStudents extends AppCompatActivity {
+public class AttendanceActivity extends AppCompatActivity {
 
-    private String JSON_URL = "http://api.ouanixi.com/module_enrollments/";
+    private String JSON_URL = "http://api.ouanixi.com/class_register/";
     private ListView lv;
-    private String moduleID,moduleCode;
+    private String classID;
     CustomStudentList sl;
+
+    private String startTime;
+    private String endTime;
+    private String room;
+    private String building;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_enrolled_students);
+        setContentView(R.layout.activity_attendance);
 
         lv = (ListView) findViewById(R.id.listView);
 
-        moduleID = getIntent().getStringExtra("module");
-        moduleCode = getIntent().getStringExtra("moduleCode");
-        Log.i("module ID ", moduleID);
-        TextView nameText = (TextView) findViewById(R.id.enrolledTitle);
-        nameText.setText("Students enrolled in "+moduleCode);
+        startTime = getIntent().getStringExtra("start");
+        Log.i("Start Time ", startTime);
+        endTime = getIntent().getStringExtra("end");
+        room = getIntent().getStringExtra("room");
+        building = getIntent().getStringExtra("building");
+        classID = getIntent().getStringExtra("classID");
+
+        EditText startText = (EditText) findViewById(R.id.startTime);
+        EditText endText = (EditText) findViewById(R.id.endTime);
+        EditText roomText = (EditText) findViewById(R.id.room);
+        EditText buildingText = (EditText) findViewById(R.id.building);
+
+        startText.setText(startTime);
+        endText.setText(endTime);
+        roomText.setText(room);
+        buildingText.setText(building);
+
         sendRequest();
+
     }
 
+
     private void sendRequest(){
-        StringRequest stringRequest = new StringRequest(JSON_URL + moduleID,
+        StringRequest stringRequest = new StringRequest(JSON_URL + classID,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -61,7 +79,7 @@ public class EnrolledStudents extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(EnrolledStudents.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(AttendanceActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -74,5 +92,6 @@ public class EnrolledStudents extends AppCompatActivity {
         pj.parseJSONEnrolledStudents();
         sl = new CustomStudentList(this, ParseJSON.matricNumber, ParseJSON.email, ParseJSON.fName, ParseJSON.lName);
         lv.setAdapter(sl);
+
     }
 }
