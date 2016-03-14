@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class StaffModuleAttendanceActivity extends AppCompatActivity {
-    private String moduleId;
+public class StaffModuleStudentAttendanceActivity extends AppCompatActivity {
+    private String matric_number;
     private String JSON_URL = "http://api.ouanixi.com/moduleAttendance/";
     private TableLayout tableLayout;
     private TableRow headingRow;
@@ -38,14 +38,14 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_staff_module_attendance);
-        moduleId = getIntent().getStringExtra("moduleId");
+        setContentView(R.layout.activity_staff_module_student_attendance);
+        matric_number = getIntent().getStringExtra("matricNumber");
         // int 0 neutral, 2 ascending, 1 descending
         sortReminder = new TreeMap<>();
-        sortReminder.put((getString(R.string.matricNumber)), 0);
-        sortReminder.put((getString(R.string.forename)), 0);
-        sortReminder.put((getString(R.string.surname)), 0);
-        sortReminder.put((getString(R.string.attendance)), 0);
+        sortReminder.put((getString(R.string.date)), 0);
+        sortReminder.put((getString(R.string.weekday)), 0);
+        sortReminder.put((getString(R.string.start_time)), 0);
+        sortReminder.put((getString(R.string.attend)), 0);
         sendRequest();
     }
 
@@ -63,8 +63,8 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
             headers.get(i).setTextSize(15);
         }
 
-        defaultHeaders.add(getString(R.string.matricNumber));
-        headers.get(0).setText(R.string.matricNumber);
+        defaultHeaders.add(getString(R.string.date));
+        headers.get(0).setText(R.string.date);
         headers.get(0).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,8 +75,8 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
         headingRow.addView(headers.get(0));
 
         // refactored to use string resources
-        headers.get(1).setText(R.string.forename);
-        defaultHeaders.add(getString(R.string.forename));
+        headers.get(1).setText(R.string.weekday);
+        defaultHeaders.add(getString(R.string.weekday));
         headers.get(1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,8 +86,8 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
         });
         headingRow.addView(headers.get(1));
 
-        headers.get(2).setText(R.string.surname);
-        defaultHeaders.add(getString(R.string.surname));
+        headers.get(2).setText(R.string.start_time);
+        defaultHeaders.add(getString(R.string.start_time));
         headers.get(2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,8 +97,8 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
         });
         headingRow.addView(headers.get(2));
 
-        headers.get(3).setText(R.string.attendance);
-        defaultHeaders.add(getString(R.string.attendance));
+        headers.get(3).setText(R.string.attend);
+        defaultHeaders.add(getString(R.string.attend));
         headers.get(3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,26 +114,6 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
     private void populateTable() {
         for (int i = 0; i < attendanceData.get(0).size(); i++) {
             TableRow tableRowInside = new TableRow(this);
-            tableRowInside.setClickable(true);
-            tableRowInside.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    // remove colour change later if not needed
-                    v.setBackgroundColor(Color.GRAY);
-                    //get the data you need
-                    TableRow tablerow = (TableRow) v;
-                    TextView matric = (TextView) tablerow.getChildAt(0);
-                    String matricNumber = matric.getText().toString();
-                    Log.i("matric number", matricNumber);
-
-                    // call single student (based on matric number) attendance activity here
-
-                    Bundle b = new Bundle();
-                    b.putString("matricNumber", matricNumber);
-                    Intent pass = new Intent(StaffModuleAttendanceActivity.this, StaffModuleStudentAttendanceActivity.class);
-                    pass.putExtras(b);
-                    startActivity(pass);
-                }
-            });
             rows = new ArrayList<>();
             for (int j = 0; j < 4; j++) {
                 rows.add(new TextView(this));
@@ -148,8 +128,8 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
     }
 
     private void sendRequest() {
-        Log.i("string", JSON_URL + moduleId);
-        StringRequest stringRequest = new StringRequest(JSON_URL + moduleId,
+        Log.i("string", JSON_URL + matric_number);
+        StringRequest stringRequest = new StringRequest(JSON_URL + matric_number,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -163,7 +143,7 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(StaffModuleAttendanceActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(StaffModuleStudentAttendanceActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -174,7 +154,7 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
     private void showJSON(String json) throws JSONException {
         Log.i("inside", "inside json");
         ParseJSON pj = new ParseJSON(json);
-        attendanceData = pj.parseJSONModuleAttendance();
+        attendanceData = pj.parseJSONStudentAttendance();
         init();
         populateTable();
     }

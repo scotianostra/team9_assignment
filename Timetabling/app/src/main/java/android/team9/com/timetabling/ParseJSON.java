@@ -31,6 +31,9 @@ public class ParseJSON {
 
     public static String[] attendancePercentage;
 
+    public static String[] date;
+    public static String[] weekday;
+    public static String[] attendance;
 
 
     public static int user_id;
@@ -58,6 +61,10 @@ public class ParseJSON {
     public static final String KEY_MODULE = "module";
 
     public static final String KEY_PERCENTAGE = "percentage";
+
+    public static final String KEY_DATE = "date";
+    public static final String KEY_WEEKDAY = "weekday";
+    public static final String KEY_ATTENDANCE = "attendance";
 
     private String json;
 
@@ -184,6 +191,39 @@ public class ParseJSON {
             attendanceData.add(Arrays.asList(fName));
             attendanceData.add(Arrays.asList(lName));
             attendanceData.add(Arrays.asList(attendancePercentage));
+            Log.i("A size", Integer.toString(attendanceData.size()));
+            Log.i("A size", Integer.toString(attendanceData.get(0).size()));
+            return attendanceData;
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+            throw e;
+        }
+    }
+
+    protected List<List<String>> parseJSONStudentAttendance() throws JSONException {
+        try {
+            List<List<String>> attendanceData = new ArrayList<>();
+            JSONArray jsonArray = new JSONArray(json);
+            Log.v("JSON", jsonArray.toString());
+
+            date = new String[jsonArray.length()];
+            weekday = new String[jsonArray.length()];
+            startTime = new String[jsonArray.length()];
+            attendance = new String[jsonArray.length()];
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonobject = jsonArray.getJSONObject(i);
+                date[i] = jsonobject.getString(KEY_DATE);
+                weekday[i] = jsonobject.getString(KEY_WEEKDAY);
+                startTime[i] = jsonobject.getString(KEY_START_TIME);
+                attendance[i] = jsonobject.getString(KEY_ATTENDANCE);
+            }
+
+            attendanceData.add(Arrays.asList(date));
+            attendanceData.add(Arrays.asList(weekday));
+            attendanceData.add(Arrays.asList(startTime));
+            attendanceData.add(Arrays.asList(attendance));
             Log.i("A size", Integer.toString(attendanceData.size()));
             Log.i("A size", Integer.toString(attendanceData.get(0).size()));
             return attendanceData;
