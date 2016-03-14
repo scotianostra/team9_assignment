@@ -19,7 +19,7 @@
         <activity
             android:name=".StaffLandingActivity"
             android:label="Modules I teach" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".ModuleAttendanceGraphActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,7 +53,8 @@
                 android:value="android.team9.com.timetabling.EnrolledStudents" />
         </activity>
         <activity android:name=".ClassListActivity" />
-        <activity android:name=".AttendanceActivity"></activity>
+        <activity android:name=".AttendanceActivity" />
+        <activity android:name=".LoginActivity"></activity>
     </application>
 
 </manifest>
