@@ -32,7 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class SimpleScannerActivity extends BaseScannerActivity implements ZXingScannerView.ResultHandler {
+public class    SimpleScannerActivity extends BaseScannerActivity implements ZXingScannerView.ResultHandler {
     private ZXingScannerView mScannerView;
     private String userid;
     private String roomid;

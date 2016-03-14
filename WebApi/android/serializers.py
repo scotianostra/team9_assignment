@@ -45,6 +45,12 @@ class StaffModuleListSerializer(serializers.ModelSerializer):
         model = Module
         fields = ('moduleid', 'module_code', 'module_title', 'coordinators')
 
+## Jamie's class
+class ModuleAttendanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Class
+        fields = ('week', 'class_type', 'start_time', 'end_time', 'module', 'class_register')
+
 
 # lists the role and id of the staff trying to login
 class StaffLoginSerializer(serializers.ModelSerializer):

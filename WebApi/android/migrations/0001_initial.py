@@ -13,8 +13,10 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Class',
             fields=[
-                ('id', models.AutoField(serialize=False, primary_key=True, verbose_name='ID', auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('qrCode', models.IntegerField()),
+                ('week', models.IntegerField()),
+                ('class_type', models.CharField(max_length=256)),
                 ('start_time', models.DateTimeField()),
                 ('room_id', models.CharField(max_length=10)),
                 ('end_time', models.DateTimeField()),

@@ -20,6 +20,22 @@ def staff_module_list(request, pk):
         serializer = StaffModuleListSerializer(modules, many=True)
         return Response(serializer.data)
 
+# Returns a list of student attendance for a specific module for a specific week
+@api_view(['POST'])
+def module_attendance_by_week(request):
+    if request.method == 'POST':
+        #module_id = request.data['module_id']
+        week = request.data['week']
+    try:
+        print(week)
+        attendance = Class.objects.filter(week=week)
+
+    except Module.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'POST':
+        serializer = ModuleAttendanceSerializer(attendance, many=True)
+        return Response(serializer.data)
 
 # Returns the list of all classes that are linked to a specific module
 @api_view(['GET'])
