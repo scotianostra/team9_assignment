@@ -20,6 +20,7 @@ public class UnitTests {
     private String jsonStudentObject;
     private String jsonStaffObject;
     private String jsonClassList;
+    private String jsonAttendanceByWeek;
 
 
     @Rule
@@ -40,6 +41,23 @@ public class UnitTests {
         jsonClassList = "[{\"id\": 1, \"qrCode\": 0, \"start_time\": \"2016-02-22T17:00:00\", \"end_time\": \"2016-02-22T18:00:00\", \"room_id\": \"5\", \"building\": \"QMB\", \"module\": \"10012\"}, " +
                 "{\"id\": 2, \"qrCode\": 123, \"start_time\": \"2016-02-23T16:00:00\", \"end_time\": \"2016-02-23T17:00:00\", \"room_id\": \"2S14\", \"building\": \"Dalhousie\", \"module\": \"10012\"}]";
 
+        jsonAttendanceByWeek = "[{\"week\": 1, \"class_type\": \"Seminar\", \"class_register\": [1, 2, 3]}," +
+                                "{\"week\": 1, \"class_type\": \"Lab\", \"class_register\": [1, 2]}," +
+                                "{\"week\": 1, \"class_type\": \"Lecture\", \"class_register\": []}]";
+    }
+
+    @Test
+    public void testParseJSONModuleAttendanceByWeek() throws JSONException {
+
+        parseJSON = new ParseJSON(jsonAttendanceByWeek);
+        parseJSON.parseModuleAttendanceByWeek();
+
+        assertEquals("Seminar", ParseJSON.classType[0]);
+        assertEquals("Lab", ParseJSON.classType[1]);
+        assertEquals("Lecture", ParseJSON.classType[2]);
+        assertEquals(3, ParseJSON.attendanceCount[0]);
+        assertEquals(2, ParseJSON.attendanceCount[1]);
+        assertEquals(0, ParseJSON.attendanceCount[2]);
     }
 
     @Test
