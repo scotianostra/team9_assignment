@@ -50,9 +50,12 @@
         android:focusable="false"
         android:enabled="false" />
 
-    <Spinner
-        android:id="@+id/week_spinner"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/moduleGraphBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View attendance graph"
+        android:layout_below="@+id/attendanceButton"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

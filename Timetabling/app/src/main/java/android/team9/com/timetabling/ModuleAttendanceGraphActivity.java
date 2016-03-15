@@ -29,17 +29,53 @@ import java.util.Map;
 
 public class ModuleAttendanceGraphActivity extends AppCompatActivity {
 
-    private static final String MODULE_ATTENDANCE_URL = "http://127.0.0.1:8000/moduleAttendanceList/";
+    private static final String MODULE_ATTENDANCE_URL = "http://10.0.2.2:8000/moduleAttendanceList/";
+    private static final String NO_OF_STUDENTS_URL = "http://10.0.2.2:8000/module_enrollments/";
     public static final String KEY_MODULE_ID = "module_id";
     public static final String KEY_WEEK = "week";
+    private String week;
+    private String moduleId;
+    private String moduleTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_module_attendance_graph);
 
-        getModuleAttendance();
+        week = getIntent().getStringExtra("week");
+        moduleId = getIntent().getStringExtra("module");
+        moduleTitle = getIntent().getStringExtra("moduleTitle");
 
+        getModuleAttendance();
+        getStudentNumber();
+        createChart();
+    }
+
+    private void getStudentNumber() {
+        StringRequest stringRequest = new StringRequest(NO_OF_STUDENTS_URL + moduleId,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.v("no of students", String.valueOf(response.length()));
+//                        try {
+//                            showJSON(response);
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(ModuleAttendanceGraphActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    private void createChart() {
         // To make vertical bar chart, initialize graph id this way
         BarChart barChart = (BarChart) findViewById(R.id.chart);
 
@@ -61,7 +97,7 @@ public class ModuleAttendanceGraphActivity extends AppCompatActivity {
         BarData data = new BarData(labels, dataset);
         barChart.setData(data); // set the data and list of lables into chart
 
-        barChart.setDescription("Week 1 - Introduction to Java");  // set the description
+        barChart.setDescription(week + " - " + moduleTitle);  // set the description
         dataset.setColors(ColorTemplate.COLORFUL_COLORS);
         barChart.animateY(2000);
     }

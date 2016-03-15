@@ -1,4 +1,3 @@
-
 from django.utils import timezone
 from django.db.models.query import Q
 from android.serializers import *
@@ -6,6 +5,7 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+import simplejson as json
 
 
 # Returns a list of modules that a specific staff memember teaches/coordinates
@@ -20,15 +20,21 @@ def staff_module_list(request, pk):
         serializer = StaffModuleListSerializer(modules, many=True)
         return Response(serializer.data)
 
+
 # Returns a list of student attendance for a specific module for a specific week
 @api_view(['POST'])
 def module_attendance_by_week(request):
+
+    no_of_students = 0
     if request.method == 'POST':
-        #module_id = request.data['module_id']
+        module_id = request.data['module_id']
         week = request.data['week']
     try:
-        print(week)
-        attendance = Class.objects.filter(week=week)
+        class_id = Class.objects.filter(module_id=module_id)
+        attendance = class_id.filter(week=week)
+        # students = Module.objects.get(moduleid=module_id).students_enrolled
+        # no_of_students = students.all().count()
+        # # print(attendance.)
 
     except Module.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)

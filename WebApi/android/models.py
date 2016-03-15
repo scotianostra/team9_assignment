@@ -46,6 +46,7 @@ class Module(models.Model):
 
 
 class Class(models.Model):
+    id = models.IntegerField(primary_key=True)
     qrCode = models.IntegerField()
     week = models.IntegerField()
     class_type = models.CharField(max_length=256)

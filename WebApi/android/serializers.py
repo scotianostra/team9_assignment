@@ -45,11 +45,19 @@ class StaffModuleListSerializer(serializers.ModelSerializer):
         model = Module
         fields = ('moduleid', 'module_code', 'module_title', 'coordinators')
 
+
 ## Jamie's class
 class ModuleAttendanceSerializer(serializers.ModelSerializer):
+    # no_of_students = serializers.SerializerMethodField()
+    #
+    # def get_no_of_enrolled_students(self, obj):
+    #     students = Module.objects.get(moduleid=obj.module).students_enrolled.all().count()
+    #     return students
+
+
     class Meta:
         model = Class
-        fields = ('week', 'class_type', 'start_time', 'end_time', 'module', 'class_register')
+        fields = ('week', 'class_type', 'class_register')
 
 
 # lists the role and id of the staff trying to login
