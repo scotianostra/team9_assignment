@@ -57,31 +57,29 @@ public class ModuleAttendanceGraphActivity extends AppCompatActivity {
         noOfStudents = getIntent().getStringExtra("noOfStudents");
 
         getModuleAttendance();
-        createChart();
+
     }
 
-
-
     private void createChart() {
-        // To make vertical bar chart, initialize graph id this way
+
         BarChart barChart = (BarChart) findViewById(R.id.chart);
 
+        // populate attendance count
         ArrayList<BarEntry> entries = new ArrayList<>();
-        entries.add(new BarEntry(4, 0));
-        entries.add(new BarEntry(8, 1));
-        entries.add(new BarEntry(6, 2));
-        entries.add(new BarEntry(12, 3));
+        for(int i=0; i<ParseJSON.attendanceCount.length; i++) {
+            entries.add(new BarEntry(ParseJSON.attendanceCount[i], i));
+        }
 
         BarDataSet dataset = new BarDataSet(entries, "# of students (" + noOfStudents + " enrolled)");
 
         // creating labels
         ArrayList<String> labels = new ArrayList<String>();
-        labels.add("Tutorial");
-        labels.add("Lecture");
-        labels.add("Lecture");
-        labels.add("Lab");
+        for(int i=0; i<ParseJSON.classType.length; i++) {
+            labels.add(ParseJSON.classType[i]);
+        }
 
         BarData data = new BarData(labels, dataset);
+        barChart.setDrawBarShadow(true);
         barChart.setData(data); // set the data and list of lables into chart
 
         barChart.setDescription("Week " + week + " - " + moduleTitle);  // set the description
@@ -95,13 +93,14 @@ public class ModuleAttendanceGraphActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                        ParseJSON prsJson = new ParseJSON(response);
-//                        try {
-//                            showJSON(response);
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
+                        ParseJSON prsJson = new ParseJSON(response);
                         Log.v("ATTENDANCE", response.toString());
+                        try {
+                            showJSON(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -125,4 +124,9 @@ public class ModuleAttendanceGraphActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
+    private void showJSON(String json) throws JSONException {
+        ParseJSON pj = new ParseJSON(json);
+        pj.parseModuleAttendanceByWeek();
+        createChart();
+    }
 }

@@ -25,7 +25,8 @@ public class ParseJSON {
     public static String[] building;
     public static String[] module;
 
-
+    public static String[] classType;
+    public static int[] attendanceCount;
 
     public static int user_id;
     public static String role;
@@ -50,6 +51,9 @@ public class ParseJSON {
     public static final String KEY_ROOM = "room_id";
     public static final String KEY_BUILDING = "building";
     public static final String KEY_MODULE = "module";
+
+    public static final String KEY_CLASS_TYPE = "class_type";
+    public static final String KEY_CLASS_REGISTER = "class_register";
 
     private String json;
 
@@ -158,6 +162,26 @@ public class ParseJSON {
             JSONArray jsonArray = new JSONArray(json);
             int noOfStudents = jsonArray.length();
             return noOfStudents;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    protected void parseModuleAttendanceByWeek() throws JSONException {
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            classType = new String[jsonArray.length()];
+            attendanceCount = new int[jsonArray.length()];
+            int count;
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonobject = jsonArray.getJSONObject(i);
+                classType[i] = jsonobject.getString(KEY_CLASS_TYPE);
+                attendanceCount[i] = jsonobject.getJSONArray(KEY_CLASS_REGISTER).length();
+                Log.v("class: " , classType[i]);
+                Log.v("count: " , String.valueOf(attendanceCount[i]));
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
             throw e;

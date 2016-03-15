@@ -69,11 +69,10 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
     }
 
     private void getStudentNumber() {
-        StringRequest stringRequest = new StringRequest(NO_OF_STUDENTS_URL + 10014,
+        StringRequest stringRequest = new StringRequest(NO_OF_STUDENTS_URL + moduleId,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.v("no of students", String.valueOf(response.length()));
                         try {
                             showJSON(response);
                         } catch (JSONException e) {
