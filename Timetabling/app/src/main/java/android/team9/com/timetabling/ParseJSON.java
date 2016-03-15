@@ -152,4 +152,15 @@ public class ParseJSON {
             throw e;
         }
     }
+
+    protected int parseNoOfEnrolledStudents() throws JSONException {
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            int noOfStudents = jsonArray.length();
+            return noOfStudents;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
 }

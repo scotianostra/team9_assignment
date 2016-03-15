@@ -13,11 +13,22 @@ import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+
 public class StaffFirstSelectionActivity extends AppCompatActivity {
-        private String moduleId;
-        private String moduleTitle;
-        private String moduleCode;
-        public final static String MODULEID = "android.team9.com.MODULEID";
+
+    private String moduleId;
+    private String moduleTitle;
+    private String moduleCode;
+    private int noOfStudents;
+    public final static String MODULEID = "android.team9.com.MODULEID";
+    private static final String NO_OF_STUDENTS_URL = "http://10.0.2.2:8000/module_enrollments/";
 
     private Button buttonAttendance;
     private Button buttonGraph;
@@ -37,6 +48,8 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
 
         buttonAttendance = (Button) findViewById(R.id.attendanceButton);
         buttonGraph = (Button) findViewById(R.id.moduleGraphBtn);
+
+        getStudentNumber();
         
         buttonAttendance.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -53,6 +66,35 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void getStudentNumber() {
+        StringRequest stringRequest = new StringRequest(NO_OF_STUDENTS_URL + 10014,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.v("no of students", String.valueOf(response.length()));
+                        try {
+                            showJSON(response);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(StaffFirstSelectionActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(stringRequest);
+    }
+
+    private void showJSON(String json) throws JSONException {
+        ParseJSON pj = new ParseJSON(json);
+        noOfStudents = pj.parseNoOfEnrolledStudents();
     }
 
     private void viewPopupMenu() {
@@ -84,6 +126,7 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
         Bundle b = makeBundle();
         b.putString("moduleTitle", moduleTitle);
         b.putString("week", week);
+        b.putString("noOfStudents", String.valueOf(noOfStudents));
         Intent intent = new Intent(StaffFirstSelectionActivity.this, ModuleAttendanceGraphActivity.class);
         intent.putExtras(b);
         startActivity(intent);

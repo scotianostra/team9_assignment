@@ -26,54 +26,41 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ModuleAttendanceGraphActivity extends AppCompatActivity {
 
     private static final String MODULE_ATTENDANCE_URL = "http://10.0.2.2:8000/moduleAttendanceList/";
-    private static final String NO_OF_STUDENTS_URL = "http://10.0.2.2:8000/module_enrollments/";
+
     public static final String KEY_MODULE_ID = "module_id";
     public static final String KEY_WEEK = "week";
     private String week;
     private String moduleId;
     private String moduleTitle;
+    private String noOfStudents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_module_attendance_graph);
 
-        week = getIntent().getStringExtra("week");
+        // extract week number from the string "week x"
+        String inputline = getIntent().getStringExtra("week");
+        Pattern p = Pattern.compile("-?\\d+");
+        Matcher m = p.matcher(inputline);
+        if(m.find())
+            week = m.group();
+
         moduleId = getIntent().getStringExtra("module");
         moduleTitle = getIntent().getStringExtra("moduleTitle");
+        noOfStudents = getIntent().getStringExtra("noOfStudents");
 
         getModuleAttendance();
-        getStudentNumber();
         createChart();
     }
 
-    private void getStudentNumber() {
-        StringRequest stringRequest = new StringRequest(NO_OF_STUDENTS_URL + moduleId,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        Log.v("no of students", String.valueOf(response.length()));
-//                        try {
-//                            showJSON(response);
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(ModuleAttendanceGraphActivity.this, error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
 
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-    }
 
     private void createChart() {
         // To make vertical bar chart, initialize graph id this way
@@ -85,7 +72,7 @@ public class ModuleAttendanceGraphActivity extends AppCompatActivity {
         entries.add(new BarEntry(6, 2));
         entries.add(new BarEntry(12, 3));
 
-        BarDataSet dataset = new BarDataSet(entries, "# of students (60 enrolled)");
+        BarDataSet dataset = new BarDataSet(entries, "# of students (" + noOfStudents + " enrolled)");
 
         // creating labels
         ArrayList<String> labels = new ArrayList<String>();
@@ -97,7 +84,7 @@ public class ModuleAttendanceGraphActivity extends AppCompatActivity {
         BarData data = new BarData(labels, dataset);
         barChart.setData(data); // set the data and list of lables into chart
 
-        barChart.setDescription(week + " - " + moduleTitle);  // set the description
+        barChart.setDescription("Week " + week + " - " + moduleTitle);  // set the description
         dataset.setColors(ColorTemplate.COLORFUL_COLORS);
         barChart.animateY(2000);
     }
@@ -108,12 +95,13 @@ public class ModuleAttendanceGraphActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        ParseJSON prsJson = new ParseJSON(response);
-                        //try {
-                            Log.v("ATTENDANCE", response.toString());
+//                        ParseJSON prsJson = new ParseJSON(response);
+//                        try {
+//                            showJSON(response);
 //                        } catch (JSONException e) {
 //                            e.printStackTrace();
 //                        }
+                        Log.v("ATTENDANCE", response.toString());
                     }
                 },
                 new Response.ErrorListener() {
@@ -126,8 +114,8 @@ public class ModuleAttendanceGraphActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put(KEY_MODULE_ID, "10014");
-                params.put(KEY_WEEK, "1");
+                params.put(KEY_MODULE_ID, moduleId);
+                params.put(KEY_WEEK, week);
                 return params;
             }
 
@@ -136,6 +124,5 @@ public class ModuleAttendanceGraphActivity extends AppCompatActivity {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
     }
-
 
 }
