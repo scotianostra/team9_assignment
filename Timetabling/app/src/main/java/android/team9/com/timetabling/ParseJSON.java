@@ -6,6 +6,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class ParseJSON {
     public static String[] moduleCode;
     public static String[] moduleTitle;
@@ -27,6 +31,8 @@ public class ParseJSON {
 
     public static String[] classType;
     public static int[] attendanceCount;
+
+    public static String[] attendancePercentage;
 
     public static int user_id;
     public static String role;
@@ -54,6 +60,8 @@ public class ParseJSON {
 
     public static final String KEY_CLASS_TYPE = "class_type";
     public static final String KEY_CLASS_REGISTER = "class_register";
+
+    public static final String KEY_PERCENTAGE = "percentage";
 
     private String json;
 
@@ -178,10 +186,35 @@ public class ParseJSON {
                 JSONObject jsonobject = jsonArray.getJSONObject(i);
                 classType[i] = jsonobject.getString(KEY_CLASS_TYPE);
                 attendanceCount[i] = jsonobject.getJSONArray(KEY_CLASS_REGISTER).length();
-                Log.v("class: " , classType[i]);
-                Log.v("count: " , String.valueOf(attendanceCount[i]));
+                Log.v("class: ", classType[i]);
+                Log.v("count: ", String.valueOf(attendanceCount[i]));
             }
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected List<List<String>> parseJSONModuleAttendance() throws JSONException {
+        try {
+            List<List<String>> attendanceData = new ArrayList<>();
+            JSONArray jsonArray = new JSONArray(json);
+            Log.v("JSON", jsonArray.toString());
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                ArrayList<String> temp = new ArrayList<>();
+                JSONObject jsonobject = jsonArray.getJSONObject(i);
+                temp.add(jsonobject.getString(KEY_MATRIC_NUMBER));
+                temp.add(jsonobject.getString(KEY_FIRST_NAME));
+                temp.add(jsonobject.getString(KEY_LAST_NAME));
+                temp.add(jsonobject.getString(KEY_PERCENTAGE));
+
+                attendanceData.add(temp);
+            }
+
+            Log.i("A size", Integer.toString(attendanceData.size()));
+            Log.i("A size", Integer.toString(attendanceData.get(0).size()));
+            return attendanceData;
         } catch (JSONException e) {
             e.printStackTrace();
             throw e;

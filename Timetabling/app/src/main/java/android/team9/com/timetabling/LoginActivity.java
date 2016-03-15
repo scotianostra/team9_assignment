@@ -94,7 +94,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putInt("id", prsJson.user_id);
                         editor.putString("role", prsJson.role);
                         editor.commit();
-                        //Toast.makeText(LoginActivity.this, prsJson.role + " " +prsJson.user_id, Toast.LENGTH_LONG).show();
+                        Toast.makeText(LoginActivity.this, prsJson.role + " " +prsJson.user_id, Toast.LENGTH_LONG).show();
                         routeToActivity(prsJson.role,prsJson.user_id);
                     }
                 },

@@ -20,21 +20,44 @@ def staff_module_list(request, pk):
         serializer = StaffModuleListSerializer(modules, many=True)
         return Response(serializer.data)
 
+@api_view(['GET'])
+def module_attendance(request, pk):
+    data = []
+    try:
+        students = Module.objects.get(moduleid=pk).students_enrolled
+        classes = Class.objects.filter(module=pk)
+        number_of_classes = classes.count()
+    except Module.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    for student in students.all():
+        stdnt = {}
+        count = 0
+        for cls in classes.iterator():
+            if student in cls.class_register.all():
+                count += 1
+        if count != 0:
+            percentage = (count / number_of_classes) * 100
+        else:
+            percentage = 0
+        stdnt['percentage'] = percentage
+        stdnt['first_name'] = student.first_name
+        stdnt['last_name'] = student.last_name
+        stdnt['matric_number'] = student.matric_number
+        data.append(stdnt)
+    json_obj = json.dumps(data)
+    return Response(json.loads(json_obj))
 
 # Returns a list of student attendance for a specific module for a specific week
 @api_view(['POST'])
 def module_attendance_by_week(request):
 
-    no_of_students = 0
     if request.method == 'POST':
         module_id = request.data['module_id']
         week = request.data['week']
     try:
         class_id = Class.objects.filter(module_id=module_id)
         attendance = class_id.filter(week=week)
-        # students = Module.objects.get(moduleid=module_id).students_enrolled
-        # no_of_students = students.all().count()
-        # # print(attendance.)
 
     except Module.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
@@ -42,6 +65,7 @@ def module_attendance_by_week(request):
     if request.method == 'POST':
         serializer = ModuleAttendanceSerializer(attendance, many=True)
         return Response(serializer.data)
+
 
 # Returns the list of all classes that are linked to a specific module
 @api_view(['GET'])

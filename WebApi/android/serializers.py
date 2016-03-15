@@ -48,12 +48,6 @@ class StaffModuleListSerializer(serializers.ModelSerializer):
 
 ## Jamie's class
 class ModuleAttendanceSerializer(serializers.ModelSerializer):
-    # no_of_students = serializers.SerializerMethodField()
-    #
-    # def get_no_of_enrolled_students(self, obj):
-    #     students = Module.objects.get(moduleid=obj.module).students_enrolled.all().count()
-    #     return students
-
 
     class Meta:
         model = Class

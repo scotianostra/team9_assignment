@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^students/sign/$', views.ClassSign.as_view()),
     url(r'^staffModuleList/(?P<pk>[0-9]+)$', views.staff_module_list),
     url(r'^moduleAttendanceList/$', views.module_attendance_by_week),
+    url(r'^moduleAttendance/(?P<pk>[0-9]+)/$', views.module_attendance),
     url(r'^module_enrollments/(?P<pk>[0-9]+)/$', views.module_enrollment_list),
     url(r'^modules/$', views.ModuleList.as_view()),
     url(r'^modules/(?P<pk>[0-9]+)/$', views.ModuleDetail.as_view()),
