@@ -167,23 +167,17 @@ public class ParseJSON {
             JSONArray jsonArray = new JSONArray(json);
             Log.v("JSON", jsonArray.toString());
 
-            matricNumber = new String[jsonArray.length()];
-            attendancePercentage = new String[jsonArray.length()];
-            fName = new String[jsonArray.length()];
-            lName = new String[jsonArray.length()];
-
             for (int i = 0; i < jsonArray.length(); i++) {
+                ArrayList<String> temp = new ArrayList<>();
                 JSONObject jsonobject = jsonArray.getJSONObject(i);
-                matricNumber[i] = jsonobject.getString(KEY_MATRIC_NUMBER);
-                fName[i] = jsonobject.getString(KEY_FIRST_NAME);
-                lName[i] = jsonobject.getString(KEY_LAST_NAME);
-                attendancePercentage[i] = jsonobject.getString(KEY_PERCENTAGE);
+                temp.add(jsonobject.getString(KEY_MATRIC_NUMBER));
+                temp.add(jsonobject.getString(KEY_FIRST_NAME));
+                temp.add(jsonobject.getString(KEY_LAST_NAME));
+                temp.add(jsonobject.getString(KEY_PERCENTAGE));
+
+                attendanceData.add(temp);
             }
 
-            attendanceData.add(Arrays.asList(matricNumber));
-            attendanceData.add(Arrays.asList(fName));
-            attendanceData.add(Arrays.asList(lName));
-            attendanceData.add(Arrays.asList(attendancePercentage));
             Log.i("A size", Integer.toString(attendanceData.size()));
             Log.i("A size", Integer.toString(attendanceData.get(0).size()));
             return attendanceData;

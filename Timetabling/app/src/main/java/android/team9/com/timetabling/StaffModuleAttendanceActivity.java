@@ -20,6 +20,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -29,10 +31,12 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
     private String JSON_URL = "http://api.ouanixi.com/moduleAttendance/";
     private TableLayout tableLayout;
     private TableRow headingRow;
+    private ArrayList<TableRow> bodyRows;
     private TreeMap<String, Integer> sortReminder;
     private ArrayList<TextView> headers, rows;
     private ArrayList<String> defaultHeaders;
-    List<List<String>> attendanceData;
+    private List<List<String>> attendanceData;
+    private String[] columnNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +58,13 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
         headingRow = new TableRow(this);
         headers = new ArrayList<>();
         defaultHeaders = new ArrayList<>();
+        bodyRows = new ArrayList<>();
+        columnNames = new String[4];
+        columnNames[0] = getString(R.string.matricNumber);
+        columnNames[1] = getString(R.string.forename);
+        columnNames[2] = getString(R.string.surname);
+        columnNames[3] = getString(R.string.attendance);
+
         for (int i = 0; i < 4; i++) {
             headers.add(new TextView(this));
             headers.get(i).setPadding(25, 0, 25, 25);
@@ -111,6 +122,45 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
 
     // refactored code into separate methods to make it more portable/accommodate sorting
     private void populateTable() {
+        for(TableRow row : bodyRows) {
+            row.removeAllViews();
+        }
+
+        //Determine which column should be sorted and in what order
+        int column = 0;
+        int tempOrder = 0;
+        for (Map.Entry<String, Integer> entry : sortReminder.entrySet()) {
+            int value = entry.getValue();
+
+            for(int i = 0; i < columnNames.length; i++) {
+                if(columnNames[i].equals(entry.getKey())) {
+                    column = i;
+                    break;
+                }
+            }
+
+            if (value != 0) {
+                tempOrder = value;
+                break;
+            }
+        }
+
+        if(tempOrder != 0) {
+            //Order data appropriately
+            final int orderBy = column;
+            final int order = tempOrder;
+            Collections.sort(attendanceData, new Comparator<List<String>>() {
+                @Override
+                public int compare(List<String> list1, List<String> list2) {
+                    if (order == 1) {
+                        return list1.get(orderBy).compareTo(list2.get(orderBy));
+                    }
+
+                    return list2.get(orderBy).compareTo(list1.get(orderBy));
+                }
+            });
+        }
+
         for (int i = 0; i < attendanceData.get(0).size(); i++) {
             TableRow tableRowInside = new TableRow(this);
             tableRowInside.setClickable(true);
@@ -138,10 +188,11 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                 rows.get(j).setTextColor(Color.WHITE);
                 rows.get(j).setGravity(Gravity.CENTER);
                 rows.get(j).setPadding(25, 0, 25, 0);
-                rows.get(j).setText(attendanceData.get(j).get(i));
+                rows.get(j).setText(attendanceData.get(i).get(j));
                 tableRowInside.addView(rows.get(j));
             }
             tableLayout.addView(tableRowInside);
+            bodyRows.add(tableRowInside);
         }
     }
 
@@ -202,6 +253,9 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
             if (header != i)
                 headers.get(i).setText(defaultHeaders.get(i));
         }
+
+        populateTable();
+
         return column;
     }
 }
