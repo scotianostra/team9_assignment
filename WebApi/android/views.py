@@ -1,4 +1,3 @@
-import json
 from django.utils import timezone
 from django.db.models.query import Q
 from android.serializers import *
@@ -6,6 +5,7 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+import simplejson as json
 
 
 # Returns a list of modules that a specific staff memember teaches/coordinates
@@ -48,7 +48,23 @@ def module_attendance(request, pk):
     json_obj = json.dumps(data)
     return Response(json.loads(json_obj))
 
+# Returns a list of student attendance for a specific module for a specific week
+@api_view(['POST'])
+def module_attendance_by_week(request):
 
+    if request.method == 'POST':
+        module_id = request.data['module_id']
+        week = request.data['week']
+    try:
+        class_id = Class.objects.filter(module_id=module_id)
+        attendance = class_id.filter(week=week)
+
+    except Module.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'POST':
+        serializer = ModuleAttendanceSerializer(attendance, many=True)
+        return Response(serializer.data)
 
 
 # Returns the list of all classes that are linked to a specific module

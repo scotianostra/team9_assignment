@@ -21,6 +21,7 @@ public class UnitTests {
     private String jsonStudentObject;
     private String jsonStaffObject;
     private String jsonClassList;
+    private String jsonAttendanceByWeek;
     private String jsonModuleAttendance;
 
 
@@ -44,6 +45,25 @@ public class UnitTests {
 
         jsonModuleAttendance = "[{\"matric_number\": 101010, \"first_name\": \"Bill\", \"last_name\": \"Kill\", \"percentage\": \"100%\"}, " +
                 "{\"matric_number\": 101011,  \"first_name\": \"John\", \"last_name\": \"Wick\",\"percentage\": \"50%\"}]";
+
+        jsonAttendanceByWeek = "[{\"week\": 1, \"class_type\": \"Seminar\", \"class_register\": [1, 2, 3]}," +
+                                "{\"week\": 1, \"class_type\": \"Lab\", \"class_register\": [1, 2]}," +
+                                "{\"week\": 1, \"class_type\": \"Lecture\", \"class_register\": []}]";
+    }
+
+    @Test
+    public void testParseJSONModuleAttendanceByWeek() throws JSONException {
+
+        parseJSON = new ParseJSON(jsonAttendanceByWeek);
+        parseJSON.parseModuleAttendanceByWeek();
+
+        assertEquals("Seminar", ParseJSON.classType[0]);
+        assertEquals("Lab", ParseJSON.classType[1]);
+        assertEquals("Lecture", ParseJSON.classType[2]);
+        assertEquals(3, ParseJSON.attendanceCount[0]);
+        assertEquals(2, ParseJSON.attendanceCount[1]);
+        assertEquals(0, ParseJSON.attendanceCount[2]);
+
     }
 
     @Test

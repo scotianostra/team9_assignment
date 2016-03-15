@@ -51,6 +51,14 @@
         android:enabled="false" />
 
     <Button
+        android:id="@+id/moduleGraphBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View attendance graph"
+        android:layout_below="@+id/attendanceTableButton"
+        android:layout_centerHorizontal="true" />
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/attendanceTable_button"
@@ -59,4 +67,5 @@
         android:layout_below="@+id/attendanceButton"
         android:layout_alignStart="@+id/attendanceButton"
         android:layout_alignEnd="@+id/attendanceButton" />
+
 </RelativeLayout>

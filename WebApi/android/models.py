@@ -46,12 +46,13 @@ class Module(models.Model):
 
 
 class Class(models.Model):
+    id = models.IntegerField(primary_key=True)
     qrCode = models.IntegerField()
+    week = models.IntegerField()
+    class_type = models.CharField(max_length=256)
     start_time = models.DateTimeField()
     room_id = models.CharField(max_length=10)
     end_time = models.DateTimeField()
     building = models.CharField(max_length=20)
     module = models.ForeignKey(Module, related_name='classes')
     class_register = models.ManyToManyField(Student)
-
-
