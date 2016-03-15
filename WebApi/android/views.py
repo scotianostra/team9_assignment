@@ -33,7 +33,7 @@ def module_attendance(request, pk):
     for student in students.all():
         stdnt = {}
         count = 0
-        for cls in classes:
+        for cls in classes.iterator():
             if student in cls.class_register.all():
                 count += 1
         if count != 0:
