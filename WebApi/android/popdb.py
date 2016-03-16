@@ -13,6 +13,7 @@ password = 'password'
 
 with open('uk-500.csv', 'r') as f:
     reader = csv.reader(f)
+    next(reader, None)
     for row in reader:
         first_name = row[0]
         last_name = row[1]
