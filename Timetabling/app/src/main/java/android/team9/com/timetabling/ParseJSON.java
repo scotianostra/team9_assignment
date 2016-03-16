@@ -30,7 +30,17 @@ public class ParseJSON {
     public static String[] module;
 
     public static String[] classType;
+    public static String[] classAttended;
     public static int[] attendanceCount;
+
+    public static int seminarCount;
+    public static int labCount;
+    public static int tutorialCount;
+
+    public static int seminarAttended;
+    public static int labAttended;
+    public static int tutorialAttended;
+
 
     public static String[] attendancePercentage;
 
@@ -60,6 +70,9 @@ public class ParseJSON {
 
     public static final String KEY_CLASS_TYPE = "class_type";
     public static final String KEY_CLASS_REGISTER = "class_register";
+
+    public static final String KEY_STUDENT_CLASS_TYPE = "class_type";
+    public static final String KEY_STUDENT_ATTENDED = "attended";
 
     public static final String KEY_PERCENTAGE = "percentage";
 
@@ -188,6 +201,46 @@ public class ParseJSON {
                 attendanceCount[i] = jsonobject.getJSONArray(KEY_CLASS_REGISTER).length();
                 Log.v("class: ", classType[i]);
                 Log.v("count: ", String.valueOf(attendanceCount[i]));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void parseStudentAttendance() throws JSONException {
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+
+            seminarCount = 0;
+            seminarAttended = 0;
+            labCount = 0;
+            labAttended = 0;
+            tutorialCount = 0;
+            tutorialAttended = 0;
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonobject = jsonArray.getJSONObject(i);
+
+                classType[i] = jsonobject.getString(KEY_STUDENT_CLASS_TYPE);
+                classAttended[i] = jsonobject.getString(KEY_STUDENT_ATTENDED);
+
+                if (classType[i].equals("Seminar")){
+                    seminarCount++;
+                    if (classAttended[i].equals("yes"))
+                        seminarAttended++;
+                }
+                else if (classType[i].equals("Lab")){
+                    labCount++;
+                    if (classAttended[i].equals("yes"))
+                        labAttended++;
+                }
+                else if (classType[i].equals("Tutorial")){
+                    tutorialCount++;
+                    if (classAttended[i].equals("yes"))
+                        tutorialAttended++;
+                }
+
             }
 
         } catch (JSONException e) {
