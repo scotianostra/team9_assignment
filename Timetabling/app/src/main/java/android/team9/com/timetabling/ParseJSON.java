@@ -9,6 +9,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class ParseJSON {
     public static String[] moduleCode;
@@ -31,9 +33,12 @@ public class ParseJSON {
 
     public static String[] attendancePercentage;
 
+    public static String[] class_type;
     public static String[] date;
+    public static String[] week;
     public static String[] weekday;
-    public static String[] attendance;
+    public static String[] weekdays;
+    public static String[] attended;
 
 
     public static int user_id;
@@ -62,9 +67,11 @@ public class ParseJSON {
 
     public static final String KEY_PERCENTAGE = "percentage";
 
+    public static final String KEY_CLASS_TYPE = "class_type";
     public static final String KEY_DATE = "date";
+    public static final String KEY_WEEK = "week";
     public static final String KEY_WEEKDAY = "weekday";
-    public static final String KEY_ATTENDANCE = "attendance";
+    public static final String KEY_ATTENDED = "attended";
 
     private String json;
 
@@ -207,23 +214,42 @@ public class ParseJSON {
             JSONArray jsonArray = new JSONArray(json);
             Log.v("JSON", jsonArray.toString());
 
+            class_type = new String[jsonArray.length()];
             date = new String[jsonArray.length()];
-            weekday = new String[jsonArray.length()];
+            week = new String[jsonArray.length()];
             startTime = new String[jsonArray.length()];
-            attendance = new String[jsonArray.length()];
+            weekday = new String[jsonArray.length()];
+            weekdays = new String[jsonArray.length()];
+            attended = new String[jsonArray.length()];
+
+            Map<String,Integer> weekdaysMap= new TreeMap<String,Integer>(){};
+            weekdaysMap.put("Monday",0);weekdaysMap.put("Tuesday",1);weekdaysMap.put("Wednesday",2);weekdaysMap.put("Thursday",3);weekdaysMap.put("Friday",4);
+            weekdaysMap.put("Saturday",5);weekdaysMap.put("Sunday",6);
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonobject = jsonArray.getJSONObject(i);
+                class_type[i] = jsonobject.getString(KEY_CLASS_TYPE);
                 date[i] = jsonobject.getString(KEY_DATE);
-                weekday[i] = jsonobject.getString(KEY_WEEKDAY);
+                week[i] = jsonobject.getString(KEY_WEEK);
                 startTime[i] = jsonobject.getString(KEY_START_TIME);
-                attendance[i] = jsonobject.getString(KEY_ATTENDANCE);
+                weekday[i] = jsonobject.getString(KEY_WEEKDAY);
+                for (Map.Entry<String, Integer> entry : weekdaysMap.entrySet())
+                {
+                    if(entry.getValue()==Integer.parseInt(weekday[i]))
+                        weekdays[i]=entry.getKey();
+                }
+                attended[i] = jsonobject.getString(KEY_ATTENDED);
             }
 
+
+
             attendanceData.add(Arrays.asList(date));
-            attendanceData.add(Arrays.asList(weekday));
+            attendanceData.add(Arrays.asList(week));
+            attendanceData.add(Arrays.asList(weekdays));
             attendanceData.add(Arrays.asList(startTime));
-            attendanceData.add(Arrays.asList(attendance));
+            attendanceData.add(Arrays.asList(class_type));
+            attendanceData.add(Arrays.asList(attended));
+            attendanceData.add(Arrays.asList(weekday));
             Log.i("A size", Integer.toString(attendanceData.size()));
             Log.i("A size", Integer.toString(attendanceData.get(0).size()));
             return attendanceData;

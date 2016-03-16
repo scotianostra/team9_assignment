@@ -27,7 +27,8 @@ import java.util.TreeMap;
 
 public class StaffModuleStudentAttendanceActivity extends AppCompatActivity {
     private String matric_number;
-    private String JSON_URL = "http://api.ouanixi.com/moduleAttendance/";
+    private String moduleId;
+    private String JSON_URL = "http://api.ouanixi.com/studentAttendance/";
     private TableLayout tableLayout;
     private TableRow headingRow;
     private TreeMap<String, Integer> sortReminder;
@@ -40,12 +41,16 @@ public class StaffModuleStudentAttendanceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staff_module_student_attendance);
         matric_number = getIntent().getStringExtra("matricNumber");
+        moduleId = getIntent().getStringExtra("moduleId");
+
         // int 0 neutral, 2 ascending, 1 descending
         sortReminder = new TreeMap<>();
+        sortReminder.put((getString(R.string.class_type)), 0);
         sortReminder.put((getString(R.string.date)), 0);
-        sortReminder.put((getString(R.string.weekday)), 0);
+        sortReminder.put((getString(R.string.week)), 0);
         sortReminder.put((getString(R.string.start_time)), 0);
-        sortReminder.put((getString(R.string.attend)), 0);
+        sortReminder.put((getString(R.string.weekday)), 0);
+        sortReminder.put((getString(R.string.attended)), 0);
         sendRequest();
     }
 
@@ -55,58 +60,35 @@ public class StaffModuleStudentAttendanceActivity extends AppCompatActivity {
         headingRow = new TableRow(this);
         headers = new ArrayList<>();
         defaultHeaders = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 6; i++) {
             headers.add(new TextView(this));
             headers.get(i).setPadding(25, 0, 25, 25);
             headers.get(i).setTextColor(Color.WHITE);
             headers.get(i).setGravity(Gravity.CENTER);
             headers.get(i).setTextSize(15);
+            final int finalI = i;
+            headers.get(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    headers.get(finalI).setText(changeSortDirection(finalI, headers.get(finalI).getText().toString()));
+                }
+            });
+            headingRow.addView(headers.get(i));
         }
 
-        defaultHeaders.add(getString(R.string.date));
+
         headers.get(0).setText(R.string.date);
-        headers.get(0).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                headers.get(0).setText(changeSortDirection(0, headers.get(0).getText().toString()));
-                //sort based on matric nr here or do api magic here
-            }
-        });
-        headingRow.addView(headers.get(0));
-
-        // refactored to use string resources
-        headers.get(1).setText(R.string.weekday);
+        defaultHeaders.add(getString(R.string.date));
+        headers.get(1).setText(R.string.week);
+        defaultHeaders.add(getString(R.string.week));
+        headers.get(2).setText(R.string.weekday);
         defaultHeaders.add(getString(R.string.weekday));
-        headers.get(1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                headers.get(1).setText(changeSortDirection(1, headers.get(1).getText().toString()));
-                //sort based on forename here or do api magic here
-            }
-        });
-        headingRow.addView(headers.get(1));
-
-        headers.get(2).setText(R.string.start_time);
+        headers.get(3).setText(R.string.start_time);
         defaultHeaders.add(getString(R.string.start_time));
-        headers.get(2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                headers.get(2).setText(changeSortDirection(2, headers.get(2).getText().toString()));
-                //sort based on surname here or do api magic here
-            }
-        });
-        headingRow.addView(headers.get(2));
-
-        headers.get(3).setText(R.string.attend);
-        defaultHeaders.add(getString(R.string.attend));
-        headers.get(3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                headers.get(3).setText(changeSortDirection(3, headers.get(3).getText().toString()));
-                //sort based on attendance here or do api magic here
-            }
-        });
-        headingRow.addView(headers.get(3));
+        headers.get(4).setText(R.string.class_type);
+        defaultHeaders.add(getString(R.string.class_type));
+        headers.get(5).setText(R.string.attended);
+        defaultHeaders.add(getString(R.string.attended));
         tableLayout.addView(headingRow);
     }
 
@@ -115,7 +97,7 @@ public class StaffModuleStudentAttendanceActivity extends AppCompatActivity {
         for (int i = 0; i < attendanceData.get(0).size(); i++) {
             TableRow tableRowInside = new TableRow(this);
             rows = new ArrayList<>();
-            for (int j = 0; j < 4; j++) {
+            for (int j = 0; j < 6; j++) {
                 rows.add(new TextView(this));
                 rows.get(j).setTextColor(Color.WHITE);
                 rows.get(j).setGravity(Gravity.CENTER);
@@ -128,8 +110,8 @@ public class StaffModuleStudentAttendanceActivity extends AppCompatActivity {
     }
 
     private void sendRequest() {
-        Log.i("string", JSON_URL + matric_number);
-        StringRequest stringRequest = new StringRequest(JSON_URL + matric_number,
+        Log.i("string", JSON_URL + moduleId + "/" + matric_number);
+        StringRequest stringRequest = new StringRequest(JSON_URL +moduleId + "/" + matric_number,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -180,7 +162,7 @@ public class StaffModuleStudentAttendanceActivity extends AppCompatActivity {
                 entry.setValue(value);
             } else entry.setValue(0);
         }
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 6; i++) {
             if (header != i)
                 headers.get(i).setText(defaultHeaders.get(i));
         }

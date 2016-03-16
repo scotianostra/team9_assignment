@@ -40,6 +40,7 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staff_module_attendance);
         moduleId = getIntent().getStringExtra("moduleId");
+
         // int 0 neutral, 2 ascending, 1 descending
         sortReminder = new TreeMap<>();
         sortReminder.put((getString(R.string.matricNumber)), 0);
@@ -123,12 +124,13 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                     TableRow tablerow = (TableRow) v;
                     TextView matric = (TextView) tablerow.getChildAt(0);
                     String matricNumber = matric.getText().toString();
-                    Log.i("matric number", matricNumber);
+
 
                     // call single student (based on matric number) attendance activity here
-
                     Bundle b = new Bundle();
                     b.putString("matricNumber", matricNumber);
+                    b.putString("moduleId", moduleId);
+
                     Intent pass = new Intent(StaffModuleAttendanceActivity.this, StaffModuleStudentAttendanceActivity.class);
                     pass.putExtras(b);
                     startActivity(pass);
