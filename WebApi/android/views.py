@@ -25,7 +25,10 @@ def staff_module_list(request, pk):
 @api_view(['GET'])
 def student_attendance_to_module(request, pk, sid):
     data = []
+    module = Module.objects.get(moduleid=pk)
     classes = Class.objects.filter(module=pk).all()
+    if sid not in module.students_enrolled.all():
+        return Response(status=status.HTTP_404_NOT_FOUND)
     print(classes)
     for cls in classes:
         val = {}
