@@ -32,6 +32,7 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
 
     private Button buttonAttendance;
     private Button buttonGraph;
+    private Button buttonTest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
 
         buttonAttendance = (Button) findViewById(R.id.attendanceButton);
         buttonGraph = (Button) findViewById(R.id.moduleGraphBtn);
+        buttonTest = (Button) findViewById(R.id.testBTN);
 
         getStudentNumber();
         
@@ -55,6 +57,13 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (v == buttonAttendance) {
                     viewAttendance();
+                }
+            }
+        });
+        buttonTest.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (v == buttonTest) {
+                    test();
                 }
             }
         });
@@ -150,8 +159,26 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
     private void viewAttendance(){
 
         Intent intent = new Intent(this, ClassListActivity.class);
-        intent.putExtra(MODULEID,moduleId);
+        intent.putExtra(MODULEID, moduleId);
         startActivity(intent);
 
+    }
+
+    private void test(){
+
+        String studentName = "Diana Parsons";
+        String studentId = "101012";
+
+        Bundle b = new Bundle();
+
+
+        b.putString("moduleId", moduleId);
+        b.putString("moduleTitle", moduleTitle);
+        b.putString("studentId", studentId);
+        b.putString("studentName", studentName);
+
+        Intent pass = new Intent(StaffFirstSelectionActivity.this, StudentAttendanceGraph.class);
+        pass.putExtras(b);
+        startActivity(pass);
     }
 }

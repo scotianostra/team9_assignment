@@ -19,6 +19,7 @@
         android:layout_alignRight="@+id/attendanceButton"
         android:layout_alignEnd="@+id/attendanceButton" />
 
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -56,6 +57,14 @@
         android:layout_height="wrap_content"
         android:text="View attendance graph"
         android:layout_below="@+id/attendanceTableButton"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/testBTN"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TEST"
+        android:layout_below="@+id/moduleGraphBtn"
         android:layout_centerHorizontal="true" />
 
     <Button

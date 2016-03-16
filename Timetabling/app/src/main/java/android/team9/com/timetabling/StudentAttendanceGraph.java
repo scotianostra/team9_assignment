@@ -46,6 +46,7 @@ public class StudentAttendanceGraph extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_attendance_graph);
 
+        Bundle extra = getIntent().getExtras();
         moduleId = getIntent().getStringExtra("moduleId");
         moduleTitle = getIntent().getStringExtra("moduleTitle");
         studentName = getIntent().getStringExtra("studentName");
@@ -95,7 +96,7 @@ public class StudentAttendanceGraph extends AppCompatActivity {
         barChart.setDrawBarShadow(true);
         barChart.setData(data); // set the data and list of lables into chart
 
-        barChart.setDescription("Student Name " + studentName + " - " + moduleTitle);  // set the description
+        barChart.setDescription(studentName + " - " + moduleTitle);  // set the description
         dataset.setColors(ColorTemplate.COLORFUL_COLORS);
         barChart.animateY(2000);
     }

@@ -211,6 +211,8 @@ public class ParseJSON {
     protected void parseStudentAttendance() throws JSONException {
         try {
             JSONArray jsonArray = new JSONArray(json);
+            classType = new String[jsonArray.length()];
+            classAttended = new String[jsonArray.length()];
 
             seminarCount = 0;
             seminarAttended = 0;
