@@ -5,7 +5,7 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-import simplejson as json
+import json
 
 
 # Returns a list of modules that a specific staff memember teaches/coordinates
