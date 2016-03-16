@@ -1,4 +1,3 @@
-
 from django.utils import timezone
 from django.db.models.query import Q
 from android.serializers import *
@@ -6,6 +5,8 @@ from rest_framework import generics
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+import json
+
 
 
 # Returns a list of modules that a specific staff memember teaches/coordinates
@@ -18,6 +19,82 @@ def staff_module_list(request, pk):
 
     if request.method == 'GET':
         serializer = StaffModuleListSerializer(modules, many=True)
+        return Response(serializer.data)
+
+
+
+@api_view(['GET'])
+def student_attendance_to_module(request, pk, sid):
+    data = []
+    student = Student.objects.get(matric_number=sid)
+    module = Module.objects.get(moduleid=pk)
+    classes = Class.objects.filter(module=module).all()
+    students = module.students_enrolled.all()
+
+    if student not in students:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    for cls in classes:
+        val = {}
+        val['week'] = cls.week
+        val['class_type'] = cls.class_type
+        val['weekday'] = cls.start_time.weekday()
+        val['date'] = str(cls.start_time.strftime("%d-%m-%Y"))
+        val['start_time'] = str(cls.start_time.strftime("%H:%M"))
+        if student in cls.class_register.all():
+            val['attended'] = 'yes'
+        else:
+            val['attended'] = 'no'
+        data.append(val)
+
+    json_obj = json.dumps(data)
+    return Response(json.loads(json_obj))
+
+
+@api_view(['GET'])
+def module_attendance(request, pk):
+    data = []
+    try:
+        students = Module.objects.get(moduleid=pk).students_enrolled
+        classes = Class.objects.filter(module=pk)
+        number_of_classes = classes.count()
+    except Module.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    for student in students.all():
+        stdnt = {}
+        count = 0
+        for cls in classes.iterator():
+            if student in cls.class_register.all():
+                count += 1
+        if count != 0:
+            percentage = (count / number_of_classes) * 100
+        else:
+            percentage = 0
+        stdnt['percentage'] = percentage
+        stdnt['first_name'] = student.first_name
+        stdnt['last_name'] = student.last_name
+        stdnt['matric_number'] = student.matric_number
+        data.append(stdnt)
+    json_obj = json.dumps(data)
+    return Response(json.loads(json_obj))
+
+# Returns a list of student attendance for a specific module for a specific week
+@api_view(['POST'])
+def module_attendance_by_week(request):
+
+    if request.method == 'POST':
+        module_id = request.data['module_id']
+        week = request.data['week']
+    try:
+        class_id = Class.objects.filter(module_id=module_id)
+        attendance = class_id.filter(week=week)
+
+    except Module.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'POST':
+        serializer = ModuleAttendanceSerializer(attendance, many=True)
         return Response(serializer.data)
 
 
@@ -39,6 +116,19 @@ def module_classes(request, pk):
 def module_enrollment_list(request, pk):
     try:
         students = Module.objects.get(moduleid=pk).students_enrolled
+    except Module.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = StudentSerializer(students, many=True)
+        return Response(serializer.data)
+
+
+# Returns a list of students that have attended to a given class.
+@api_view(['GET'])
+def class_register(request, pk):
+    try:
+        students = Class.objects.get(id=pk).class_register
     except Module.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 

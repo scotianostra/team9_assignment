@@ -5,20 +5,24 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.junit.rules.ExpectedException;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by jamie on 22/02/16.
  */
 
-public class ParseJSONTest{
+public class UnitTests {
 
     private ParseJSON parseJSON;
     private String jsonArray;
     private String jsonStudents;
     private String jsonStudentObject;
     private String jsonStaffObject;
+    private String jsonClassList;
+    private String jsonAttendanceByWeek;
+    private String jsonModuleAttendance;
 
 
     @Rule
@@ -35,6 +39,30 @@ public class ParseJSONTest{
 
         jsonStudentObject = "{\"matric_number\": 234242, \"hash\": \"AD3435SF\"}";
         jsonStaffObject = "{\"staffid\": 1000, \"hash\": \"AJ232ASFA\"}";
+
+        jsonClassList = "[{\"id\": 1, \"qrCode\": 0, \"start_time\": \"2016-02-22T17:00:00\", \"end_time\": \"2016-02-22T18:00:00\", \"room_id\": \"5\", \"building\": \"QMB\", \"module\": \"10012\"}, " +
+                "{\"id\": 2, \"qrCode\": 123, \"start_time\": \"2016-02-23T16:00:00\", \"end_time\": \"2016-02-23T17:00:00\", \"room_id\": \"2S14\", \"building\": \"Dalhousie\", \"module\": \"10012\"}]";
+
+        jsonModuleAttendance = "[{\"matric_number\": 101010, \"first_name\": \"Bill\", \"last_name\": \"Kill\", \"percentage\": \"100%\"}, " +
+                "{\"matric_number\": 101011,  \"first_name\": \"John\", \"last_name\": \"Wick\",\"percentage\": \"50%\"}]";
+
+        jsonAttendanceByWeek = "[{\"week\": 1, \"class_type\": \"Seminar\", \"class_register\": [1, 2, 3]}," +
+                                "{\"week\": 1, \"class_type\": \"Lab\", \"class_register\": [1, 2]}," +
+                                "{\"week\": 1, \"class_type\": \"Lecture\", \"class_register\": []}]";
+    }
+
+    @Test
+    public void testParseJSONModuleAttendanceByWeek() throws JSONException {
+
+        parseJSON = new ParseJSON(jsonAttendanceByWeek);
+        parseJSON.parseModuleAttendanceByWeek();
+
+        assertEquals("Seminar", ParseJSON.classType[0]);
+        assertEquals("Lab", ParseJSON.classType[1]);
+        assertEquals("Lecture", ParseJSON.classType[2]);
+        assertEquals(3, ParseJSON.attendanceCount[0]);
+        assertEquals(2, ParseJSON.attendanceCount[1]);
+        assertEquals(0, ParseJSON.attendanceCount[2]);
 
     }
 
@@ -66,6 +94,29 @@ public class ParseJSONTest{
         assertEquals("John", ParseJSON.fName[1]);
         assertEquals("Kill", ParseJSON.lName[0]);
         assertEquals("Wick", ParseJSON.lName[1]);
+    }
+
+
+    @Test
+    public void testParseJSONClassList() throws JSONException {
+
+        parseJSON = new ParseJSON(jsonClassList);
+        parseJSON.parseJSONClassList();
+
+        assertEquals("1", ParseJSON.classId[0]);
+        assertEquals("2", ParseJSON.classId[1]);
+        assertEquals("0", ParseJSON.qrCode[0]);
+        assertEquals("123", ParseJSON.qrCode[1]);
+        assertEquals("2016-02-22T17:00:00", ParseJSON.startTime[0]);
+        assertEquals("2016-02-23T16:00:00", ParseJSON.startTime[1]);
+        assertEquals("2016-02-22T18:00:00", ParseJSON.endTime[0]);
+        assertEquals("2016-02-23T17:00:00", ParseJSON.endTime[1]);
+        assertEquals("5", ParseJSON.room[0]);
+        assertEquals("2S14", ParseJSON.room[1]);
+        assertEquals("QMB", ParseJSON.building[0]);
+        assertEquals("Dalhousie", ParseJSON.building[1]);
+        assertEquals("10012", ParseJSON.module[0]);
+        assertEquals("10012", ParseJSON.module[1]);
     }
 
     @Test
@@ -108,11 +159,35 @@ public class ParseJSONTest{
         parseJSON.parseJSONEnrolledStudents();
     }
 
+    @Test
+    public void testParseJSONClassListThrowsJSONException() throws JSONException {
+        parseJSON = new ParseJSON("not valid json");
+        thrown.expect(JSONException.class);
+        parseJSON.parseJSONClassList();
+    }
+
+    @Test
+    public void testParseJSONModuleAttendance() throws JSONException {
+
+        parseJSON = new ParseJSON(jsonModuleAttendance);
+        parseJSON.parseJSONModuleAttendance();
+
+        assertEquals("101010", ParseJSON.matricNumber[0]);
+        assertEquals("101011", ParseJSON.matricNumber[1]);
+        assertEquals("Bill", ParseJSON.fName[0]);
+        assertEquals("John", ParseJSON.fName[1]);
+        assertEquals("Kill", ParseJSON.lName[0]);
+        assertEquals("Wick", ParseJSON.lName[1]);
+        assertEquals("100%", ParseJSON.attendancePercentage[0]);
+        assertEquals("50%", ParseJSON.attendancePercentage[1]);
+    }
+
     @After
     public void tearDown() {
         parseJSON = null;
         jsonStaffObject = null;
         jsonStudentObject = null;
         jsonArray = null;
+        jsonClassList = null;
     }
 }
