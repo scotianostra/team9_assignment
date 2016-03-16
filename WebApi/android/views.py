@@ -20,6 +20,30 @@ def staff_module_list(request, pk):
         serializer = StaffModuleListSerializer(modules, many=True)
         return Response(serializer.data)
 
+
+
+@api_view(['GET'])
+def student_attendance_to_module(request, pk, sid):
+    data = []
+    classes = Class.objects.filter(module=pk).all()
+    print(classes)
+    for cls in classes:
+        val = {}
+        val['week'] = cls.week
+        val['class_type'] = cls.class_type
+        val['weekday'] = cls.start_time.weekday()
+        val['date'] = str(cls.start_time.strftime("%d-%m-%Y"))
+        val['start_time'] = str(cls.start_time.strftime("%H:%M"))
+        if sid in cls.class_register.all():
+            val['attended'] = 'yes'
+        else:
+            val['attended'] = 'no'
+        data.append(val)
+
+    json_obj = json.dumps(data)
+    return Response(json.loads(json_obj))
+
+
 @api_view(['GET'])
 def module_attendance(request, pk):
     data = []
