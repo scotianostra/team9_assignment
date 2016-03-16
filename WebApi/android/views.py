@@ -8,6 +8,7 @@ from rest_framework.response import Response
 import json
 
 
+
 # Returns a list of modules that a specific staff memember teaches/coordinates
 @api_view(['GET'])
 def staff_module_list(request, pk):
@@ -25,11 +26,14 @@ def staff_module_list(request, pk):
 @api_view(['GET'])
 def student_attendance_to_module(request, pk, sid):
     data = []
+    student = Student.objects.get(matric_number=sid)
     module = Module.objects.get(moduleid=pk)
-    classes = Class.objects.filter(module=pk).all()
-    if sid not in module.students_enrolled.all():
+    classes = Class.objects.filter(module=module).all()
+    students = module.students_enrolled.all()
+
+    if student not in students:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    print(classes)
+
     for cls in classes:
         val = {}
         val['week'] = cls.week
@@ -37,7 +41,7 @@ def student_attendance_to_module(request, pk, sid):
         val['weekday'] = cls.start_time.weekday()
         val['date'] = str(cls.start_time.strftime("%d-%m-%Y"))
         val['start_time'] = str(cls.start_time.strftime("%H:%M"))
-        if sid in cls.class_register.all():
+        if student in cls.class_register.all():
             val['attended'] = 'yes'
         else:
             val['attended'] = 'no'
