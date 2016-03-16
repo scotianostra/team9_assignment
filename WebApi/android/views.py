@@ -68,10 +68,10 @@ def module_attendance(request, pk):
             if student in cls.class_register.all():
                 count += 1
         if count != 0:
-            percentage = (count / number_of_classes) * 100
+            percentage = int(100 * count / number_of_classes)
         else:
             percentage = 0
-        stdnt['percentage'] = percentage
+        stdnt['percentage'] = repr(percentage) + '%'
         stdnt['first_name'] = student.first_name
         stdnt['last_name'] = student.last_name
         stdnt['matric_number'] = student.matric_number
