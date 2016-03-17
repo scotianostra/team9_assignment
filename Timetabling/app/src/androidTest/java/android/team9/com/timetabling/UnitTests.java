@@ -204,14 +204,14 @@ public class UnitTests {
         parseJSON = new ParseJSON(jsonModuleAttendance);
         parseJSON.parseJSONModuleAttendance();
 
-        assertEquals("101010", ParseJSON.matricNumber[0]);
-        assertEquals("101011", ParseJSON.matricNumber[1]);
-        assertEquals("Bill", ParseJSON.fName[0]);
-        assertEquals("John", ParseJSON.fName[1]);
-        assertEquals("Kill", ParseJSON.lName[0]);
-        assertEquals("Wick", ParseJSON.lName[1]);
-        assertEquals("100%", ParseJSON.attendancePercentage[0]);
-        assertEquals("50%", ParseJSON.attendancePercentage[1]);
+        assertEquals("101010", ParseJSON.attendanceData.get(0).get(0));
+        assertEquals("101011", ParseJSON.attendanceData.get(1).get(0));
+        assertEquals("Bill", ParseJSON.attendanceData.get(0).get(1));
+        assertEquals("John", ParseJSON.attendanceData.get(1).get(1));
+        assertEquals("Kill", ParseJSON.attendanceData.get(0).get(2));
+        assertEquals("Wick", ParseJSON.attendanceData.get(1).get(2));
+        assertEquals("100%", ParseJSON.attendanceData.get(0).get(3));
+        assertEquals("50%", ParseJSON.attendanceData.get(1).get(3));
     }
 
     @After

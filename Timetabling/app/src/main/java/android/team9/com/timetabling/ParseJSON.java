@@ -35,8 +35,6 @@ public class ParseJSON {
 
     public static int[] attendanceCount;
 
-    public static String[] attendancePercentage;
-
     public static String[] class_type;
     public static String[] date;
     public static String[] week;
@@ -48,6 +46,7 @@ public class ParseJSON {
     public static Integer[] attendanceCountInt;
     public static Integer[] classCount;
 
+    public static List<List<String>> attendanceData;
 
     public static int user_id;
     public static String role;
@@ -218,7 +217,7 @@ public class ParseJSON {
 
     protected List<List<String>> parseJSONModuleAttendance() throws JSONException {
         try {
-            List<List<String>> attendanceData = new ArrayList<>();
+            attendanceData = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(json);
             Log.v("JSON", jsonArray.toString());
 
@@ -242,8 +241,6 @@ public class ParseJSON {
     }
 
 
-
-
     protected void parseSemesterModuleAttendance() throws JSONException {
         try {
             JSONArray jsonArray = new JSONArray(json);
@@ -253,7 +250,7 @@ public class ParseJSON {
             ArrayList<Integer> attendanceCountList = new ArrayList<>();
 
             int count = 0;
-            int attendance =0;
+            int attendance = 0;
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonobject = jsonArray.getJSONObject(i);
@@ -261,8 +258,8 @@ public class ParseJSON {
                 classTypeList.add(jsonobject.getString(KEY_CLASS_TYPE));
                 attendance += jsonobject.getJSONArray(KEY_CLASS_REGISTER).length();
 
-                if(i < jsonArray.length() - 1 &&
-                        jsonobject.getString(KEY_CLASS_TYPE).equals(jsonArray.getJSONObject(i+1).getString(KEY_CLASS_TYPE))) {
+                if (i < jsonArray.length() - 1 &&
+                        jsonobject.getString(KEY_CLASS_TYPE).equals(jsonArray.getJSONObject(i + 1).getString(KEY_CLASS_TYPE))) {
                     count++;
                 } else {
                     count++;
@@ -288,7 +285,7 @@ public class ParseJSON {
 
     protected List<List<String>> parseJSONStudentAttendance() throws JSONException {
         try {
-            List<List<String>> attendanceData = new ArrayList<>();
+            attendanceData = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(json);
             Log.v("JSON", jsonArray.toString());
 

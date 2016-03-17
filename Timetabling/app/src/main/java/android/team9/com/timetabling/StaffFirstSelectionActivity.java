@@ -2,7 +2,6 @@ package android.team9.com.timetabling;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;

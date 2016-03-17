@@ -9,7 +9,6 @@
     tools:context="android.team9.com.timetabling.StaffModuleStudentAttendanceActivity">
 
 
-
     <ScrollView
 
         android:id="@+id/scrollVieWMain"
