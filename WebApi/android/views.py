@@ -1,3 +1,4 @@
+import json
 from django.utils import timezone
 from django.db.models.query import Q
 from android.serializers import *
@@ -38,7 +39,7 @@ def student_attendance_to_module(request, pk, sid):
         val = {}
         val['week'] = cls.week
         val['class_type'] = cls.class_type
-        val['weekday'] = cls.start_time.weekday()
+        val['weekday'] = cls.start_time.strftime("%A")
         val['date'] = str(cls.start_time.strftime("%d-%m-%Y"))
         val['start_time'] = str(cls.start_time.strftime("%H:%M"))
         if student in cls.class_register.all():

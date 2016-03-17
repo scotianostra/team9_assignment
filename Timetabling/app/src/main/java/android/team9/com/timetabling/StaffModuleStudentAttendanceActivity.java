@@ -1,6 +1,5 @@
 package android.team9.com.timetabling;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -111,7 +110,7 @@ public class StaffModuleStudentAttendanceActivity extends AppCompatActivity {
 
     private void sendRequest() {
         Log.i("string", JSON_URL + moduleId + "/" + matric_number);
-        StringRequest stringRequest = new StringRequest(JSON_URL +moduleId + "/" + matric_number,
+        StringRequest stringRequest = new StringRequest(JSON_URL + moduleId + "/" + matric_number,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

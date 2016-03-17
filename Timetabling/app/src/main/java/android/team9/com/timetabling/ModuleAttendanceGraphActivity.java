@@ -1,9 +1,7 @@
 package android.team9.com.timetabling;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,7 +13,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -31,7 +28,7 @@ import java.util.regex.Pattern;
 
 public class ModuleAttendanceGraphActivity extends AppCompatActivity {
 
-    private static final String MODULE_ATTENDANCE_URL = "http://10.0.2.2:8000/moduleAttendanceList/";
+    private static final String MODULE_ATTENDANCE_URL = "http://api.ouanixi.com/moduleAttendanceList/";
 
     public static final String KEY_MODULE_ID = "module_id";
     public static final String KEY_WEEK = "week";
@@ -49,7 +46,7 @@ public class ModuleAttendanceGraphActivity extends AppCompatActivity {
         String inputline = getIntent().getStringExtra("week");
         Pattern p = Pattern.compile("-?\\d+");
         Matcher m = p.matcher(inputline);
-        if(m.find())
+        if (m.find())
             week = m.group();
 
         moduleId = getIntent().getStringExtra("module");
@@ -66,7 +63,7 @@ public class ModuleAttendanceGraphActivity extends AppCompatActivity {
 
         // populate attendance count
         ArrayList<BarEntry> entries = new ArrayList<>();
-        for(int i=0; i<ParseJSON.attendanceCount.length; i++) {
+        for (int i = 0; i < ParseJSON.attendanceCount.length; i++) {
             entries.add(new BarEntry(ParseJSON.attendanceCount[i], i));
         }
 
@@ -74,7 +71,7 @@ public class ModuleAttendanceGraphActivity extends AppCompatActivity {
 
         // creating labels
         ArrayList<String> labels = new ArrayList<String>();
-        for(int i=0; i<ParseJSON.classType.length; i++) {
+        for (int i = 0; i < ParseJSON.classType.length; i++) {
             labels.add(ParseJSON.classType[i]);
         }
 

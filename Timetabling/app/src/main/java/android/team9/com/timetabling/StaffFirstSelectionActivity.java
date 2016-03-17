@@ -2,15 +2,12 @@ package android.team9.com.timetabling;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupMenu;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -28,7 +25,7 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
     private String moduleCode;
     private int noOfStudents;
     public final static String MODULEID = "android.team9.com.MODULEID";
-    private static final String NO_OF_STUDENTS_URL = "http://10.0.2.2:8000/module_enrollments/";
+    private static final String NO_OF_STUDENTS_URL = "http://api.ouanixi.com/module_enrollments/";
 
     private Button buttonAttendance;
     private Button buttonGraph;
@@ -50,7 +47,7 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
         buttonGraph = (Button) findViewById(R.id.moduleGraphBtn);
 
         getStudentNumber();
-        
+
         buttonAttendance.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (v == buttonAttendance) {
@@ -132,7 +129,7 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
     }
 
     //click on button 'VIEW ENROLLED STUDENTS'
-    public void view_enrolled_students(View view){
+    public void view_enrolled_students(View view) {
         Bundle b = makeBundle();
         Intent pass = new Intent(StaffFirstSelectionActivity.this, EnrolledStudents.class);
         pass.putExtras(b);
@@ -142,6 +139,7 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
     public void view_module_attendance(View view) {
         Bundle b = new Bundle();
         b.putString("moduleId", moduleId);
+        b.putString("moduleTitle", moduleTitle);
         Intent pass = new Intent(StaffFirstSelectionActivity.this, StaffModuleAttendanceActivity.class);
         pass.putExtras(b);
         startActivity(pass);
