@@ -34,15 +34,13 @@ public class ParseJSON {
     public static String[] classType;
     public static int[] attendanceCount;
 
-    public static String[] attendancePercentage;
-
     public static String[] class_type;
     public static String[] date;
     public static String[] week;
     public static String[] weekday;
     public static String[] weekdays;
     public static String[] attended;
-
+    public static List<List<String>> attendanceData;
 
     public static int user_id;
     public static String role;
@@ -212,7 +210,7 @@ public class ParseJSON {
 
     protected List<List<String>> parseJSONModuleAttendance() throws JSONException {
         try {
-            List<List<String>> attendanceData = new ArrayList<>();
+            attendanceData = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(json);
             Log.v("JSON", jsonArray.toString());
 
@@ -237,7 +235,7 @@ public class ParseJSON {
 
     protected List<List<String>> parseJSONStudentAttendance() throws JSONException {
         try {
-            List<List<String>> attendanceData = new ArrayList<>();
+            attendanceData = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(json);
             Log.v("JSON", jsonArray.toString());
 
