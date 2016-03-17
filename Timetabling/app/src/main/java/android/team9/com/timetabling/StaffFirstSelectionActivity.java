@@ -47,7 +47,7 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
         buttonGraph = (Button) findViewById(R.id.moduleGraphBtn);
 
         getStudentNumber();
-        
+
         buttonAttendance.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (v == buttonAttendance) {
