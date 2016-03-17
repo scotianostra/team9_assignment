@@ -67,8 +67,7 @@ public class ParseJSON {
     public static final String KEY_ROOM = "room_id";
     public static final String KEY_BUILDING = "building";
     public static final String KEY_MODULE = "module";
-    
-    public static final String KEY_CLASS_REGISTER = "class_register";
+
 
     public static final String KEY_CLASS_TYPE = "class_type";
     public static final String KEY_CLASS_REGISTER = "class_register";
