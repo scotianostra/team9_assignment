@@ -1,7 +1,7 @@
 package android.team9.com.timetabling;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -55,8 +55,8 @@ public class SemesterAttendanceGraphActivity extends AppCompatActivity {
 
         // populate attendance count
         ArrayList<BarEntry> entries = new ArrayList<>();
-        for(int i=0; i< ParseJSON.attendanceCountInt.length; i++) {
-            percentage = ((float) ParseJSON.attendanceCountInt[i] / (float)(31 * ParseJSON.classCount[i])) * 100;
+        for (int i = 0; i < ParseJSON.attendanceCountInt.length; i++) {
+            percentage = ((float) ParseJSON.attendanceCountInt[i] / (float) (31 * ParseJSON.classCount[i])) * 100;
             Log.v("%", String.valueOf(percentage));
             entries.add(new BarEntry(percentage, i));
         }
@@ -65,7 +65,7 @@ public class SemesterAttendanceGraphActivity extends AppCompatActivity {
 
         // creating labels
         ArrayList<String> labels = new ArrayList<String>();
-        for(int i=0; i<ParseJSON.classType.length; i++) {
+        for (int i = 0; i < ParseJSON.classType.length; i++) {
             labels.add(ParseJSON.classType[i]);
         }
 

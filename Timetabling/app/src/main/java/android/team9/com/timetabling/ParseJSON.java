@@ -241,8 +241,6 @@ public class ParseJSON {
     }
 
 
-
-
     protected void parseSemesterModuleAttendance() throws JSONException {
         try {
             JSONArray jsonArray = new JSONArray(json);
@@ -252,7 +250,7 @@ public class ParseJSON {
             ArrayList<Integer> attendanceCountList = new ArrayList<>();
 
             int count = 0;
-            int attendance =0;
+            int attendance = 0;
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonobject = jsonArray.getJSONObject(i);
@@ -260,8 +258,8 @@ public class ParseJSON {
                 classTypeList.add(jsonobject.getString(KEY_CLASS_TYPE));
                 attendance += jsonobject.getJSONArray(KEY_CLASS_REGISTER).length();
 
-                if(i < jsonArray.length() - 1 &&
-                        jsonobject.getString(KEY_CLASS_TYPE).equals(jsonArray.getJSONObject(i+1).getString(KEY_CLASS_TYPE))) {
+                if (i < jsonArray.length() - 1 &&
+                        jsonobject.getString(KEY_CLASS_TYPE).equals(jsonArray.getJSONObject(i + 1).getString(KEY_CLASS_TYPE))) {
                     count++;
                 } else {
                     count++;
