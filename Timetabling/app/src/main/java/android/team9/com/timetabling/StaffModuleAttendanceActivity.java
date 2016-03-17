@@ -198,7 +198,7 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                 rows.add(new TextView(this));
                 rows.get(j).setTextColor(Color.WHITE);
                 rows.get(j).setGravity(Gravity.CENTER);
-                rows.get(j).setPadding(25, 0, 25, 0);
+                rows.get(j).setPadding(25, 10, 25, 10);
                 rows.get(j).setText(attendanceData.get(i).get(j));
 
                 tableRowInside.addView(rows.get(j));
