@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ParseJSON {
@@ -29,9 +28,10 @@ public class ParseJSON {
     public static String[] building;
     public static String[] module;
 
+    public static String[] classType;
+    public static int[] attendanceCount;
+
     public static String[] attendancePercentage;
-
-
 
     public static int user_id;
     public static String role;
@@ -56,6 +56,9 @@ public class ParseJSON {
     public static final String KEY_ROOM = "room_id";
     public static final String KEY_BUILDING = "building";
     public static final String KEY_MODULE = "module";
+
+    public static final String KEY_CLASS_TYPE = "class_type";
+    public static final String KEY_CLASS_REGISTER = "class_register";
 
     public static final String KEY_PERCENTAGE = "percentage";
 
@@ -161,35 +164,58 @@ public class ParseJSON {
         }
     }
 
+    protected int parseNoOfEnrolledStudents() throws JSONException {
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            int noOfStudents = jsonArray.length();
+            return noOfStudents;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    protected void parseModuleAttendanceByWeek() throws JSONException {
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+            classType = new String[jsonArray.length()];
+            attendanceCount = new int[jsonArray.length()];
+            int count;
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonobject = jsonArray.getJSONObject(i);
+                classType[i] = jsonobject.getString(KEY_CLASS_TYPE);
+                attendanceCount[i] = jsonobject.getJSONArray(KEY_CLASS_REGISTER).length();
+                Log.v("class: ", classType[i]);
+                Log.v("count: ", String.valueOf(attendanceCount[i]));
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     protected List<List<String>> parseJSONModuleAttendance() throws JSONException {
         try {
             List<List<String>> attendanceData = new ArrayList<>();
             JSONArray jsonArray = new JSONArray(json);
             Log.v("JSON", jsonArray.toString());
 
-            matricNumber = new String[jsonArray.length()];
-            attendancePercentage = new String[jsonArray.length()];
-            fName = new String[jsonArray.length()];
-            lName = new String[jsonArray.length()];
-
             for (int i = 0; i < jsonArray.length(); i++) {
+                ArrayList<String> temp = new ArrayList<>();
                 JSONObject jsonobject = jsonArray.getJSONObject(i);
-                matricNumber[i] = jsonobject.getString(KEY_MATRIC_NUMBER);
-                fName[i] = jsonobject.getString(KEY_FIRST_NAME);
-                lName[i] = jsonobject.getString(KEY_LAST_NAME);
-                attendancePercentage[i] = jsonobject.getString(KEY_PERCENTAGE);
+                temp.add(jsonobject.getString(KEY_MATRIC_NUMBER));
+                temp.add(jsonobject.getString(KEY_FIRST_NAME));
+                temp.add(jsonobject.getString(KEY_LAST_NAME));
+                temp.add(jsonobject.getString(KEY_PERCENTAGE));
+
+                attendanceData.add(temp);
             }
 
-            attendanceData.add(Arrays.asList(matricNumber));
-            attendanceData.add(Arrays.asList(fName));
-            attendanceData.add(Arrays.asList(lName));
-            attendanceData.add(Arrays.asList(attendancePercentage));
             Log.i("A size", Integer.toString(attendanceData.size()));
             Log.i("A size", Integer.toString(attendanceData.get(0).size()));
             return attendanceData;
         } catch (JSONException e) {
             e.printStackTrace();
-
             throw e;
         }
     }

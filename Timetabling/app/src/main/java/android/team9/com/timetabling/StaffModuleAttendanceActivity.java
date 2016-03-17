@@ -20,25 +20,30 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class StaffModuleAttendanceActivity extends AppCompatActivity {
-    private String moduleId;
+    private String moduleId, moduleTitle;
     private String JSON_URL = "http://api.ouanixi.com/moduleAttendance/";
     private TableLayout tableLayout;
     private TableRow headingRow;
+    private ArrayList<TableRow> bodyRows;
     private TreeMap<String, Integer> sortReminder;
     private ArrayList<TextView> headers, rows;
     private ArrayList<String> defaultHeaders;
-    List<List<String>> attendanceData;
+    private List<List<String>> attendanceData;
+    private String[] columnNames;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staff_module_attendance);
         moduleId = getIntent().getStringExtra("moduleId");
+        moduleTitle = getIntent().getStringExtra("moduleTitle");
         // int 0 neutral, 2 ascending, 1 descending
         sortReminder = new TreeMap<>();
         sortReminder.put((getString(R.string.matricNumber)), 0);
@@ -54,64 +59,77 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
         headingRow = new TableRow(this);
         headers = new ArrayList<>();
         defaultHeaders = new ArrayList<>();
+        bodyRows = new ArrayList<>();
+        columnNames = new String[4];
+        columnNames[0] = getString(R.string.matricNumber);
+        columnNames[1] = getString(R.string.forename);
+        columnNames[2] = getString(R.string.surname);
+        columnNames[3] = getString(R.string.attendance);
+
         for (int i = 0; i < 4; i++) {
             headers.add(new TextView(this));
             headers.get(i).setPadding(25, 0, 25, 25);
             headers.get(i).setTextColor(Color.WHITE);
             headers.get(i).setGravity(Gravity.CENTER);
             headers.get(i).setTextSize(15);
+            final int finalI = i;
+            headers.get(i).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    headers.get(finalI).setText(changeSortDirection(finalI, headers.get(finalI).getText().toString()));
+                }
+            });
+            headingRow.addView(headers.get(i));
         }
-
-        defaultHeaders.add(getString(R.string.matricNumber));
-        headers.get(0).setText(R.string.matricNumber);
-        headers.get(0).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                headers.get(0).setText(changeSortDirection(0, headers.get(0).getText().toString()));
-                //sort based on matric nr here or do api magic here
-            }
-        });
-        headingRow.addView(headers.get(0));
-
         // refactored to use string resources
+        headers.get(0).setText(R.string.matricNumber);
+        defaultHeaders.add(getString(R.string.matricNumber));
         headers.get(1).setText(R.string.forename);
         defaultHeaders.add(getString(R.string.forename));
-        headers.get(1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                headers.get(1).setText(changeSortDirection(1, headers.get(1).getText().toString()));
-                //sort based on forename here or do api magic here
-            }
-        });
-        headingRow.addView(headers.get(1));
-
         headers.get(2).setText(R.string.surname);
         defaultHeaders.add(getString(R.string.surname));
-        headers.get(2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                headers.get(2).setText(changeSortDirection(2, headers.get(2).getText().toString()));
-                //sort based on surname here or do api magic here
-            }
-        });
-        headingRow.addView(headers.get(2));
-
         headers.get(3).setText(R.string.attendance);
         defaultHeaders.add(getString(R.string.attendance));
-        headers.get(3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                headers.get(3).setText(changeSortDirection(3, headers.get(3).getText().toString()));
-                //sort based on attendance here or do api magic here
-            }
-        });
-        headingRow.addView(headers.get(3));
         tableLayout.addView(headingRow);
     }
 
     // refactored code into separate methods to make it more portable/accommodate sorting
     private void populateTable() {
-        for (int i = 0; i < attendanceData.get(0).size(); i++) {
+        for (TableRow row : bodyRows) {
+            row.removeAllViews();
+        }
+        //Determine which column should be sorted and in what order
+        int column = 0, tempOrder = 0;
+        for (Map.Entry<String, Integer> entry : sortReminder.entrySet()) {
+            int value = entry.getValue();
+
+            for (int i = 0; i < columnNames.length; i++) {
+                if (columnNames[i].equals(entry.getKey())) {
+                    column = i;
+                    break;
+                }
+            }
+            if (value != 0) {
+                tempOrder = value;
+                break;
+            }
+        }
+        if (tempOrder != 0) {
+            //Order data appropriately
+            final int orderBy = column;
+            final int order = tempOrder;
+            Collections.sort(attendanceData, new Comparator<List<String>>() {
+                @Override
+                public int compare(List<String> list1, List<String> list2) {
+                    if (order == 1) {
+                        return list1.get(orderBy).compareTo(list2.get(orderBy));
+                    }
+                    return list2.get(orderBy).compareTo(list1.get(orderBy));
+                }
+            });
+        }
+
+        for (int i = 0; i < attendanceData.size(); i++) {
             TableRow tableRowInside = new TableRow(this);
             tableRowInside.setClickable(true);
             tableRowInside.setOnClickListener(new View.OnClickListener() {
@@ -122,7 +140,6 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                     TableRow tablerow = (TableRow) v;
                     TextView matric = (TextView) tablerow.getChildAt(0);
                     String matricNumber = matric.getText().toString();
-                    Log.i("matric number", matricNumber);
 
                     // call single student (based on matric number) attendance activity here
                     //Bundle b = new Bundle();
@@ -138,15 +155,15 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                 rows.get(j).setTextColor(Color.WHITE);
                 rows.get(j).setGravity(Gravity.CENTER);
                 rows.get(j).setPadding(25, 0, 25, 0);
-                rows.get(j).setText(attendanceData.get(j).get(i));
+                rows.get(j).setText(attendanceData.get(i).get(j));
                 tableRowInside.addView(rows.get(j));
             }
             tableLayout.addView(tableRowInside);
+            bodyRows.add(tableRowInside);
         }
     }
 
     private void sendRequest() {
-        Log.i("string", JSON_URL + moduleId);
         StringRequest stringRequest = new StringRequest(JSON_URL + moduleId,
                 new Response.Listener<String>() {
                     @Override
@@ -155,6 +172,7 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                             showJSON(response);
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Log.v("error1", e.toString());
                         }
                     }
                 },
@@ -170,7 +188,6 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
     }
 
     private void showJSON(String json) throws JSONException {
-        Log.i("inside", "inside json");
         ParseJSON pj = new ParseJSON(json);
         attendanceData = pj.parseJSONModuleAttendance();
         init();
@@ -202,6 +219,9 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
             if (header != i)
                 headers.get(i).setText(defaultHeaders.get(i));
         }
+
+        populateTable();
+
         return column;
     }
 }
