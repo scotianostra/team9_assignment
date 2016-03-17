@@ -2,12 +2,15 @@ package android.team9.com.timetabling;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -129,7 +132,7 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
     }
 
     //click on button 'VIEW ENROLLED STUDENTS'
-    public void view_enrolled_students(View view) {
+    public void view_enrolled_students(View view){
         Bundle b = makeBundle();
         Intent pass = new Intent(StaffFirstSelectionActivity.this, EnrolledStudents.class);
         pass.putExtras(b);

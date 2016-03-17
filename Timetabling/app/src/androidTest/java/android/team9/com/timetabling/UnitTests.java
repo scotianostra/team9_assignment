@@ -23,6 +23,7 @@ public class UnitTests {
     private String jsonClassList;
     private String jsonAttendanceByWeek;
     private String jsonModuleAttendance;
+    private String jsonStudentAttendance;
 
 
     @Rule
@@ -46,9 +47,12 @@ public class UnitTests {
         jsonModuleAttendance = "[{\"matric_number\": 101010, \"first_name\": \"Bill\", \"last_name\": \"Kill\", \"percentage\": \"100%\"}, " +
                 "{\"matric_number\": 101011,  \"first_name\": \"John\", \"last_name\": \"Wick\",\"percentage\": \"50%\"}]";
 
+        jsonStudentAttendance = "[{\"date\": \"04-02-2016\", \"week\": 5, \"weekday\": 3, \"start_time\": \"10:00\", \"class_type\": \"Tutorial\", \"attended\": \"no\"}, " +
+                "{\"date\": \"18-01-2016\",  \"week\": 3, \"weekday\": 0, \"start_time\": \"10:00\", \"class_type\": \"Seminar\", \"attended\": \"yes\"}]";
+
         jsonAttendanceByWeek = "[{\"week\": 1, \"class_type\": \"Seminar\", \"class_register\": [1, 2, 3]}," +
-                "{\"week\": 1, \"class_type\": \"Lab\", \"class_register\": [1, 2]}," +
-                "{\"week\": 1, \"class_type\": \"Lecture\", \"class_register\": []}]";
+                                "{\"week\": 1, \"class_type\": \"Lab\", \"class_register\": [1, 2]}," +
+                                "{\"week\": 1, \"class_type\": \"Lecture\", \"class_register\": []}]";
     }
 
     @Test
@@ -63,6 +67,8 @@ public class UnitTests {
         assertEquals(3, ParseJSON.attendanceCount[0]);
         assertEquals(2, ParseJSON.attendanceCount[1]);
         assertEquals(0, ParseJSON.attendanceCount[2]);
+
+
 
     }
 
@@ -120,6 +126,26 @@ public class UnitTests {
     }
 
     @Test
+    public void testParseJSONStudentAttendance() throws JSONException {
+
+        parseJSON = new ParseJSON(jsonStudentAttendance);
+        parseJSON.parseJSONStudentAttendance();
+
+        assertEquals("04-02-2016", ParseJSON.date[0]);
+        assertEquals("18-01-2016", ParseJSON.date[1]);
+        assertEquals("5", ParseJSON.week[0]);
+        assertEquals("3", ParseJSON.week[1]);
+        assertEquals("3", ParseJSON.weekday[0]);
+        assertEquals("0", ParseJSON.weekday[1]);
+        assertEquals("10:00", ParseJSON.startTime[0]);
+        assertEquals("10:00", ParseJSON.startTime[1]);
+        assertEquals("Tutorial", ParseJSON.class_type[0]);
+        assertEquals("Seminar", ParseJSON.class_type[1]);
+        assertEquals("no", ParseJSON.attended[0]);
+        assertEquals("yes", ParseJSON.attended[1]);
+    }
+
+    @Test
     public void testParseJSONLoginStudent() throws JSONException {
 
         parseJSON = new ParseJSON(jsonStudentObject);
@@ -164,6 +190,13 @@ public class UnitTests {
         parseJSON = new ParseJSON("not valid json");
         thrown.expect(JSONException.class);
         parseJSON.parseJSONClassList();
+    }
+
+    @Test
+    public void testParseJSONStudentAttendanceThrowsJSONException() throws JSONException {
+        parseJSON = new ParseJSON("not valid json");
+        thrown.expect(JSONException.class);
+        parseJSON.parseJSONStudentAttendance();
     }
 
     @Test
