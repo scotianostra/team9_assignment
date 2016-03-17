@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import java.util.TreeMap;
 public class StaffModuleStudentAttendanceActivity extends AppCompatActivity {
     private String matric_number;
     private String moduleId;
+    private String studentName;
     private String JSON_URL = "http://api.ouanixi.com/studentAttendance/";
     private TableLayout tableLayout;
     private TableRow headingRow;
@@ -41,6 +43,10 @@ public class StaffModuleStudentAttendanceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_staff_module_student_attendance);
         matric_number = getIntent().getStringExtra("matricNumber");
         moduleId = getIntent().getStringExtra("moduleId");
+        studentName = getIntent().getStringExtra("studentName");
+
+        EditText nameText = (EditText) findViewById(R.id.studentName);
+        nameText.setText(studentName);
 
         // int 0 neutral, 2 ascending, 1 descending
         sortReminder = new TreeMap<>();
