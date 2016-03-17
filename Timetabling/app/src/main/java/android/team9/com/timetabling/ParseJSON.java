@@ -31,6 +31,9 @@ public class ParseJSON {
     public static String[] building;
     public static String[] module;
 
+    public static String[] classType;
+    public static int[] attendanceCount;
+
     public static String[] attendancePercentage;
 
     public static String[] class_type;
@@ -64,6 +67,8 @@ public class ParseJSON {
     public static final String KEY_ROOM = "room_id";
     public static final String KEY_BUILDING = "building";
     public static final String KEY_MODULE = "module";
+    
+    public static final String KEY_CLASS_REGISTER = "class_register";
 
     public static final String KEY_PERCENTAGE = "percentage";
 
