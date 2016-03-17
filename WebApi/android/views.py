@@ -9,7 +9,6 @@ from rest_framework.response import Response
 import json
 
 
-
 # Returns a list of modules that a specific staff memember teaches/coordinates
 @api_view(['GET'])
 def staff_module_list(request, pk):
@@ -20,6 +19,18 @@ def staff_module_list(request, pk):
 
     if request.method == 'GET':
         serializer = StaffModuleListSerializer(modules, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def module_attendance_by_semester(request, pk):
+    try:
+        all_classes = Class.objects.filter(module_id=pk).order_by('class_type')
+    except Module.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = SemesterAttendanceSerializer(all_classes, many=True)
         return Response(serializer.data)
 
 

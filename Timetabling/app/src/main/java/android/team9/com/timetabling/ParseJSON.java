@@ -8,8 +8,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class ParseJSON {
@@ -31,7 +33,6 @@ public class ParseJSON {
     public static String[] building;
     public static String[] module;
 
-    public static String[] classType;
     public static int[] attendanceCount;
 
     public static String[] attendancePercentage;
@@ -42,6 +43,10 @@ public class ParseJSON {
     public static String[] weekday;
     public static String[] weekdays;
     public static String[] attended;
+
+    public static String[] classType;
+    public static Integer[] attendanceCountInt;
+    public static Integer[] classCount;
 
 
     public static int user_id;
@@ -235,6 +240,51 @@ public class ParseJSON {
             throw e;
         }
     }
+
+
+
+
+    protected void parseSemesterModuleAttendance() throws JSONException {
+        try {
+            JSONArray jsonArray = new JSONArray(json);
+
+            Set<String> classTypeList = new HashSet<>();
+            ArrayList<Integer> classCountList = new ArrayList<>();
+            ArrayList<Integer> attendanceCountList = new ArrayList<>();
+
+            int count = 0;
+            int attendance =0;
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonobject = jsonArray.getJSONObject(i);
+
+                classTypeList.add(jsonobject.getString(KEY_CLASS_TYPE));
+                attendance += jsonobject.getJSONArray(KEY_CLASS_REGISTER).length();
+
+                if(i < jsonArray.length() - 1 &&
+                        jsonobject.getString(KEY_CLASS_TYPE).equals(jsonArray.getJSONObject(i+1).getString(KEY_CLASS_TYPE))) {
+                    count++;
+                } else {
+                    count++;
+                    classCountList.add(0, count);
+                    attendanceCountList.add(0, attendance);
+                    count = 0;
+                    attendance = 0;
+                }
+            }
+            Log.v("CLASS TYPE", classTypeList.toString());
+            Log.v("CLASS COUNT", classCountList.toString());
+            Log.v("ATTENDANCE COUNT", attendanceCountList.toString());
+            classCount = classCountList.toArray(new Integer[classCountList.size()]);
+            classType = classTypeList.toArray(new String[classTypeList.size()]);
+            attendanceCountInt = attendanceCountList.toArray(new Integer[attendanceCountList.size()]);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     protected List<List<String>> parseJSONStudentAttendance() throws JSONException {
         try {
