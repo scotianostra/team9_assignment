@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
 
 public class ModuleAttendanceGraphActivity extends AppCompatActivity {
 
-    private static final String MODULE_ATTENDANCE_URL = "http://10.0.2.2:8000/moduleAttendanceList/";
+    private static final String MODULE_ATTENDANCE_URL = "http://api.ouanixi.com/moduleAttendanceList/";
 
     public static final String KEY_MODULE_ID = "module_id";
     public static final String KEY_WEEK = "week";

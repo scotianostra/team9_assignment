@@ -25,7 +25,7 @@ public class StaffFirstSelectionActivity extends AppCompatActivity {
     private String moduleCode;
     private int noOfStudents;
     public final static String MODULEID = "android.team9.com.MODULEID";
-    private static final String NO_OF_STUDENTS_URL = "http://10.0.2.2:8000/module_enrollments/";
+    private static final String NO_OF_STUDENTS_URL = "http://api.ouanixi.com/module_enrollments/";
 
     private Button buttonAttendance;
     private Button buttonGraph;
