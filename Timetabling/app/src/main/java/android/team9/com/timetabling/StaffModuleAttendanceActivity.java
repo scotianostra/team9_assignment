@@ -142,7 +142,8 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
 
             tableRowInside.setOnClickListener(new View.OnClickListener() {
 
-                public void onClick(View v) {
+                public void onClick(final View v) {
+                    v.setBackgroundColor(Color.GRAY);
                     //get the data you need
                     TableRow tablerow = (TableRow) v;
                     TextView matric = (TextView) tablerow.getChildAt(0);
@@ -170,13 +171,13 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                                 Intent pass = new Intent(StaffModuleAttendanceActivity.this, StaffModuleStudentAttendanceActivity.class);
                                 pass.putExtras(b);
                                 startActivity(pass);
-                            }
-                            if (selection[0].contains("Graph")) {
+                            } else if (selection[0].contains("Graph")) {
                                 // Dominic call your activity from here
                                 Intent pass = new Intent(StaffModuleAttendanceActivity.this, StaffModuleStudentAttendanceActivity.class);
                                 pass.putExtras(b);
                                 startActivity(pass);
                             }
+                            v.setBackgroundColor(Color.rgb(61, 69, 91));
                             return true;
                         }
                     });
@@ -184,6 +185,12 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                         popup.setGravity(Gravity.CENTER_HORIZONTAL);
                     }
                     popup.show(); //showing popup menu
+                    popup.setOnDismissListener(new PopupMenu.OnDismissListener() {
+                        @Override
+                        public void onDismiss(PopupMenu menu) {
+                            v.setBackgroundColor(Color.rgb(61, 69, 91));
+                        }
+                    });
                 }
             });
             rows = new ArrayList<>();
