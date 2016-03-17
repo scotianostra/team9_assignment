@@ -1,6 +1,5 @@
 package android.team9.com.timetabling;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -100,10 +99,8 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
         for(TableRow row : bodyRows) {
             row.removeAllViews();
         }
-
         //Determine which column should be sorted and in what order
-        int column = 0;
-        int tempOrder = 0;
+        int column = 0, tempOrder = 0;
         for (Map.Entry<String, Integer> entry : sortReminder.entrySet()) {
             int value = entry.getValue();
 
@@ -113,14 +110,12 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                     break;
                 }
             }
-
             if (value != 0) {
                 tempOrder = value;
                 break;
             }
         }
-
-        if(tempOrder != 0) {
+        if (tempOrder != 0) {
             //Order data appropriately
             final int orderBy = column;
             final int order = tempOrder;
@@ -130,13 +125,12 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                     if (order == 1) {
                         return list1.get(orderBy).compareTo(list2.get(orderBy));
                     }
-
                     return list2.get(orderBy).compareTo(list1.get(orderBy));
                 }
             });
         }
 
-        for (int i = 0; i < attendanceData.get(0).size(); i++) {
+        for (int i = 0; i < attendanceData.size(); i++) {
             TableRow tableRowInside = new TableRow(this);
             tableRowInside.setClickable(true);
             tableRowInside.setOnClickListener(new View.OnClickListener() {
@@ -147,7 +141,6 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                     TableRow tablerow = (TableRow) v;
                     TextView matric = (TextView) tablerow.getChildAt(0);
                     String matricNumber = matric.getText().toString();
-
 
                     // call single student (based on matric number) attendance activity here
                     Bundle b = new Bundle();
