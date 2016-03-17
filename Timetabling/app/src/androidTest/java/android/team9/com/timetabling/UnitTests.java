@@ -23,6 +23,7 @@ public class UnitTests {
     private String jsonClassList;
     private String jsonAttendanceByWeek;
     private String jsonModuleAttendance;
+    private String jsonAttendance;
 
 
     @Rule
@@ -39,6 +40,9 @@ public class UnitTests {
 
         jsonStudentObject = "{\"matric_number\": 234242, \"hash\": \"AD3435SF\"}";
         jsonStaffObject = "{\"staffid\": 1000, \"hash\": \"AJ232ASFA\"}";
+
+        jsonAttendance = "[{\"attended\": yes, \"class_type\": \"Seminar\"}, " +
+                "{\"attended\": yes, \"class_type\": \"Seminar\"}]";
 
         jsonClassList = "[{\"id\": 1, \"qrCode\": 0, \"start_time\": \"2016-02-22T17:00:00\", \"end_time\": \"2016-02-22T18:00:00\", \"room_id\": \"5\", \"building\": \"QMB\", \"module\": \"10012\"}, " +
                 "{\"id\": 2, \"qrCode\": 123, \"start_time\": \"2016-02-23T16:00:00\", \"end_time\": \"2016-02-23T17:00:00\", \"room_id\": \"2S14\", \"building\": \"Dalhousie\", \"module\": \"10012\"}]";
@@ -136,6 +140,14 @@ public class UnitTests {
         parseJSON.parseJSONLogin();
         assertEquals(1000, ParseJSON.user_id);
         assertEquals("AJ232ASFA", ParseJSON.role);
+    }
+
+    @Test
+    public void testParseJSONStudentAttendance() throws JSONException {
+
+        parseJSON = new ParseJSON(jsonAttendance);
+        parseJSON.parseStudentAttendance();
+        assertEquals(2, ParseJSON.seminarAttended);
     }
 
     @Test
