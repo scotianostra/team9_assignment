@@ -216,11 +216,6 @@ public class ParseJSON {
             JSONArray jsonArray = new JSONArray(json);
             Log.v("JSON", jsonArray.toString());
 
-            matricNumber = new String[jsonArray.length()];
-            attendancePercentage = new String[jsonArray.length()];
-            fName = new String[jsonArray.length()];
-            lName = new String[jsonArray.length()];
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 ArrayList<String> temp = new ArrayList<>();
                 JSONObject jsonobject = jsonArray.getJSONObject(i);
@@ -232,10 +227,6 @@ public class ParseJSON {
                 attendanceData.add(temp);
             }
 
-            attendanceData.add(Arrays.asList(matricNumber));
-            attendanceData.add(Arrays.asList(fName));
-            attendanceData.add(Arrays.asList(lName));
-            attendanceData.add(Arrays.asList(attendancePercentage));
             return attendanceData;
         } catch (JSONException e) {
             e.printStackTrace();
@@ -258,9 +249,15 @@ public class ParseJSON {
             weekdays = new String[jsonArray.length()];
             attended = new String[jsonArray.length()];
 
-            Map<String,Integer> weekdaysMap= new TreeMap<String,Integer>(){};
-            weekdaysMap.put("Monday",0);weekdaysMap.put("Tuesday",1);weekdaysMap.put("Wednesday",2);weekdaysMap.put("Thursday",3);weekdaysMap.put("Friday",4);
-            weekdaysMap.put("Saturday",5);weekdaysMap.put("Sunday",6);
+            Map<String, Integer> weekdaysMap = new TreeMap<String, Integer>() {
+            };
+            weekdaysMap.put("Monday", 0);
+            weekdaysMap.put("Tuesday", 1);
+            weekdaysMap.put("Wednesday", 2);
+            weekdaysMap.put("Thursday", 3);
+            weekdaysMap.put("Friday", 4);
+            weekdaysMap.put("Saturday", 5);
+            weekdaysMap.put("Sunday", 6);
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonobject = jsonArray.getJSONObject(i);
@@ -269,15 +266,12 @@ public class ParseJSON {
                 week[i] = jsonobject.getString(KEY_WEEK);
                 startTime[i] = jsonobject.getString(KEY_START_TIME);
                 weekday[i] = jsonobject.getString(KEY_WEEKDAY);
-                for (Map.Entry<String, Integer> entry : weekdaysMap.entrySet())
-                {
-                    if(entry.getValue()==Integer.parseInt(weekday[i]))
-                        weekdays[i]=entry.getKey();
+                for (Map.Entry<String, Integer> entry : weekdaysMap.entrySet()) {
+                    if (entry.getValue() == Integer.parseInt(weekday[i]))
+                        weekdays[i] = entry.getKey();
                 }
                 attended[i] = jsonobject.getString(KEY_ATTENDED);
             }
-
-
 
             attendanceData.add(Arrays.asList(date));
             attendanceData.add(Arrays.asList(week));
@@ -286,8 +280,7 @@ public class ParseJSON {
             attendanceData.add(Arrays.asList(class_type));
             attendanceData.add(Arrays.asList(attended));
             attendanceData.add(Arrays.asList(weekday));
-            Log.i("A size", Integer.toString(attendanceData.size()));
-            Log.i("A size", Integer.toString(attendanceData.get(0).size()));
+
             return attendanceData;
         } catch (JSONException e) {
             e.printStackTrace();

@@ -2,8 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/one"
-        android:title="View as Table"/>
+        android:title="View as Table" />
     <item
         android:id="@+id/two"
-        android:title="View as Graph"/>
+        android:title="View as Graph" />
 </menu>

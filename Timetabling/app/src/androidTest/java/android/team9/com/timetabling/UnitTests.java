@@ -51,8 +51,8 @@ public class UnitTests {
                 "{\"date\": \"18-01-2016\",  \"week\": 3, \"weekday\": 0, \"start_time\": \"10:00\", \"class_type\": \"Seminar\", \"attended\": \"yes\"}]";
 
         jsonAttendanceByWeek = "[{\"week\": 1, \"class_type\": \"Seminar\", \"class_register\": [1, 2, 3]}," +
-                                "{\"week\": 1, \"class_type\": \"Lab\", \"class_register\": [1, 2]}," +
-                                "{\"week\": 1, \"class_type\": \"Lecture\", \"class_register\": []}]";
+                "{\"week\": 1, \"class_type\": \"Lab\", \"class_register\": [1, 2]}," +
+                "{\"week\": 1, \"class_type\": \"Lecture\", \"class_register\": []}]";
     }
 
     @Test
@@ -67,7 +67,6 @@ public class UnitTests {
         assertEquals(3, ParseJSON.attendanceCount[0]);
         assertEquals(2, ParseJSON.attendanceCount[1]);
         assertEquals(0, ParseJSON.attendanceCount[2]);
-
 
 
     }

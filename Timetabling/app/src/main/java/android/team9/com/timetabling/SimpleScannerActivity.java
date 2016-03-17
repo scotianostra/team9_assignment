@@ -29,7 +29,7 @@ import me.dm7.barcodescanner.core.ViewFinderView;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 
-public class    SimpleScannerActivity extends BaseScannerActivity implements ZXingScannerView.ResultHandler {
+public class SimpleScannerActivity extends BaseScannerActivity implements ZXingScannerView.ResultHandler {
     private ZXingScannerView mScannerView;
     private String userid;
     private String roomid;

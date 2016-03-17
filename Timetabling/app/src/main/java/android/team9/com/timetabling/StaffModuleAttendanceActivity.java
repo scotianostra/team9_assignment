@@ -1,11 +1,16 @@
 package android.team9.com.timetabling;
 
+
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -96,7 +101,7 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
 
     // refactored code into separate methods to make it more portable/accommodate sorting
     private void populateTable() {
-        for(TableRow row : bodyRows) {
+        for (TableRow row : bodyRows) {
             row.removeAllViews();
         }
         //Determine which column should be sorted and in what order
@@ -104,8 +109,8 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
         for (Map.Entry<String, Integer> entry : sortReminder.entrySet()) {
             int value = entry.getValue();
 
-            for(int i = 0; i < columnNames.length; i++) {
-                if(columnNames[i].equals(entry.getKey())) {
+            for (int i = 0; i < columnNames.length; i++) {
+                if (columnNames[i].equals(entry.getKey())) {
                     column = i;
                     break;
                 }
@@ -125,31 +130,60 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                     if (order == 1) {
                         return list1.get(orderBy).compareTo(list2.get(orderBy));
                     }
+
                     return list2.get(orderBy).compareTo(list1.get(orderBy));
                 }
             });
         }
 
         for (int i = 0; i < attendanceData.size(); i++) {
-            TableRow tableRowInside = new TableRow(this);
+            final TableRow tableRowInside = new TableRow(this);
             tableRowInside.setClickable(true);
+
             tableRowInside.setOnClickListener(new View.OnClickListener() {
+
                 public void onClick(View v) {
-                    // remove colour change later if not needed
-                    v.setBackgroundColor(Color.GRAY);
                     //get the data you need
                     TableRow tablerow = (TableRow) v;
                     TextView matric = (TextView) tablerow.getChildAt(0);
                     String matricNumber = matric.getText().toString();
-
+                    TextView fname = (TextView) tablerow.getChildAt(1);
+                    TextView lname = (TextView) tablerow.getChildAt(2);
+                    String name = fname.getText().toString() + " " + lname.getText().toString();
                     // call single student (based on matric number) attendance activity here
-                    Bundle b = new Bundle();
+                    final Bundle b = new Bundle();
                     b.putString("matricNumber", matricNumber);
                     b.putString("moduleId", moduleId);
+                    b.putString("moduleTitle", moduleTitle);
+                    b.putString("studentName", name);
 
-                    Intent pass = new Intent(StaffModuleAttendanceActivity.this, StaffModuleStudentAttendanceActivity.class);
-                    pass.putExtras(b);
-                    startActivity(pass);
+                    PopupMenu popup = new PopupMenu(StaffModuleAttendanceActivity.this, tableRowInside);
+                    //Inflating the Popup using xml file
+                    popup.getMenuInflater()
+                            .inflate(R.menu.selection_popup, popup.getMenu());
+                    final String[] selection = new String[1];
+                    //registering popup with OnMenuItemClickListener
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {
+                            selection[0] = (item.getTitle().toString());
+                            if (selection[0].contains("Table")) {
+                                Intent pass = new Intent(StaffModuleAttendanceActivity.this, StaffModuleStudentAttendanceActivity.class);
+                                pass.putExtras(b);
+                                startActivity(pass);
+                            }
+                            if (selection[0].contains("Graph")) {
+                                // Dominic call your activity from here
+                                Intent pass = new Intent(StaffModuleAttendanceActivity.this, StaffModuleStudentAttendanceActivity.class);
+                                pass.putExtras(b);
+                                startActivity(pass);
+                            }
+                            return true;
+                        }
+                    });
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        popup.setGravity(Gravity.CENTER_HORIZONTAL);
+                    }
+                    popup.show(); //showing popup menu
                 }
             });
             rows = new ArrayList<>();
@@ -159,12 +193,14 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
                 rows.get(j).setGravity(Gravity.CENTER);
                 rows.get(j).setPadding(25, 0, 25, 0);
                 rows.get(j).setText(attendanceData.get(i).get(j));
+
                 tableRowInside.addView(rows.get(j));
             }
             tableLayout.addView(tableRowInside);
             bodyRows.add(tableRowInside);
         }
     }
+
 
     private void sendRequest() {
         Log.i("string", JSON_URL + moduleId);
@@ -222,9 +258,7 @@ public class StaffModuleAttendanceActivity extends AppCompatActivity {
             if (header != i)
                 headers.get(i).setText(defaultHeaders.get(i));
         }
-
         populateTable();
-
         return column;
     }
 }
